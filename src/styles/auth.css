@@ -1,0 +1,37 @@
+.input {
+  width: 320px;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 30px;
+  border: 1px solid #555;
+  padding: 18px 14px 15px 46px;
+  background: #ffffff;
+  font-size: 20px;
+}
+
+.remember {
+  color: #262688;
+
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  
+}
+
+.content {
+  display: flex;
+  width: 610px;
+  padding: 12px 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.auth-logo {
+  width: 300px;
+
+}
+
