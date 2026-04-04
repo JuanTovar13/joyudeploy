@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom' // 1. Importamos el salto
 import { Input } from '../components/Input'
 import '../styles/global.css'
 import '../styles/auth.css'
@@ -6,6 +7,14 @@ import logo from '../assets/logo.svg'
 import { BackgroundHills } from '../components/BackgroundHills'
 
 export const Register = () => {
+  const navigate = useNavigate() // 2. Inicializamos el navegador
+
+  // 3. Función para saltar al Home al registrarse
+  const handleRegister = () => {
+    // Aquí luego validaremos el Name, Email y Password
+    navigate('/home')
+  }
+
   return (
     <div className="container">
       <img src={logo} className="auth-logo" />
@@ -26,7 +35,10 @@ export const Register = () => {
           <label>Remember me</label>
         </div>
 
-        <button className="button">Signup</button>
+        {/* 4. Activamos el botón de registro */}
+        <button className="button" onClick={handleRegister}>
+          Signup
+        </button>
 
         <Link to="/login" className="link">
           Or Log in
