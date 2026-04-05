@@ -3,9 +3,10 @@ import { Landing } from './pages/Landing'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Home } from './pages/Home'
+import circularFont from './assets/Circular.ttf'
 
 function App() {
-  const miFuente = new FontFace('title', 'url(/assets/Circular.ttf) format("truetype")')
+  const miFuente = new FontFace('title', `url(${circularFont}) format("truetype")`)
   miFuente
     .load()
     .then(function (loadedFont) {

@@ -14,6 +14,9 @@ import { joyuItems } from '../data/joyuData'
 export const Home = () => {
   return (
     <div className="home-screen">
+      {/* Contenedor blanco redondeado al fondo */}
+      <div className="home-white-background"></div>
+
       {/* Header Superior */}
       <header className="home-header">
         <div className="user-greeting">
@@ -42,10 +45,6 @@ export const Home = () => {
             <img src={caraFrase} alt="Smiley" />
           </section>
 
-          <button className="btn-appointment schedule">
-            <span>Schedule Appointment</span>
-            <img src={iconoCalendario} alt="Calendar" />
-          </button>
         </div>
 
         {/* Sección Derecha */}
@@ -67,13 +66,19 @@ export const Home = () => {
               ))}
             </div>
           </section>
-
-          <button className="btn-appointment see-appointments">
-            <span>See Appointments</span>
-            <img src={burbujaChat} alt="Chat" />
-          </button>
         </div>
       </main>
+
+      <section className="home-actions-row">
+        <button className="action-card action-card-schedule">
+          <span>Schedule Appointment</span>
+          <img src={iconoCalendario} alt="Calendar" />
+        </button>
+        <button className="action-card action-card-see">
+          <span>See Appointments</span>
+          <img src={burbujaChat} alt="Chat" />
+        </button>
+      </section>
 
       {/* Decoración inferior (Colinas) */}
       <div className="decor-hills"></div>
