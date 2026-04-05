@@ -169,11 +169,11 @@
 .activity-item {
   background-color: white;
   border-radius: 20px;
-  padding: 15px;
-  text-align: center;
+  padding: 20px;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Sombra suave */
 }
@@ -184,10 +184,16 @@
   object-fit: contain;
 }
 
+.activity-item h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
 .activity-item p {
   font-size: 14px;
-  font-weight: 600;
+  color: #4a4a8a;
   margin: 0;
+  line-height: 1.4;
 }
 
 /* Botón Verde Lima (See Appointments) */

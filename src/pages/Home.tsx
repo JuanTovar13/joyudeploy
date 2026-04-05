@@ -8,9 +8,8 @@ import feliz from '../assets/home-icons/FelizRadiante (MoradoLila).svg'
 import iconoCalendario from '../assets/home-icons/icono de Calendario.svg'
 import logoJoyuOscuro from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import neutral from '../assets/home-icons/NeutralCalmado (Verde claro).svg'
-import paletaPintor from '../assets/home-icons/Paleta de Pintor (Para talleres de arte)..svg'
-import pelotasTenis from '../assets/home-icons/Pelotas de Tenis (Para clases deportivas).svg'
 import triste from '../assets/home-icons/TristeCansado (Azul).svg'
+import { joyuItems } from '../data/joyuData'
 
 export const Home = () => {
   return (
@@ -57,15 +56,15 @@ export const Home = () => {
               <button className="view-all">See all</button>
             </div>
             <div className="activities-grid">
-              {/* Aquí luego crearemos un componente para las tarjetas pequeñas */}
-              <div className="activity-item">
-                <img src={pelotasTenis} alt="Tenis" />
-                <p>Tenis Class</p>
-              </div>
-              <div className="activity-item">
-                <img src={paletaPintor} alt="Arte" />
-                <p>Taller de arte</p>
-              </div>
+              {joyuItems.map((item) => (
+                <div key={item.id} className="activity-item">
+                  <img src={item.image} alt={item.title} />
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
 
