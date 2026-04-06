@@ -17,7 +17,7 @@
   padding: 40px;
   position: relative;
   overflow: hidden;
-  font-family: 'Fredoka', sans-serif; /* La fuente que vimos en el index */
+  font-family: 'Fredoka', sans-serif; /* La fuente del index */
   display: flex;
   flex-direction: column;
   gap: 20px;
