@@ -8,13 +8,44 @@ import feliz from '../assets/home-icons/FelizRadiante (MoradoLila).svg'
 import iconoCalendario from '../assets/home-icons/icono de Calendario.svg'
 import logoJoyuOscuro from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import neutral from '../assets/home-icons/NeutralCalmado (Verde claro).svg'
-import paletaPintor from '../assets/home-icons/Paleta de Pintor (Para talleres de arte)..svg'
-import pelotasTenis from '../assets/home-icons/Pelotas de Tenis (Para clases deportivas).svg'
 import triste from '../assets/home-icons/TristeCansado (Azul).svg'
 
+
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import type { JoyuItem } from '../types'
+
 export const Home = () => {
+  const [joyuItems, setJoyuItems] = useState<JoyuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchActivities() {
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*');
+      console.log('Supabase data:', data);
+      console.log('Supabase error:', error);
+
+      if (error) {
+        console.error('Error fetching activities:', error);
+      } else {
+        setJoyuItems(data || []);
+      }
+      setLoading(false);
+    }
+
+    fetchActivities();
+  }, []);
+
+  if (loading) {
+    return <div className="home-screen">Loading activities...</div>;
+  }
   return (
     <div className="home-screen">
+      {/* Contenedor blanco redondeado al fondo */}
+      <div className="home-white-background"></div>
+
       {/* Header Superior */}
       <header className="home-header">
         <div className="user-greeting">
@@ -43,10 +74,6 @@ export const Home = () => {
             <img src={caraFrase} alt="Smiley" />
           </section>
 
-          <button className="btn-appointment schedule">
-            <span>Schedule Appointment</span>
-            <img src={iconoCalendario} alt="Calendar" />
-          </button>
         </div>
 
         {/* Sección Derecha */}
@@ -57,24 +84,30 @@ export const Home = () => {
               <button className="view-all">See all</button>
             </div>
             <div className="activities-grid">
-              {/* Aquí luego crearemos un componente para las tarjetas pequeñas */}
-              <div className="activity-item">
-                <img src={pelotasTenis} alt="Tenis" />
-                <p>Tenis Class</p>
-              </div>
-              <div className="activity-item">
-                <img src={paletaPintor} alt="Arte" />
-                <p>Taller de arte</p>
-              </div>
+{joyuItems.map((item) => (
+                <div key={item.id} className="activity-item">
+                  <img src={item.image} alt={item.title} />
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
-
-          <button className="btn-appointment see-appointments">
-            <span>See Appointments</span>
-            <img src={burbujaChat} alt="Chat" />
-          </button>
         </div>
       </main>
+
+      <section className="home-actions-row">
+        <button className="action-card action-card-schedule">
+          <span>Schedule Appointment</span>
+          <img src={iconoCalendario} alt="Calendar" />
+        </button>
+        <button className="action-card action-card-see">
+          <span>See Appointments</span>
+          <img src={burbujaChat} alt="Chat" />
+        </button>
+      </section>
 
       {/* Decoración inferior (Colinas) */}
       <div className="decor-hills"></div>
