@@ -9,9 +9,38 @@ import iconoCalendario from '../assets/home-icons/icono de Calendario.svg'
 import logoJoyuOscuro from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import neutral from '../assets/home-icons/NeutralCalmado (Verde claro).svg'
 import triste from '../assets/home-icons/TristeCansado (Azul).svg'
-import { joyuItems } from '../data/joyuData'
+
+
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import type { JoyuItem } from '../types'
 
 export const Home = () => {
+  const [joyuItems, setJoyuItems] = useState<JoyuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchActivities() {
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*');
+      console.log('Supabase data:', data);
+      console.log('Supabase error:', error);
+
+      if (error) {
+        console.error('Error fetching activities:', error);
+      } else {
+        setJoyuItems(data || []);
+      }
+      setLoading(false);
+    }
+
+    fetchActivities();
+  }, []);
+
+  if (loading) {
+    return <div className="home-screen">Loading activities...</div>;
+  }
   return (
     <div className="home-screen">
       {/* Contenedor blanco redondeado al fondo */}
@@ -55,7 +84,7 @@ export const Home = () => {
               <button className="view-all">See all</button>
             </div>
             <div className="activities-grid">
-              {joyuItems.map((item) => (
+{joyuItems.map((item) => (
                 <div key={item.id} className="activity-item">
                   <img src={item.image} alt={item.title} />
                   <div>
