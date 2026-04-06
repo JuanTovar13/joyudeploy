@@ -1,4 +1,4 @@
-/* Contenedor blanco redondeado al fondo */
+
 .home-white-background {
   position: absolute;
   top: 120px;
@@ -12,12 +12,12 @@
 }
 
 .home-screen {
-  background-color: #a7dfff; /* El azul cielo de Joyu */
+  background-color: #a7dfff; 
   min-height: 100vh;
   padding: 40px;
   position: relative;
   overflow: hidden;
-  font-family: 'Fredoka', sans-serif; /* La fuente del index */
+  font-family: 'Fredoka', sans-serif; 
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -33,8 +33,8 @@
 }
 
 .title-font {
-  font-family: 'title'; /* La fuente Circular que cargó Juan */
-  color: #262688; /* El azul oscuro de la marca */
+  font-family: 'title'; 
+  color: #262688; 
   font-size: 32px;
   margin: 0;
 }
@@ -49,11 +49,11 @@
   width: 120px;
 }
 
-/* El contenedor que divide Izquierda y Derecha */
+
 .home-content {
   display: flex;
   gap: 25px;
-  z-index: 2; /* Para que esté por encima del fondo blanco */
+  z-index: 2; 
   position: relative;
 }
 
@@ -65,9 +65,9 @@
   width: calc(50% - 12px);
   flex: none;
 }
-/* Tarjeta Verde (Check-in) */
+
 .check-in-card {
-  background-color: #70C041; /* Verde Joyu */
+  background-color: #70C041; 
   border-radius: 30px;
   padding: 30px;
   color: white;
@@ -94,19 +94,19 @@
 }
 
 .emotions-grid img {
-  width: 75px; /* Ajustamos el tamaño de los SVGs */
+  width: 75px; 
   height: auto;
   cursor: pointer;
   transition: transform 0.2s;
 }
 
 .emotions-grid img:hover {
-  transform: scale(1.1); /* Un pequeño efecto de vida */
+  transform: scale(1.1); 
 }
 
-/* Tarjeta Amarilla (Frase motivadora) */
+
 .quote-card {
-  background-color: #FFF59D; /* Amarillo pastel */
+  background-color: #FFF59D; 
   border-radius: 30px;
   padding: 20px 40px;
   display: flex;
@@ -129,7 +129,7 @@
   width: 120px;
 }
 
-/* Botones Grandes (Schedule y See Appointments) */
+
 .btn-appointment {
   width: 100%;
   border-radius: 25px;
@@ -147,13 +147,13 @@
 }
 
 .btn-appointment.schedule {
-  background-color: #D1C4E9; /* Lila */
+  background-color: #D1C4E9; 
 }
 
 .btn-appointment img {
   width: 50px;
 }
-/* Tarjeta de Actividades (Azul pastel) */
+
 .activities-card {
   background-color: #A7DFFF;
   border-radius: 20px;
@@ -187,7 +187,7 @@
   padding: 0;
 }
 
-/* Cuadrícula de items (Tenis, Arte, etc.) */
+
 .activities-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -226,13 +226,13 @@
   margin: 0;
 }
 
-/* Botón Verde Lima (See Appointments) */
+
 .btn-appointment.see-appointments {
-  background-color: #000000; /* Verde lima brillante */
+  background-color: #000000; 
 }
 
 .btn-appointment.see-appointments img {
-  width: 60px; /* La burbuja de chat es un poco más grande */
+  width: 60px; 
 }
 
 .home-actions-row {
@@ -281,22 +281,92 @@
   background-color: #DAFF7E;
 }
 
-/* Decoración de colinas en la parte inferior */
+
 .decor-hills {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px; /* Ajusta según qué tan alto quieras que se vean */
-  background-image: url('../assets/hills.svg'); /* Usamos el asset que ya existe */
+  height: 120px; 
+  background-image: url('../assets/hills.svg'); 
   background-repeat: repeat-x;
   background-size: contain;
   background-position: bottom;
-  z-index: 1; /* Por debajo del contenido pero visible */
-  pointer-events: none; /* Para que no interfiera si haces click cerca */
+  z-index: 1; 
+  pointer-events: none; 
 }
 
-/* Ajuste final para que el contenido no choque con las colinas */
+
 .home-screen {
   padding-bottom: 140px; 
+}
+
+
+@media (max-width: 768px) {
+  
+  .home-screen {
+    padding: 20px;
+    padding-bottom: 100px; 
+  }
+
+  
+  .home-white-background {
+    top: 180px; 
+  }
+
+ 
+  .home-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .home-left-column {
+    flex: none;
+    width: 100%;
+  }
+
+  .home-right-column {
+    flex: none;
+    width: 100% !important; 
+  }
+
+  
+  .emotions-grid {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .emotions-grid img {
+    width: 55px;
+  }
+
+  
+  .quote-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+    padding: 25px;
+  }
+
+  .quote-card p {
+    max-width: 100%;
+    font-size: 20px;
+  }
+
+  
+  .activities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  
+  .home-actions-row {
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 0;
+  }
+
+  .action-card {
+    width: 100%;
+    padding: 15px;
+  }
 }

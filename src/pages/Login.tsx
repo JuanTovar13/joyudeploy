@@ -7,12 +7,11 @@ import logo from '../assets/logo.svg'
 import { BackgroundHills } from '../components/BackgroundHills'
 
 export const Login = () => {
-  const navigate = useNavigate() // 2. Inicializamos el navegador
+  const navigate = useNavigate() 
 
-  // 3. Esta función es la que hace la magia
+  
   const handleLogin = () => {
-    // Aquí iría la lógica de validar correo/password, 
-    // pero por ahora, ¡directo al Home!
+  
     navigate('/home')
   }
 

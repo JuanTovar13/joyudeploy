@@ -1,6 +1,6 @@
 import '../styles/home.css'
 
-// Importaciones de iconos desde la nueva carpeta
+
 import burbujaChat from '../assets/home-icons/Burbuja de Chat con Carita.svg'
 import caraFrase from '../assets/home-icons/Cara sonriente(frase motivadora).svg'
 import enojado from '../assets/home-icons/EnojadoMolesto (AmarilloVerde).svg'
