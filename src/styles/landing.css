@@ -48,6 +48,7 @@ h1 {
   left: 0;
   width: 100%;
   z-index: 1;
+ 
 
 }
 
@@ -66,4 +67,22 @@ h1 {
   width: 65vh;
   z-index: 3;
   transform: rotate(-15deg);
+}
+
+
+@media (max-width: 768px) {
+  .landing-content {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .landing-title {
+    font-size: 28px; 
+    line-height: 1.2;
+  }
+
+  .landing-button {
+    width: 100%; 
+    max-width: 300px;
+  }
 }
