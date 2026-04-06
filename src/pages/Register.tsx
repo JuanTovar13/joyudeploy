@@ -7,11 +7,11 @@ import logo from '../assets/logo.svg'
 import { BackgroundHills } from '../components/BackgroundHills'
 
 export const Register = () => {
-  const navigate = useNavigate() // 2. Inicializamos el navegador
+  const navigate = useNavigate() 
 
-  // 3. Función para saltar al Home al registrarse
+  
   const handleRegister = () => {
-    // Aquí luego validaremos el Name, Email y Password
+    
     navigate('/home')
   }
 
