@@ -1,3 +1,5 @@
+
+
 .input {
   width: 100%;
   max-width: 320px;
@@ -19,6 +21,7 @@
 
   font-size: clamp(14px, 2vh, 24px);
   font-weight: 400;
+
 }
 
 .content {

@@ -1,9 +1,11 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import {  Routes, Route } from 'react-router-dom'
 import { Landing } from './pages/Landing'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Home } from './pages/Home'
 import circularFont from './assets/Circular.ttf'
+import { ProtectedRoute } from './utils/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   const miFuente = new FontFace('title', `url(${circularFont}) format("truetype")`)
@@ -17,14 +19,22 @@ function App() {
     })
 
   return (
-    <BrowserRouter>
+      <AuthProvider>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
+        <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
       </Routes>
-    </BrowserRouter>
+      </AuthProvider>
+ 
   )
 }
 
