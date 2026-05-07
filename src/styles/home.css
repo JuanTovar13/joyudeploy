@@ -283,18 +283,68 @@
 }
 
 
+/* ── Quote-card: animación de carga mientras Groq responde ── */
+.quote-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.quote-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #262688;
+  animation: quote-bounce 1.2s infinite ease-in-out;
+}
+
+.quote-dot:nth-child(1) { animation-delay: 0s; }
+.quote-dot:nth-child(2) { animation-delay: 0.2s; }
+.quote-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes quote-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1);   opacity: 1; }
+}
+
+.quote-error {
+  font-size: 16px !important;
+  color: #a04040 !important;
+  opacity: 0.85;
+}
+
+.quote-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quote-activity-badge {
+  display: inline-block;
+  background-color: rgba(38, 38, 136, 0.1);
+  color: #262688;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 99px;
+  border: 1.5px solid rgba(38, 38, 136, 0.25);
+  width: fit-content;
+}
+
 .decor-hills {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px; 
-  background-image: url('../assets/hills.svg'); 
+  height: 120px;
+  background-image: url('../assets/hills.svg');
   background-repeat: repeat-x;
   background-size: contain;
   background-position: bottom;
-  z-index: 1; 
-  pointer-events: none; 
+  z-index: 1;
+  pointer-events: none;
 }
 
 
