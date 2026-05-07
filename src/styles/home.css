@@ -119,8 +119,9 @@
 }
 
 .quote-card p {
+  font-family: 'Fredoka', sans-serif; 
   font-size: 25px;
-  font-weight: 300;
+  font-weight: 500;
   max-width: 65%;
   line-height: 1.4;
 }

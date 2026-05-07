@@ -4,3 +4,11 @@ export interface JoyuItem {
   description: string;
   image: string;
 }
+
+
+export interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+}

@@ -1,0 +1,245 @@
+.checkin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(38, 38, 136, 0.35);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.checkin-card {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 36px 40px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(38, 38, 136, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header */
+.checkin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkin-label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4a8a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.checkin-close {
+  background: #f0f0f8;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #262688;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.checkin-close:hover {
+  background: #d5d5f5;
+}
+
+/* Progress */
+.checkin-progress-track {
+  width: 100%;
+  height: 7px;
+  background: #e8e8f5;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.checkin-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #70c041, #a7dfff);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.checkin-step-count {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  color: #9090b8;
+  margin: -10px 0 0;
+}
+
+/* Question */
+.checkin-question {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #262688;
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Options */
+.checkin-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkin-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f5f5fb;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: #3a3a7a;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.checkin-option:hover {
+  border-color: #a7dfff;
+  background: #eef8ff;
+  transform: translateX(3px);
+}
+
+.checkin-option--selected {
+  border-color: #262688;
+  background: #eeeeff;
+  color: #262688;
+  font-weight: 500;
+}
+
+.checkin-option--selected .checkin-option-dot {
+  background: #262688;
+  box-shadow: 0 0 0 3px rgba(38, 38, 136, 0.2);
+}
+
+.checkin-option-dot {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c8c8e8;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+/* Navigation */
+.checkin-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.checkin-btn-primary {
+  background: #262688;
+  color: #ffffff;
+  border: none;
+  border-radius: 99px;
+  padding: 13px 36px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.checkin-btn-primary:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.checkin-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.checkin-btn-secondary {
+  background: #f0f0f8;
+  color: #262688;
+  border: none;
+  border-radius: 99px;
+  padding: 13px 28px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.checkin-btn-secondary:hover {
+  background: #d5d5f5;
+}
+
+/* Success screen */
+.checkin-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+.checkin-success-emoji {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.checkin-success h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+}
+
+.checkin-success p {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 17px;
+  color: #6060a0;
+  max-width: 340px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+  .checkin-card {
+    padding: 28px 22px;
+    border-radius: 24px;
+  }
+
+  .checkin-question {
+    font-size: 19px;
+  }
+
+  .checkin-option {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .checkin-btn-primary,
+  .checkin-btn-secondary {
+    font-size: 16px;
+    padding: 11px 24px;
+  }
+}

@@ -1,6 +1,5 @@
 import '../styles/home.css'
 
-
 import burbujaChat from '../assets/home-icons/Burbuja de Chat con Carita.svg'
 import caraFrase from '../assets/home-icons/Cara sonriente(frase motivadora).svg'
 import enojado from '../assets/home-icons/EnojadoMolesto (AmarilloVerde).svg'
@@ -10,46 +9,74 @@ import logoJoyuOscuro from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import neutral from '../assets/home-icons/NeutralCalmado (Verde claro).svg'
 import triste from '../assets/home-icons/TristeCansado (Azul).svg'
 
-
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { CheckInForm } from '../components/Form/CheckInForm'
 import { supabase } from '../lib/supabaseClient'
 import type { JoyuItem } from '../types'
+import { AuthContext } from '../context/AuthContext'
+import { authService } from '../firebase/firebaseConfig'
+import { signOut } from 'firebase/auth'
+
+const checkinKey = (uid: string) => `joyu_checkin_done_${uid}`
 
 export const Home = () => {
-  const [joyuItems, setJoyuItems] = useState<JoyuItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [joyuItems, setJoyuItems] = useState<JoyuItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showCheckIn, setShowCheckIn] = useState(false)
+
+  const context = useContext(AuthContext)
+
+  // Mostrar el check-in automáticamente la primera vez que el usuario llega al Home
+  useEffect(() => {
+    const uid = context?.user?.uid
+    if (!uid) return
+    const alreadyDone = localStorage.getItem(checkinKey(uid))
+    if (!alreadyDone) {
+      setShowCheckIn(true)
+    }
+  }, [context?.user?.uid])
 
   useEffect(() => {
     async function fetchActivities() {
-      const { data, error } = await supabase
-        .from('activities')
-        .select('*');
-      console.log('Supabase data:', data);
-      console.log('Supabase error:', error);
+      const { data, error } = await supabase.from('activities').select('*')
+      console.log('Supabase data:', data)
+      console.log('Supabase error:', error)
 
       if (error) {
-        console.error('Error fetching activities:', error);
+        console.error('Error fetching activities:', error)
       } else {
-        setJoyuItems(data || []);
+        setJoyuItems(data || [])
       }
-      setLoading(false);
+      setLoading(false)
     }
 
-    fetchActivities();
-  }, []);
+    fetchActivities()
+  }, [])
+
+  // Marca el check-in como completado para este usuario y cierra el modal
+  const handleCheckInDone = () => {
+    const uid = context?.user?.uid
+    if (uid) localStorage.setItem(checkinKey(uid), 'true')
+    setShowCheckIn(false)
+  }
 
   if (loading) {
-    return <div className="home-screen">Loading activities...</div>;
+    return <div className="home-screen">Loading activities...</div>
   }
+
   return (
     <div className="home-screen">
+      <button style={{ width: '250px' }} onClick={() => signOut(authService)}>
+        Sign Out
+      </button>
+
       {/* Contenedor blanco redondeado al fondo */}
       <div className="home-white-background"></div>
 
       {/* Header Superior */}
       <header className="home-header">
         <div className="user-greeting">
-          <h1 className="title-font">Hi, Juanes</h1>
+          <h1 className="title-font">Hi, {context?.user?.displayName || 'User'}</h1>
           <p>How are you feeling today?</p>
         </div>
         <img src={logoJoyuOscuro} alt="Joyu Logo" className="home-logo" />
@@ -58,7 +85,7 @@ export const Home = () => {
       <main className="home-content">
         {/* Sección Izquierda */}
         <div className="home-left-column">
-          <section className="check-in-card">
+          <section className="check-in-card" style={{ cursor: 'pointer' }} onClick={() => setShowCheckIn(true)}>
             <h2>Ready to check in?</h2>
             <p>Take this quick test</p>
             <div className="emotions-grid">
@@ -73,7 +100,6 @@ export const Home = () => {
             <p>Listen to your emotions, take care of your mind, and bloom.</p>
             <img src={caraFrase} alt="Smiley" />
           </section>
-
         </div>
 
         {/* Sección Derecha */}
@@ -84,7 +110,7 @@ export const Home = () => {
               <button className="view-all">See all</button>
             </div>
             <div className="activities-grid">
-{joyuItems.map((item) => (
+              {joyuItems.map((item) => (
                 <div key={item.id} className="activity-item">
                   <img src={item.image} alt={item.title} />
                   <div>
@@ -111,6 +137,16 @@ export const Home = () => {
 
       {/* Decoración inferior (Colinas) */}
       <div className="decor-hills"></div>
+
+      {showCheckIn && (
+        <CheckInForm
+          onClose={handleCheckInDone}
+          onComplete={(answers) => {
+            console.log('Check-in answers:', answers)
+            handleCheckInDone()
+          }}
+        />
+      )}
     </div>
   )
 }
