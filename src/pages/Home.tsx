@@ -12,36 +12,52 @@ import triste from '../assets/home-icons/TristeCansado (Azul).svg'
 import { useState, useEffect, useContext } from 'react'
 import { CheckInForm } from '../components/Form/CheckInForm'
 import { supabase } from '../lib/supabaseClient'
+import { getRecommendation, type GroqRecommendation } from '../lib/groqClient'
 import type { JoyuItem } from '../types'
 import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
 
-const checkinKey = (uid: string) => `joyu_checkin_done_${uid}`
+const checkinKey   = (uid: string) => `joyu_checkin_done_${uid}`
+const recommendKey = (uid: string) => `joyu_recommendation_${uid}`
+
+const DEFAULT_REC: GroqRecommendation = {
+  message:  'Listen to your emotions, take care of your mind, and bloom.',
+  activity: '',
+}
 
 export const Home = () => {
-  const [joyuItems, setJoyuItems] = useState<JoyuItem[]>([])
-  const [loading, setLoading] = useState(true)
+  const [joyuItems, setJoyuItems]     = useState<JoyuItem[]>([])
+  const [loading, setLoading]         = useState(true)
   const [showCheckIn, setShowCheckIn] = useState(false)
+  const [rec, setRec]                 = useState<GroqRecommendation>(DEFAULT_REC)
+  const [loadingRec, setLoadingRec]   = useState(false)
+  const [recError, setRecError]       = useState(false)
 
   const context = useContext(AuthContext)
+  const uid = context?.user?.uid
 
-  // Mostrar el check-in automáticamente la primera vez que el usuario llega al Home
+  // Cargar recomendación guardada y decidir si mostrar el check-in
   useEffect(() => {
-    const uid = context?.user?.uid
     if (!uid) return
-    const alreadyDone = localStorage.getItem(checkinKey(uid))
-    if (!alreadyDone) {
-      setShowCheckIn(true)
+
+    const saved = localStorage.getItem(recommendKey(uid))
+    if (saved) {
+      try {
+        setRec(JSON.parse(saved))
+      } catch {
+        // guardado antiguo en formato string plano
+        setRec({ message: saved, activity: '' })
+      }
     }
-  }, [context?.user?.uid])
+
+    const alreadyDone = localStorage.getItem(checkinKey(uid))
+    if (!alreadyDone) setShowCheckIn(true)
+  }, [uid])
 
   useEffect(() => {
     async function fetchActivities() {
       const { data, error } = await supabase.from('activities').select('*')
-      console.log('Supabase data:', data)
-      console.log('Supabase error:', error)
-
       if (error) {
         console.error('Error fetching activities:', error)
       } else {
@@ -49,15 +65,28 @@ export const Home = () => {
       }
       setLoading(false)
     }
-
     fetchActivities()
   }, [])
 
-  // Marca el check-in como completado para este usuario y cierra el modal
-  const handleCheckInDone = () => {
-    const uid = context?.user?.uid
+  // Llamar a Groq, guardar y mostrar la recomendación
+  const handleCheckInDone = async (answers?: Record<string, string>) => {
     if (uid) localStorage.setItem(checkinKey(uid), 'true')
     setShowCheckIn(false)
+
+    if (!answers) return
+
+    setRecError(false)
+    setLoadingRec(true)
+    try {
+      const result = await getRecommendation(answers)
+      setRec(result)
+      if (uid) localStorage.setItem(recommendKey(uid), JSON.stringify(result))
+    } catch (err) {
+      console.error('[Home] Groq recommendation failed:', err)
+      setRecError(true)
+    } finally {
+      setLoadingRec(false)
+    }
   }
 
   if (loading) {
@@ -85,19 +114,43 @@ export const Home = () => {
       <main className="home-content">
         {/* Sección Izquierda */}
         <div className="home-left-column">
-          <section className="check-in-card" style={{ cursor: 'pointer' }} onClick={() => setShowCheckIn(true)}>
+          <section
+            className="check-in-card"
+            style={{ cursor: 'pointer' }}
+            onClick={() => setShowCheckIn(true)}
+          >
             <h2>Ready to check in?</h2>
             <p>Take this quick test</p>
             <div className="emotions-grid">
-              <img src={triste} alt="Triste" />
+              <img src={triste}  alt="Triste" />
               <img src={enojado} alt="Enojado" />
               <img src={neutral} alt="Neutral" />
-              <img src={feliz} alt="Feliz" />
+              <img src={feliz}   alt="Feliz" />
             </div>
           </section>
 
+          {/* Quote-card con frase motivadora + actividad recomendada */}
           <section className="quote-card">
-            <p>Listen to your emotions, take care of your mind, and bloom.</p>
+            {loadingRec ? (
+              <div className="quote-loading">
+                <span className="quote-dot" />
+                <span className="quote-dot" />
+                <span className="quote-dot" />
+              </div>
+            ) : recError ? (
+              <p className="quote-error">
+                Could not load your recommendation. Try the check-in again!
+              </p>
+            ) : (
+              <div className="quote-content">
+                <p>{rec.message}</p>
+                {rec.activity && (
+                  <span className="quote-activity-badge">
+                    ✦Recommended activity: {rec.activity}
+                  </span>
+                )}
+              </div>
+            )}
             <img src={caraFrase} alt="Smiley" />
           </section>
         </div>
@@ -140,11 +193,8 @@ export const Home = () => {
 
       {showCheckIn && (
         <CheckInForm
-          onClose={handleCheckInDone}
-          onComplete={(answers) => {
-            console.log('Check-in answers:', answers)
-            handleCheckInDone()
-          }}
+          onClose={() => handleCheckInDone()}
+          onComplete={(answers) => handleCheckInDone(answers)}
         />
       )}
     </div>
