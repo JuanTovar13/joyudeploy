@@ -4,15 +4,14 @@ import PomodoroTimer from '../components/PomodoroTimer'
 import TaskList from '../components/TaskList'
 
 /**
- * StudyPlanner - main page combining Pomodoro timer and study task list
+ * StudyPlanner - página principal con temporizador Pomodoro y tareas
  *
- * Performance strategy:
- * - PomodoroTimer wrapped in React.memo → only re-renders when timer props change
- * - TaskList wrapped in React.memo → only re-renders when tasks change
- * - useCallback in usePomodoro → handler references stay stable across renders
- * - Result: timer ticking every second does NOT cause TaskList to re-render,
- *   and adding or deleting tasks does NOT cause PomodoroTimer to re-render
+ * Optimización:
+ * - PomodoroTimer solo se actualiza cuando cambia el temporizador
+ * - TaskList solo se actualiza cuando cambian las tareas
+ * - useCallback mantiene referencias estables
  */
+
 export function StudyPlanner() {
   const {
     timeLeft,

@@ -21,11 +21,13 @@ function formatTime(seconds: number): string {
 }
 
 /**
- * PomodoroTimer - displays countdown timer with SVG progress ring and session controls
- * Wrapped in React.memo to prevent re-renders when TaskList state changes
+ * PomodoroTimer - muestra el temporizador y controles
+ * React.memo evita renderizados innecesarios
  */
-// React.memo: timer ticks every second. Without this, TaskList would re-render
-// 1500 times during a 25-min session. Memo prevents re-render unless props change.
+
+// El temporizador cambia cada segundo.
+// React.memo evita que TaskList se actualice constantemente.
+
 const PomodoroTimer = React.memo(function PomodoroTimer({
   timeLeft,
   status,
