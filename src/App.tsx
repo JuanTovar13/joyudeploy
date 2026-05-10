@@ -6,6 +6,7 @@ import { Home } from './pages/Home'
 import circularFont from './assets/Circular.ttf'
 import { ProtectedRoute } from './utils/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
+import { StudyPlanner } from './pages/StudyPlanner'
 
 function App() {
   const miFuente = new FontFace('title', `url(${circularFont}) format("truetype")`)
@@ -32,6 +33,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+        <Route
+          path="/study-planner"
+          element={
+            <ProtectedRoute>
+              <StudyPlanner />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       </AuthProvider>
  

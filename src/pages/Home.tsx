@@ -10,6 +10,7 @@ import neutral from '../assets/home-icons/NeutralCalmado (Verde claro).svg'
 import triste from '../assets/home-icons/TristeCansado (Azul).svg'
 
 import { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { CheckInForm } from '../components/Form/CheckInForm'
 import { supabase } from '../lib/supabaseClient'
 import { getRecommendation, type GroqRecommendation } from '../lib/groqClient'
@@ -36,6 +37,7 @@ export const Home = () => {
 
   const context = useContext(AuthContext)
   const uid = context?.user?.uid
+  const navigate = useNavigate()
 
   // Cargar recomendación guardada y decidir si mostrar el check-in
   useEffect(() => {
@@ -185,6 +187,14 @@ export const Home = () => {
         <button className="action-card action-card-see">
           <span>See Appointments</span>
           <img src={burbujaChat} alt="Chat" />
+        </button>
+        <button
+          className="action-card action-card-study"
+          onClick={() => navigate('/study-planner')}
+          aria-label="Go to Study Planner"
+        >
+          <span>Study<br />Planner</span>
+          <img src={iconoCalendario} alt="" aria-hidden="true" />
         </button>
       </section>
 

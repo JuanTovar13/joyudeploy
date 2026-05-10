@@ -282,6 +282,10 @@
   background-color: #DAFF7E;
 }
 
+.action-card-study {
+  background-color: #A7DFFF;
+}
+
 
 /* ── Quote-card: animación de carga mientras Groq responde ── */
 .quote-loading {

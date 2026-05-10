@@ -1,0 +1,114 @@
+.tasklist-container {
+  background-color: #f5f6f8;
+  border-radius: 20px;
+  padding: 24px;
+  font-family: 'Fredoka', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tasklist-title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #262688;
+}
+
+.tasklist-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tasklist-input {
+  flex: 1;
+  min-width: 140px;
+  border-radius: 99px;
+  border: 2px solid #262688;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-family: 'Fredoka', sans-serif;
+  color: #262688;
+  outline: none;
+}
+
+.tasklist-input-number {
+  width: 60px;
+  border-radius: 99px;
+  border: 2px solid #262688;
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: 'Fredoka', sans-serif;
+  color: #262688;
+  text-align: center;
+  outline: none;
+}
+
+.tasklist-btn-add {
+  background-color: #262688;
+  color: white;
+  border: none;
+  border-radius: 99px;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-family: 'Fredoka', sans-serif;
+  cursor: pointer;
+}
+
+.tasklist-empty {
+  font-size: 15px;
+  color: #6b6f92;
+  text-align: center;
+}
+
+.tasklist-error {
+  font-size: 15px;
+  color: #a04040;
+}
+
+.tasklist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tasklist-item {
+  background-color: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.tasklist-item-title {
+  flex: 1;
+  font-size: 16px;
+  color: #262688;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.tasklist-item-title.completed {
+  text-decoration: line-through;
+  color: #6b6f92;
+}
+
+.tasklist-item-pomodoros {
+  font-size: 13px;
+  color: #6b6f92;
+}
+
+.tasklist-btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b6f92;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+}
