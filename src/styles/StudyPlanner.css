@@ -1,0 +1,42 @@
+.studyplanner-screen {
+  background-color: #a7dfff;
+  min-height: 100vh;
+  padding: 40px;
+  font-family: 'Fredoka', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.studyplanner-title {
+  font-size: 32px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+  text-align: center;
+}
+
+.studyplanner-content {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .studyplanner-content {
+    flex-direction: column;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
