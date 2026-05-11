@@ -1,7 +1,11 @@
 import '../styles/StudyPlanner.css'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
 import PomodoroTimer from '../components/PomodoroTimer'
 import TaskList from '../components/TaskList'
+import type { RootState, AppDispatch } from '../store'
+import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
 
 /**
  * StudyPlanner - página principal con temporizador Pomodoro y tareas
@@ -13,6 +17,11 @@ import TaskList from '../components/TaskList'
  */
 
 export function StudyPlanner() {
+  const dispatch = useDispatch<AppDispatch>()
+  const { todaySessionsCompleted, totalFocusTimeToday } = useSelector(
+    (state: RootState) => state.studyPlanner,
+  )
+
   const {
     timeLeft,
     status,
@@ -24,6 +33,13 @@ export function StudyPlanner() {
     reset,
     skip,
   } = usePomodoro()
+
+  useEffect(() => {
+    if (currentSession > 1) {
+      dispatch(incrementSessions())
+      dispatch(addFocusTime(25))
+    }
+  }, [currentSession, dispatch])
 
   return (
     <>
@@ -43,6 +59,10 @@ export function StudyPlanner() {
         className="studyplanner-screen"
       >
         <h1 className="studyplanner-title">Study Planner</h1>
+        <p className="studyplanner-stats">
+          Hoy: {todaySessionsCompleted} sesiones · {totalFocusTimeToday} min
+          concentrado
+        </p>
         <div className="studyplanner-content">
           <PomodoroTimer
             timeLeft={timeLeft}

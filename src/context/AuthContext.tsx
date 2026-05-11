@@ -8,6 +8,8 @@ import {
 import { authService } from "../firebase/firebaseConfig";
 import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import type { User } from "../types";
+import { store } from "../store";
+import { setUser as setReduxUser, clearUser } from "../store/slices/authSlice";
 
 function mapFirebaseUser(fb: FirebaseUser): User {
   return {
@@ -30,8 +32,20 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(authService, (currentUser) => {
-      setUser(currentUser ? mapFirebaseUser(currentUser) : null);
+    const unsubscribe = onAuthStateChanged(authService, (firebaseUser) => {
+      if (firebaseUser) {
+        store.dispatch(
+          setReduxUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+          }),
+        );
+        setUser(mapFirebaseUser(firebaseUser));
+      } else {
+        store.dispatch(clearUser());
+        setUser(null);
+      }
       setIsAuthLoading(false);
     });
 
