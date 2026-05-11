@@ -1,7 +1,10 @@
 import '../styles/TaskList.css'
 import React, { useContext, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from '../context/AuthContext'
 import { supabase } from '../lib/supabaseClient'
+import type { RootState, AppDispatch } from '../store'
+import { setActiveTask, clearActiveTask } from '../store/slices/studyPlannerSlice'
 import type { Task } from '../types'
 
 /**
@@ -13,6 +16,11 @@ import type { Task } from '../types'
 const TaskList = React.memo(function TaskList() {
   const context = useContext(AuthContext)
   const user = context?.user
+
+  const dispatch = useDispatch<AppDispatch>()
+  const activeTaskId = useSelector(
+    (state: RootState) => state.studyPlanner.activeTaskId,
+  )
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -178,6 +186,24 @@ const TaskList = React.memo(function TaskList() {
             >
               {task.title}
             </span>
+            <button
+              className={`tasklist-btn-start${task.id === activeTaskId ? ' active' : ''}`}
+              type="button"
+              onClick={() => {
+                if (task.id === activeTaskId) {
+                  dispatch(clearActiveTask())
+                } else {
+                  dispatch(setActiveTask({ id: task.id, title: task.title }))
+                }
+              }}
+              aria-label={
+                task.id === activeTaskId
+                  ? 'Stop working on this task'
+                  : `Start working on ${task.title}`
+              }
+            >
+              {task.id === activeTaskId ? 'Working' : 'Start'}
+            </button>
             <span
               className="tasklist-item-pomodoros"
               aria-label={`${task.completed_pomodoros} of ${task.estimated_pomodoros} pomodoros`}

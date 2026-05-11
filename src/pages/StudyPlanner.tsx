@@ -6,6 +6,7 @@ import PomodoroTimer from '../components/PomodoroTimer'
 import TaskList from '../components/TaskList'
 import type { RootState, AppDispatch } from '../store'
 import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
+import { supabase } from '../lib/supabaseClient'
 
 /**
  * StudyPlanner - página principal con temporizador Pomodoro y tareas
@@ -21,6 +22,12 @@ export function StudyPlanner() {
   const { todaySessionsCompleted, totalFocusTimeToday } = useSelector(
     (state: RootState) => state.studyPlanner,
   )
+  const activeTaskTitle = useSelector(
+    (state: RootState) => state.studyPlanner.activeTaskTitle,
+  )
+  const activeTaskId = useSelector(
+    (state: RootState) => state.studyPlanner.activeTaskId,
+  )
 
   const {
     timeLeft,
@@ -35,11 +42,29 @@ export function StudyPlanner() {
   } = usePomodoro()
 
   useEffect(() => {
-    if (currentSession > 1) {
+    if (currentSession > 1 && activeTaskId) {
+      dispatch(incrementSessions())
+      dispatch(addFocusTime(25))
+      void (async () => {
+        const { data } = await supabase
+          .from('study_tasks')
+          .select('completed_pomodoros')
+          .eq('id', activeTaskId)
+          .single()
+        const completedRaw =
+          (data as { completed_pomodoros?: unknown } | null)?.completed_pomodoros
+        if (typeof completedRaw === 'number') {
+          await supabase
+            .from('study_tasks')
+            .update({ completed_pomodoros: completedRaw + 1 })
+            .eq('id', activeTaskId)
+        }
+      })()
+    } else if (currentSession > 1) {
       dispatch(incrementSessions())
       dispatch(addFocusTime(25))
     }
-  }, [currentSession, dispatch])
+  }, [currentSession, dispatch, activeTaskId])
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
@@ -67,6 +92,11 @@ export function StudyPlanner() {
         className="studyplanner-screen"
       >
         <h1 className="studyplanner-title">Study Planner</h1>
+        {activeTaskTitle && (
+          <p className="studyplanner-active-task">
+            Trabajando en: {activeTaskTitle}
+          </p>
+        )}
         <p className="studyplanner-stats">
           Hoy: {todaySessionsCompleted} sesiones · {totalFocusTimeToday} min
           concentrado

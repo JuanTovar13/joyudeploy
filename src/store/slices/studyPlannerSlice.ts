@@ -3,11 +3,15 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 interface StudyPlannerState {
   todaySessionsCompleted: number
   totalFocusTimeToday: number
+  activeTaskId: string | null
+  activeTaskTitle: string | null
 }
 
 const defaultStudyPlannerState: StudyPlannerState = {
   todaySessionsCompleted: 0,
   totalFocusTimeToday: 0,
+  activeTaskId: null,
+  activeTaskTitle: null,
 }
 
 function readPersistedStudyPlannerState(): StudyPlannerState {
@@ -29,7 +33,12 @@ function readPersistedStudyPlannerState(): StudyPlannerState {
         Number.isFinite(todaySessionsCompleted) &&
         Number.isFinite(totalFocusTimeToday)
       ) {
-        return { todaySessionsCompleted, totalFocusTimeToday }
+        return {
+          todaySessionsCompleted,
+          totalFocusTimeToday,
+          activeTaskId: null,
+          activeTaskTitle: null,
+        }
       }
     }
   } catch {
@@ -50,8 +59,20 @@ const studyPlannerSlice = createSlice({
     addFocusTime(state, action: PayloadAction<number>) {
       state.totalFocusTimeToday += action.payload
     },
+    setActiveTask(
+      state,
+      action: PayloadAction<{ id: string; title: string }>,
+    ) {
+      state.activeTaskId = action.payload.id
+      state.activeTaskTitle = action.payload.title
+    },
+    clearActiveTask(state) {
+      state.activeTaskId = null
+      state.activeTaskTitle = null
+    },
   },
 })
 
-export const { incrementSessions, addFocusTime } = studyPlannerSlice.actions
+export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask } =
+  studyPlannerSlice.actions
 export default studyPlannerSlice.reducer

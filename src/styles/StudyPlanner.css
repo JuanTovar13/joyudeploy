@@ -23,6 +23,18 @@
   font-family: 'Fredoka', sans-serif;
 }
 
+.studyplanner-active-task {
+  text-align: center;
+  font-size: 18px;
+  font-family: 'Fredoka', sans-serif;
+  color: #262688;
+  background-color: #D5D5F5;
+  border-radius: 99px;
+  padding: 8px 24px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
 .studyplanner-content {
   display: flex;
   flex-direction: row;
