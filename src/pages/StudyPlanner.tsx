@@ -41,6 +41,14 @@ export function StudyPlanner() {
     }
   }, [currentSession, dispatch])
 
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0]
+    localStorage.setItem(
+      `joyu_study_sessions_${today}`,
+      JSON.stringify({ todaySessionsCompleted, totalFocusTimeToday }),
+    )
+  }, [todaySessionsCompleted, totalFocusTimeToday])
+
   return (
     <>
       <a
