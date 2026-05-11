@@ -1,7 +1,12 @@
 import '../styles/StudyPlanner.css'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
 import PomodoroTimer from '../components/PomodoroTimer'
 import TaskList from '../components/TaskList'
+import type { RootState, AppDispatch } from '../store'
+import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
+import { supabase } from '../lib/supabaseClient'
 
 /**
  * StudyPlanner - página principal con temporizador Pomodoro y tareas
@@ -13,6 +18,17 @@ import TaskList from '../components/TaskList'
  */
 
 export function StudyPlanner() {
+  const dispatch = useDispatch<AppDispatch>()
+  const { todaySessionsCompleted, totalFocusTimeToday } = useSelector(
+    (state: RootState) => state.studyPlanner,
+  )
+  const activeTaskTitle = useSelector(
+    (state: RootState) => state.studyPlanner.activeTaskTitle,
+  )
+  const activeTaskId = useSelector(
+    (state: RootState) => state.studyPlanner.activeTaskId,
+  )
+
   const {
     timeLeft,
     status,
@@ -24,6 +40,39 @@ export function StudyPlanner() {
     reset,
     skip,
   } = usePomodoro()
+
+  useEffect(() => {
+    if (currentSession > 1 && activeTaskId) {
+      dispatch(incrementSessions())
+      dispatch(addFocusTime(25))
+      void (async () => {
+        const { data } = await supabase
+          .from('study_tasks')
+          .select('completed_pomodoros')
+          .eq('id', activeTaskId)
+          .single()
+        const completedRaw =
+          (data as { completed_pomodoros?: unknown } | null)?.completed_pomodoros
+        if (typeof completedRaw === 'number') {
+          await supabase
+            .from('study_tasks')
+            .update({ completed_pomodoros: completedRaw + 1 })
+            .eq('id', activeTaskId)
+        }
+      })()
+    } else if (currentSession > 1) {
+      dispatch(incrementSessions())
+      dispatch(addFocusTime(25))
+    }
+  }, [currentSession, dispatch, activeTaskId])
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0]
+    localStorage.setItem(
+      `joyu_study_sessions_${today}`,
+      JSON.stringify({ todaySessionsCompleted, totalFocusTimeToday }),
+    )
+  }, [todaySessionsCompleted, totalFocusTimeToday])
 
   return (
     <>
@@ -43,6 +92,15 @@ export function StudyPlanner() {
         className="studyplanner-screen"
       >
         <h1 className="studyplanner-title">Study Planner</h1>
+        {activeTaskTitle && (
+          <p className="studyplanner-active-task">
+            Trabajando en: {activeTaskTitle}
+          </p>
+        )}
+        <p className="studyplanner-stats">
+          Hoy: {todaySessionsCompleted} sesiones · {totalFocusTimeToday} min
+          concentrado
+        </p>
         <div className="studyplanner-content">
           <PomodoroTimer
             timeLeft={timeLeft}

@@ -1,24 +1,26 @@
-// Supabase table required: study_tasks
-// Schema: id (uuid pk), title (text), completed (bool),
-// estimated_pomodoros (int), completed_pomodoros (int default 0),
-// created_at (timestamptz), user_id (text)
-
 import '../styles/TaskList.css'
 import React, { useContext, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from '../context/AuthContext'
 import { supabase } from '../lib/supabaseClient'
+import type { RootState, AppDispatch } from '../store'
+import { setActiveTask, clearActiveTask } from '../store/slices/studyPlannerSlice'
 import type { Task } from '../types'
 
 /**
- * TaskList - manages study tasks with full CRUD via Supabase
- * Uses optimistic updates for instant UI feedback before server confirmation
- * Wrapped in React.memo to avoid re-renders caused by the Pomodoro timer ticking
+ * TaskList - maneja tareas de estudio con Supabase
+ * Usa actualizaciones instantáneas para mejorar la experiencia
+ * React.memo evita renderizados innecesarios
  */
-// React.memo: task list only re-renders when tasks change,
-// not when the timer ticks every second
+
 const TaskList = React.memo(function TaskList() {
   const context = useContext(AuthContext)
   const user = context?.user
+
+  const dispatch = useDispatch<AppDispatch>()
+  const activeTaskId = useSelector(
+    (state: RootState) => state.studyPlanner.activeTaskId,
+  )
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -27,16 +29,63 @@ const TaskList = React.memo(function TaskList() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!user?.uid) return
+
+    // Initial fetch
     void (async () => {
       const { data, error } = await supabase
         .from('study_tasks')
         .select('*')
-        .eq('user_id', user?.uid)
+        .eq('user_id', user.uid)
         .order('created_at', { ascending: false })
       if (error) setError('Could not load tasks. Please try again.')
       if (data) setTasks(data as Task[])
       setLoading(false)
     })()
+
+    // Realtime subscription
+    // Listens for INSERT, UPDATE, DELETE in study_tasks table
+    // Updates local state automatically without re-fetching all data
+    const channel = supabase
+      .channel(`study_tasks_${user.uid}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'study_tasks',
+          filter: `user_id=eq.${user.uid}`,
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setTasks((prev) => {
+              const alreadyExists = prev.some(
+                (t) => t.id === (payload.new as Task).id,
+              )
+              if (alreadyExists) return prev
+              return [payload.new as Task, ...prev]
+            })
+          }
+          if (payload.eventType === 'UPDATE') {
+            setTasks((prev) =>
+              prev.map((t) =>
+                t.id === (payload.new as Task).id ? (payload.new as Task) : t,
+              ),
+            )
+          }
+          if (payload.eventType === 'DELETE') {
+            setTasks((prev) =>
+              prev.filter((t) => t.id !== (payload.old as Task).id),
+            )
+          }
+        },
+      )
+      .subscribe()
+
+    // Cleanup: remove channel when component unmounts or user changes
+    return () => {
+      void supabase.removeChannel(channel)
+    }
   }, [user?.uid])
 
   async function handleAddTask() {
@@ -137,6 +186,24 @@ const TaskList = React.memo(function TaskList() {
             >
               {task.title}
             </span>
+            <button
+              className={`tasklist-btn-start${task.id === activeTaskId ? ' active' : ''}`}
+              type="button"
+              onClick={() => {
+                if (task.id === activeTaskId) {
+                  dispatch(clearActiveTask())
+                } else {
+                  dispatch(setActiveTask({ id: task.id, title: task.title }))
+                }
+              }}
+              aria-label={
+                task.id === activeTaskId
+                  ? 'Stop working on this task'
+                  : `Start working on ${task.title}`
+              }
+            >
+              {task.id === activeTaskId ? 'Working' : 'Start'}
+            </button>
             <span
               className="tasklist-item-pomodoros"
               aria-label={`${task.completed_pomodoros} of ${task.estimated_pomodoros} pomodoros`}

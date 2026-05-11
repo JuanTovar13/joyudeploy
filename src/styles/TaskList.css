@@ -112,3 +112,19 @@
   line-height: 1;
   padding: 0;
 }
+
+.tasklist-btn-start {
+  background: none;
+  border: 2px solid #262688;
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-family: 'Fredoka', sans-serif;
+  color: #262688;
+  cursor: pointer;
+}
+
+.tasklist-btn-start.active {
+  background-color: #262688;
+  color: white;
+}
