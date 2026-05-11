@@ -1,0 +1,154 @@
+.list-screen-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #D0EFFF 0%, #FFFFFF 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-bottom: 120px;
+}
+
+.list-header-section {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+}
+
+.back-button-top {
+  background: white;
+  border: 1px solid #E0E0E0;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  font-size: 30px;
+  color: #1A1A7E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.list-title {
+  color: #1A1A7E;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.list-logo-right {
+  width: 80px;
+}
+
+.appointments-grid-container {
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  z-index: 10; /* Asegura que las tarjetas estén sobre las colinas */
+}
+
+.appointment-card-v2 {
+  position: relative;
+  width: 100%;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.card-background-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.card-content-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 35px;
+  box-sizing: border-box;
+}
+
+.left-info {
+  text-align: left;
+}
+
+.prof-name {
+  color: #ffffff;
+  font-size: 1.8rem; /* Más grande como el prototipo */
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.details-text p {
+  color: #f8f8ff;
+  margin: 5px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.right-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 220px;
+}
+
+.btn-reschedule {
+  background: white;
+  color: #1A1A7E;
+  border: none;
+  padding: 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.btn-cancel {
+  background: #2D2D8A;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-new-appointment-v2 {
+  background: #2D2D8A;
+  color: white;
+  padding: 18px 50px;
+  border-radius: 35px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  box-shadow: 0 5px 15px rgba(243, 243, 253, 0.3);
+}
+
+.decor-hills-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: 1;
+}
+
+.hills-svg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

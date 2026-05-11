@@ -97,7 +97,22 @@ export const Home = () => {
 
   return (
     <div className="home-screen">
-      <button style={{ width: '250px' }} onClick={() => signOut(authService)}>
+      <button 
+        style={{ 
+          position: 'absolute', 
+          top: '20px', 
+          right: '20px', 
+          zIndex: 10,
+          padding: '8px 15px',
+          borderRadius: '20px',
+          border: 'none',
+          backgroundColor: '#ff4d4d',
+          color: 'white',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }} 
+        onClick={() => signOut(authService)}
+      >
         Sign Out
       </button>
 
@@ -179,15 +194,24 @@ export const Home = () => {
         </div>
       </main>
 
+      {/* Fila de Acciones Inferior - Aquí conectamos las rutas */}
       <section className="home-actions-row">
-        <button className="action-card action-card-schedule">
+        <button 
+          className="action-card action-card-schedule"
+          onClick={() => navigate('/schedule')}
+        >
           <span>Schedule Appointment</span>
           <img src={iconoCalendario} alt="Calendar" />
         </button>
-        <button className="action-card action-card-see">
+
+        <button 
+          className="action-card action-card-see"
+          onClick={() => navigate('/my-appointments')}
+        >
           <span>See Appointments</span>
           <img src={burbujaChat} alt="Chat" />
         </button>
+
         <button
           className="action-card action-card-study"
           onClick={() => navigate('/study-planner')}
