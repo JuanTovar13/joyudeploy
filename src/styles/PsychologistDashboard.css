@@ -1,0 +1,423 @@
+/* ── Screen wrapper ───────────────────────────────────────────────────────── */
+.psych-screen {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #D0EFFF 0%, #FFFFFF 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 80px;
+  font-family: 'title', sans-serif;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.psych-header {
+  width: 90%;
+  max-width: 720px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 0 16px;
+}
+
+.psych-title {
+  color: #1A1A7E;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.psych-subtitle {
+  color: #555;
+  font-size: 15px;
+  margin: 0;
+}
+
+.psych-logo {
+  width: 75px;
+}
+
+/* ── Tabs ─────────────────────────────────────────────────────────────────── */
+.psych-tabs {
+  display: flex;
+  gap: 12px;
+  width: 90%;
+  max-width: 720px;
+  margin-bottom: 22px;
+}
+
+.psych-tab {
+  flex: 1;
+  padding: 14px;
+  border-radius: 18px;
+  border: 2px solid #d0d0e8;
+  background: white;
+  color: #555;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.psych-tab--active {
+  background: #1A1A7E;
+  border-color: #1A1A7E;
+  color: white;
+}
+
+.psych-badge {
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Content area ─────────────────────────────────────────────────────────── */
+.psych-content {
+  width: 90%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.psych-loading,
+.psych-empty {
+  text-align: center;
+  color: #888;
+  padding: 40px 20px;
+  font-size: 1rem;
+}
+
+/* ── Request card ─────────────────────────────────────────────────────────── */
+.request-card {
+  background: white;
+  border-radius: 24px;
+  padding: 22px 24px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.request-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.request-student {
+  color: #1A1A7E;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.request-reason {
+  color: #444;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.request-mode-badge {
+  display: inline-block;
+  background: #EEF2FF;
+  color: #1A1A7E;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+/* Accept button */
+.btn-accept {
+  background: #1A1A7E;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-accept:hover {
+  opacity: 0.85;
+}
+
+/* ── Accept form ──────────────────────────────────────────────────────────── */
+.accept-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.accept-date-input,
+.accept-hour-select {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 16px;
+  border: 1.5px solid #d0d0e8;
+  font-size: 15px;
+  background: white;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.accept-date-input:focus,
+.accept-hour-select:focus {
+  outline: none;
+  border-color: #1A1A7E;
+}
+
+.accept-input--error {
+  border-color: #dc2626 !important;
+  background: #fff5f5;
+}
+
+.conflict-error {
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  color: #b91c1c;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.accept-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-confirm {
+  flex: 2;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancel-form {
+  flex: 1;
+  background: #f3f4f6;
+  color: #555;
+  border: none;
+  padding: 13px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-cancel-form:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Calendar widget ──────────────────────────────────────────────────────── */
+.calendar-widget {
+  background: white;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.cal-nav-btn {
+  background: #EEF2FF;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #1A1A7E;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.cal-nav-btn:hover {
+  background: #d0d8ff;
+}
+
+.cal-month-label {
+  color: #1A1A7E;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-header-cell {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #aaa;
+  padding: 6px 0;
+}
+
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+  gap: 2px;
+}
+
+.cal-cell--empty {
+  cursor: default;
+}
+
+.cal-cell:not(.cal-cell--empty):hover {
+  background: #EEF2FF;
+}
+
+.cal-cell--today .cal-day-num {
+  background: #1A1A7E;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-cell--selected {
+  background: #EEF2FF;
+}
+
+.cal-cell--has-appt {
+  font-weight: 700;
+}
+
+.cal-day-num {
+  font-size: 14px;
+  color: #333;
+}
+
+.cal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1A1A7E;
+  display: block;
+}
+
+/* ── Day panel (appointments on selected day) ─────────────────────────────── */
+.day-panel {
+  background: white;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.day-panel-title {
+  color: #1A1A7E;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+  text-transform: capitalize;
+}
+
+.day-appt-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: #F8F9FF;
+  border-radius: 16px;
+  margin-bottom: 10px;
+}
+
+.day-appt-hour {
+  background: #1A1A7E;
+  color: white;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.day-appt-info {
+  flex: 1;
+}
+
+.day-appt-student {
+  font-weight: 700;
+  color: #1A1A7E;
+  margin: 0 0 2px;
+  font-size: 0.95rem;
+}
+
+.day-appt-reason {
+  color: #666;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.day-appt-mode {
+  font-size: 1.4rem;
+}
+
+/* ── Sign out ─────────────────────────────────────────────────────────────── */
+.psych-signout {
+  margin-top: 30px;
+  background: transparent;
+  border: 2px solid #dc2626;
+  color: #dc2626;
+  padding: 12px 40px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.psych-signout:hover {
+  background: #dc2626;
+  color: white;
+}

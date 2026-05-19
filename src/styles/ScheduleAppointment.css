@@ -143,3 +143,44 @@
   background-color: #A0A0C5;
   cursor: not-allowed;
 }
+
+/* ── Mode selector ────────────────────────────────────────────────────────── */
+.mode-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 20px;
+  border: 2px solid #E0E0E0;
+  background: white;
+  color: #555;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn--active {
+  border-color: #2D2D8A;
+  background: #2D2D8A;
+  color: white;
+}
+
+.mode-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Note ─────────────────────────────────────────────────────────────────── */
+.schedule-note {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+  line-height: 1.5;
+}

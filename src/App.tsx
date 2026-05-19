@@ -5,11 +5,12 @@ import { Register } from './pages/Register'
 import { Home } from './pages/Home'
 import circularFont from './assets/Circular.ttf'
 import { ProtectedRoute } from './utils/ProtectedRoute'
+import { RoleRoute } from './utils/RoleRoute'
 import { AuthProvider } from './context/AuthContext'
 import { StudyPlanner } from './pages/StudyPlanner'
-
 import { ScheduleAppointment } from './pages/ScheduleAppointment'
 import { AppointmentsList } from './pages/AppointmentsList'
+import { PsychologistDashboard } from './pages/PsychologistDashboard'
 
 
 function App() {
@@ -29,16 +30,17 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+
+        {/* ── Student routes ── */}
         <Route
           path="/home"
           element={
-            <ProtectedRoute>
+            <RoleRoute allowedRole="student">
               <Home />
-            </ProtectedRoute>
+            </RoleRoute>
           }
         />
-        
+
         <Route
           path="/study-planner"
           element={
@@ -48,22 +50,31 @@ function App() {
           }
         />
 
-        {/* --- NUEVAS RUTAS DE CITAS --- */}
         <Route
           path="/schedule"
           element={
-            <ProtectedRoute>
+            <RoleRoute allowedRole="student">
               <ScheduleAppointment />
-            </ProtectedRoute>
+            </RoleRoute>
           }
         />
 
         <Route
           path="/my-appointments"
           element={
-            <ProtectedRoute>
+            <RoleRoute allowedRole="student">
               <AppointmentsList />
-            </ProtectedRoute>
+            </RoleRoute>
+          }
+        />
+
+        {/* ── Psychologist routes ── */}
+        <Route
+          path="/psychologist"
+          element={
+            <RoleRoute allowedRole="psychologist">
+              <PsychologistDashboard />
+            </RoleRoute>
           }
         />
       </Routes>

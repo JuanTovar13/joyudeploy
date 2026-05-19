@@ -83,3 +83,33 @@
   }
 
 }
+
+/* ── Role selector ────────────────────────────────────────────────────────── */
+.role-selector {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  margin: 6px auto;
+  justify-content: center;
+}
+
+.role-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 20px;
+  border: 2px solid #d0d0e8;
+  background: white;
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.role-btn--active {
+  border-color: #262688;
+  background: #262688;
+  color: white;
+}
