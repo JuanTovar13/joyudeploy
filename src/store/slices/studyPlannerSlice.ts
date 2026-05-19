@@ -56,6 +56,7 @@ const studyPlannerSlice = createSlice({
     incrementSessions(state) {
       state.todaySessionsCompleted += 1
     },
+    //Acumula el tiempo total de enfoque del día en la unidad que el llamador defina
     addFocusTime(state, action: PayloadAction<number>) {
       state.totalFocusTimeToday += action.payload
     },

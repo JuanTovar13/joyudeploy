@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import '../styles/AppointmentsList.css'
 
-// SVGs
 import mujerCard from '../assets/MUJER.svg'
 import hillsBottom from '../assets/hills.svg'
 
@@ -40,7 +39,6 @@ export function AppointmentsList() {
         if (error) throw error
         if (data) setAppointments(data as Appointment[])
       } catch (err: unknown) {
-        // Corrección para el error de TypeScript
         if (err instanceof Error) {
           console.error('Error fetching appointments:', err.message)
         }
@@ -71,7 +69,7 @@ export function AppointmentsList() {
           {appointments.map((app) => (
             <div key={app.id} className="appointment-card-v2">
               <img src={mujerCard} alt="" className="card-background-svg" />
-              
+
               <div className="card-content-overlay">
                 <div className="left-info">
                   <h3 className="prof-name">{app.professional_name}</h3>
@@ -80,7 +78,7 @@ export function AppointmentsList() {
                     <p><strong>Mode:</strong> {app.mode}</p>
                   </div>
                 </div>
-                
+
                 <div className="right-actions">
                   <button className="btn-reschedule">Reschedule</button>
                   <button className="btn-cancel">Cancel appointment</button>
@@ -88,7 +86,7 @@ export function AppointmentsList() {
               </div>
             </div>
           ))}
-          
+
           <Link to="/schedule" className="btn-new-appointment-v2">
             Schedule New
           </Link>

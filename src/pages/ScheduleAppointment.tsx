@@ -26,10 +26,10 @@ export function ScheduleAppointment() {
       alert('Error: No se encontró sesión de usuario.')
       return
     }
-
+    //FETCH
     setLoading(true)
     try {
-      const { error } = await supabase.from('appointments').insert([
+      const { error } = await supabase.from('appointments').insert([ 
         {
           user_id: user.uid, 
           reason: reason,
@@ -47,7 +47,6 @@ export function ScheduleAppointment() {
       alert('¡Cita agendada con éxito!')
       navigate('/my-appointments')
     } catch (err: unknown) {
-      // CORRECCIÓN AQUÍ: Manejo de error tipo 'unknown' en lugar de 'any'
       if (err instanceof Error) {
         console.error('Error detallado:', err.message)
         alert(`Error al guardar: ${err.message}`)

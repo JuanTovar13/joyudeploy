@@ -31,7 +31,7 @@ const TaskList = React.memo(function TaskList() {
   useEffect(() => {
     if (!user?.uid) return
 
-    // Initial fetch
+    // Initial fetch llama tabla de tasks
     void (async () => {
       const { data, error } = await supabase
         .from('study_tasks')
@@ -43,9 +43,6 @@ const TaskList = React.memo(function TaskList() {
       setLoading(false)
     })()
 
-    // Realtime subscription
-    // Listens for INSERT, UPDATE, DELETE in study_tasks table
-    // Updates local state automatically without re-fetching all data
     const channel = supabase
       .channel(`study_tasks_${user.uid}`)
       .on(
@@ -91,7 +88,7 @@ const TaskList = React.memo(function TaskList() {
   async function handleAddTask() {
     if (newTaskTitle.trim() === '') return
     const { data, error } = await supabase
-      .from('study_tasks')
+      .from('study_tasks') //insert
       .insert([
         {
           title: newTaskTitle.trim(),

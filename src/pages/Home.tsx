@@ -48,7 +48,6 @@ export const Home = () => {
       try {
         setRec(JSON.parse(saved))
       } catch {
-        // guardado antiguo en formato string plano
         setRec({ message: saved, activity: '' })
       }
     }
@@ -80,7 +79,7 @@ export const Home = () => {
     setRecError(false)
     setLoadingRec(true)
     try {
-      const result = await getRecommendation(answers)
+      const result = await getRecommendation(answers) //llama la funcion getRecommendation para obtener una recomendacion a partir de las respuestas
       setRec(result)
       if (uid) localStorage.setItem(recommendKey(uid), JSON.stringify(result))
     } catch (err) {
@@ -97,11 +96,11 @@ export const Home = () => {
 
   return (
     <div className="home-screen">
-      <button 
-        style={{ 
-          position: 'absolute', 
-          top: '20px', 
-          right: '20px', 
+      <button
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
           zIndex: 10,
           padding: '8px 15px',
           borderRadius: '20px',
@@ -110,7 +109,7 @@ export const Home = () => {
           color: 'white',
           cursor: 'pointer',
           fontWeight: 'bold'
-        }} 
+        }}
         onClick={() => signOut(authService)}
       >
         Sign Out
@@ -163,7 +162,7 @@ export const Home = () => {
                 <p>{rec.message}</p>
                 {rec.activity && (
                   <span className="quote-activity-badge">
-                    ✦Recommended activity: {rec.activity}
+                    ✦ Recommended activity: {rec.activity}
                   </span>
                 )}
               </div>
@@ -194,9 +193,9 @@ export const Home = () => {
         </div>
       </main>
 
-      {/* Fila de Acciones Inferior - Aquí conectamos las rutas */}
+      {/* Fila de Acciones Inferior */}
       <section className="home-actions-row">
-        <button 
+        <button
           className="action-card action-card-schedule"
           onClick={() => navigate('/schedule')}
         >
@@ -204,7 +203,7 @@ export const Home = () => {
           <img src={iconoCalendario} alt="Calendar" />
         </button>
 
-        <button 
+        <button
           className="action-card action-card-see"
           onClick={() => navigate('/my-appointments')}
         >
@@ -215,10 +214,9 @@ export const Home = () => {
         <button
           className="action-card action-card-study"
           onClick={() => navigate('/study-planner')}
-          aria-label="Go to Study Planner"
         >
-          <span>Study<br />Planner</span>
-          <img src={iconoCalendario} alt="" aria-hidden="true" />
+          <span>Study Planner</span>
+          <img src={iconoCalendario} alt="Study" />
         </button>
       </section>
 

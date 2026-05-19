@@ -5,7 +5,7 @@ export type GroqRecommendation = {
   activity: string
 }
 
-export async function getRecommendation(answers: CheckInAnswers): Promise<GroqRecommendation> {
+export async function getRecommendation(answers: CheckInAnswers): Promise<GroqRecommendation> { //los valores recibidos deben ser strings
   const apiKey = import.meta.env.VITE_GROQ_API_KEY
 
   if (!apiKey) {
@@ -32,7 +32,7 @@ Based on the following student responses, do TWO things:
    - Schedule an appointment with a psychologist
 
 Student responses:
-- Emotional state this week: ${answers.emotion}
+- Emotional state this week: ${answers.emotion} 
 - Main source of pressure: ${answers.pressure}
 - Daily hours of sleep: ${answers.sleep}
 - Preferred relaxation activity: ${answers.relax}

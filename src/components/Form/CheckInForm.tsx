@@ -10,7 +10,13 @@ const questions = [
   {
     id: 'pressure',
     text: '¿Qué te está generando más presión actualmente?',
-    options: ['Exámenes', 'Tareas y proyectos', 'Problemas personales', 'Falta de tiempo', 'Problemas económicos'],
+    options: [
+      'Exámenes',
+      'Tareas y proyectos',
+      'Problemas personales',
+      'Falta de tiempo',
+      'Problemas económicos',
+    ],
   },
   {
     id: 'sleep',
@@ -20,12 +26,24 @@ const questions = [
   {
     id: 'relax',
     text: '¿Qué actividad disfrutas más para relajarte?',
-    options: ['Escuchar música', 'Hacer ejercicio', 'Ver series o videos', 'Hablar con amigos', 'Dibujar o crear arte'],
+    options: [
+      'Escuchar música',
+      'Hacer ejercicio',
+      'Ver series o videos',
+      'Hablar con amigos',
+      'Dibujar o crear arte',
+    ],
   },
   {
     id: 'need',
     text: '¿Qué necesitas más en este momento?',
-    options: ['Relajarme', 'Organizar mi tiempo', 'Sentirme motivado/a', 'Hablar con alguien', 'Mejorar mi ánimo'],
+    options: [
+      'Relajarme',
+      'Organizar mi tiempo',
+      'Sentirme motivado/a',
+      'Hablar con alguien',
+      'Mejorar mi ánimo',
+    ],
   },
 ]
 
@@ -70,7 +88,9 @@ export const CheckInForm = ({ onComplete, onClose }: Props) => {
           <div className="checkin-success">
             <div className="checkin-success-emoji">🌟</div>
             <h2>¡Gracias por tu check-in!</h2>
-            <p>Tus respuestas nos ayudan a recomendarte actividades personalizadas para ti.</p>
+            <p>
+              Tus respuestas nos ayudan a recomendarte actividades personalizadas para ti.
+            </p>
             <button className="checkin-btn-primary" onClick={onClose}>
               Volver al inicio
             </button>
