@@ -79,7 +79,8 @@ export const Home = () => {
     setRecError(false)
     setLoadingRec(true)
     try {
-      const result = await getRecommendation(answers) //llama la funcion getRecommendation para obtener una recomendacion a partir de las respuestas
+      const activityTitles = joyuItems.map((item) => item.title)
+      const result = await getRecommendation(answers, activityTitles) //llama la funcion getRecommendation para obtener una recomendacion a partir de las respuestas
       setRec(result)
       if (uid) localStorage.setItem(recommendKey(uid), JSON.stringify(result))
     } catch (err) {

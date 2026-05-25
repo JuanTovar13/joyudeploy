@@ -5,13 +5,21 @@ export type GroqRecommendation = {
   activity: string
 }
 
-export async function getRecommendation(answers: CheckInAnswers): Promise<GroqRecommendation> { //los valores recibidos deben ser strings
+export async function getRecommendation(
+  answers: CheckInAnswers,
+  activities: string[] = [],
+): Promise<GroqRecommendation> { //los valores recibidos deben ser strings
   const apiKey = import.meta.env.VITE_GROQ_API_KEY
 
   if (!apiKey) {
     console.error('[Groq] VITE_GROQ_API_KEY is not set. Restart the dev server after adding it to .env')
     throw new Error('Missing VITE_GROQ_API_KEY')
   }
+
+  // Build the activity list from the DB; fall back to a generic option if empty
+  const activityList = activities.length > 0
+    ? activities.map((a) => `   - ${a}`).join('\n')
+    : '   - General well-being activity'
 
   const prompt = `You are an emotional well-being assistant for university students.
 
@@ -21,18 +29,10 @@ Based on the following student responses, do TWO things:
    It should feel like a personalized inspirational message, not medical advice.
 
 2. Recommend EXACTLY ONE option from this list:
-   - Individual sports
-   - Team sports
-   - Musical arts (Groups)
-   - Short workshops
-   - Musical arts (Classes)
-   - Performing arts
-   - Visual arts
-   - Physical activity and health
-   - Schedule an appointment with a psychologist
+${activityList}
 
 Student responses:
-- Emotional state this week: ${answers.emotion} 
+- Emotional state this week: ${answers.emotion}
 - Main source of pressure: ${answers.pressure}
 - Daily hours of sleep: ${answers.sleep}
 - Preferred relaxation activity: ${answers.relax}
