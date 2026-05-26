@@ -13,7 +13,7 @@ import type { Task } from '../types'
  * React.memo evita renderizados innecesarios
  */
 
-const TaskList = React.memo(function TaskList() {
+const TaskList = React.memo(() => {
   const context = useContext(AuthContext)
   const user = context?.user
 
@@ -85,7 +85,7 @@ const TaskList = React.memo(function TaskList() {
     }
   }, [user?.uid])
 
-  async function handleAddTask() {
+  const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return
     const { data, error } = await supabase
       .from('study_tasks') //insert
@@ -108,7 +108,7 @@ const TaskList = React.memo(function TaskList() {
     if (error) setError('Could not add task.')
   }
 
-  async function handleToggleComplete(taskId: string, currentStatus: boolean) {
+  const handleToggleComplete = async (taskId: string, currentStatus: boolean) => {
     setTasks((prev) =>
       prev.map((t) =>
         t.id === taskId ? { ...t, completed: !currentStatus } : t,
@@ -120,7 +120,7 @@ const TaskList = React.memo(function TaskList() {
       .eq('id', taskId)
   }
 
-  async function handleDeleteTask(taskId: string) {
+  const handleDeleteTask = async (taskId: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== taskId))
     await supabase.from('study_tasks').delete().eq('id', taskId)
   }
