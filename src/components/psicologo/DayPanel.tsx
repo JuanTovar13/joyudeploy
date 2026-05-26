@@ -6,7 +6,7 @@ interface DayPanelProps {
   monthLabel: string
 }
 
-export function DayPanel({ appointments, day, monthLabel }: DayPanelProps) {
+export const DayPanel = ({ appointments, day, monthLabel }: DayPanelProps) => {
   return (
     <div className="day-panel">
       <h3 className="day-panel-title">
