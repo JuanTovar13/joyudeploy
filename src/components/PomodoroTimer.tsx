@@ -14,7 +14,7 @@ interface PomodoroTimerProps {
   onSkip: () => void
 }
 
-function formatTime(seconds: number): string {
+const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60)
   const secs = seconds % 60
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
@@ -28,7 +28,7 @@ function formatTime(seconds: number): string {
 // El temporizador cambia cada segundo.
 // React.memo evita que TaskList se actualice constantemente.
 
-const PomodoroTimer = React.memo(function PomodoroTimer({
+const PomodoroTimer = React.memo(({
   timeLeft,
   status,
   sessionType,
