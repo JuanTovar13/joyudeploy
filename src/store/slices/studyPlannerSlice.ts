@@ -14,7 +14,7 @@ const defaultStudyPlannerState: StudyPlannerState = {
   activeTaskTitle: null,
 }
 
-function readPersistedStudyPlannerState(): StudyPlannerState {
+const readPersistedStudyPlannerState = (): StudyPlannerState => {
   try {
     const today = new Date().toISOString().split('T')[0]
     const raw = localStorage.getItem(`joyu_study_sessions_${today}`)
