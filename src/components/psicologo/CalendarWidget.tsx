@@ -11,14 +11,14 @@ interface CalendarWidgetProps {
   onSelectDay: (day: number | null) => void
 }
 
-export function CalendarWidget({
+export const CalendarWidget = ({
   scheduled,
   calendarDate,
   selectedDay,
   onPrevMonth,
   onNextMonth,
   onSelectDay,
-}: CalendarWidgetProps) {
+}: CalendarWidgetProps) => {
   const year = calendarDate.getFullYear()
   const month = calendarDate.getMonth()
   const monthLabel = calendarDate.toLocaleString('default', { month: 'long', year: 'numeric' })
