@@ -29,14 +29,14 @@ interface RequestCardProps {
   onAccept: (id: string, date: string, hour: string) => Promise<void>
 }
 
-export function RequestCard({ appointment, scheduled, onAccept }: RequestCardProps) {
+export const RequestCard = ({ appointment, scheduled, onAccept }: RequestCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [acceptDate, setAcceptDate] = useState('')
   const [acceptHour, setAcceptHour] = useState('')
   const [saving, setSaving] = useState(false)
   const [conflictError, setConflictError] = useState<string | null>(null)
 
-  async function handleConfirm() {
+  const handleConfirm = async () => {
     if (!acceptDate || !acceptHour) {
       setConflictError('Please select a date and hour before confirming.')
       return
@@ -59,7 +59,7 @@ export function RequestCard({ appointment, scheduled, onAccept }: RequestCardPro
     }
   }
 
-  function handleCancel() {
+  const handleCancel = () => {
     setIsExpanded(false)
     setAcceptDate('')
     setAcceptHour('')
