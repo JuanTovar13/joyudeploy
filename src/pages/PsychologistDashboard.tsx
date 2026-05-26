@@ -12,7 +12,7 @@ import { CalendarWidget } from '../components/psicologo/CalendarWidget'
 import { DayPanel }       from '../components/psicologo/DayPanel'
 import type { PendingAppointment, ScheduledAppointment } from '../components/psicologo/RequestCard'
 
-export function PsychologistDashboard() {
+export const PsychologistDashboard = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
 
@@ -30,7 +30,7 @@ export function PsychologistDashboard() {
     void fetchData()
   }, [user])
 
-  async function fetchData() {
+  const fetchData = async () => {
     setLoading(true)
     const [pendingRes, scheduledRes] = await Promise.all([
       supabase
@@ -50,7 +50,7 @@ export function PsychologistDashboard() {
     setLoading(false)
   }
 
-  async function handleAccept(appointmentId: string, date: string, hour: string) {
+  const handleAccept = async (appointmentId: string, date: string, hour: string) => {
     const { error } = await supabase
       .from('appointments')
       .update({
@@ -72,7 +72,7 @@ export function PsychologistDashboard() {
     }
   }
 
-  async function handleSignOut() {
+  const handleSignOut = async () => {
     await signOut(authService)
     navigate('/login')
   }
