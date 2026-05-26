@@ -17,7 +17,7 @@ import { supabase } from '../lib/supabaseClient'
  * - useCallback mantiene referencias estables
  */
 
-export function StudyPlanner() {
+export const StudyPlanner = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { todaySessionsCompleted, totalFocusTimeToday } = useSelector(
     (state: RootState) => state.studyPlanner,
