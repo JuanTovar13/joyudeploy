@@ -7,7 +7,7 @@ interface QuoteCardProps {
   rec: GroqRecommendation
 }
 
-export function QuoteCard({ loadingRec, recError, rec }: QuoteCardProps) {
+export const QuoteCard = ({ loadingRec, recError, rec }: QuoteCardProps) => {
   return (
     <section className="quote-card">
       {loadingRec ? (
