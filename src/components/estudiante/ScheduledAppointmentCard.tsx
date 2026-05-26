@@ -14,12 +14,12 @@ interface ScheduledAppointmentCardProps {
   onCancel: (id: string) => void
 }
 
-export function ScheduledAppointmentCard({
+export const ScheduledAppointmentCard = ({
   appointment,
   photoUrl,
   isCancelling,
   onCancel,
-}: ScheduledAppointmentCardProps) {
+}: ScheduledAppointmentCardProps) => {
   return (
     <div className="appointment-card-v2">
       {/* Background image */}
