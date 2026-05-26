@@ -54,7 +54,7 @@ export const Home = () => {
   }, [uid])
 
   useEffect(() => {
-    async function fetchActivities() {
+    const fetchActivities = async () => {
       const { data, error } = await supabase.from('activities').select('*')
       if (error) {
         console.error('Error fetching activities:', error)
