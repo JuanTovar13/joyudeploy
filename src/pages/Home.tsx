@@ -1,14 +1,5 @@
 import '../styles/home.css'
 
-import burbujaChat from '../assets/home-icons/Burbuja de Chat con Carita.svg'
-import caraFrase from '../assets/home-icons/Cara sonriente(frase motivadora).svg'
-import enojado from '../assets/home-icons/EnojadoMolesto (AmarilloVerde).svg'
-import feliz from '../assets/home-icons/FelizRadiante (MoradoLila).svg'
-import iconoCalendario from '../assets/home-icons/icono de Calendario.svg'
-import logoJoyuOscuro from '../assets/home-icons/Logo de Joyu oscuro.svg'
-import neutral from '../assets/home-icons/NeutralCalmado (Verde claro).svg'
-import triste from '../assets/home-icons/TristeCansado (Azul).svg'
-
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckInForm } from '../components/Form/CheckInForm'
@@ -18,6 +9,12 @@ import type { JoyuItem } from '../types'
 import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
+
+import { HomeHeader }     from '../components/estudiante/HomeHeader'
+import { CheckInCard }    from '../components/estudiante/CheckInCard'
+import { QuoteCard }      from '../components/estudiante/QuoteCard'
+import { ActivitiesCard } from '../components/estudiante/ActivitiesCard'
+import { ActionsRow }     from '../components/estudiante/ActionsRow'
 
 const checkinKey   = (uid: string) => `joyu_checkin_done_${uid}`
 const recommendKey = (uid: string) => `joyu_recommendation_${uid}`
@@ -79,7 +76,8 @@ export const Home = () => {
     setRecError(false)
     setLoadingRec(true)
     try {
-      const result = await getRecommendation(answers) //llama la funcion getRecommendation para obtener una recomendacion a partir de las respuestas
+      const activityTitles = joyuItems.map((item) => item.title)
+      const result = await getRecommendation(answers, activityTitles)
       setRec(result)
       if (uid) localStorage.setItem(recommendKey(uid), JSON.stringify(result))
     } catch (err) {
@@ -115,112 +113,27 @@ export const Home = () => {
         Sign Out
       </button>
 
-      {/* Contenedor blanco redondeado al fondo */}
       <div className="home-white-background"></div>
 
-      {/* Header Superior */}
-      <header className="home-header">
-        <div className="user-greeting">
-          <h1 className="title-font">Hi, {context?.user?.displayName || 'User'}</h1>
-          <p>How are you feeling today?</p>
-        </div>
-        <img src={logoJoyuOscuro} alt="Joyu Logo" className="home-logo" />
-      </header>
+      <HomeHeader displayName={context?.user?.displayName} />
 
       <main className="home-content">
-        {/* Sección Izquierda */}
         <div className="home-left-column">
-          <section
-            className="check-in-card"
-            style={{ cursor: 'pointer' }}
-            onClick={() => setShowCheckIn(true)}
-          >
-            <h2>Ready to check in?</h2>
-            <p>Take this quick test</p>
-            <div className="emotions-grid">
-              <img src={triste}  alt="Triste" />
-              <img src={enojado} alt="Enojado" />
-              <img src={neutral} alt="Neutral" />
-              <img src={feliz}   alt="Feliz" />
-            </div>
-          </section>
-
-          {/* Quote-card con frase motivadora + actividad recomendada */}
-          <section className="quote-card">
-            {loadingRec ? (
-              <div className="quote-loading">
-                <span className="quote-dot" />
-                <span className="quote-dot" />
-                <span className="quote-dot" />
-              </div>
-            ) : recError ? (
-              <p className="quote-error">
-                Could not load your recommendation. Try the check-in again!
-              </p>
-            ) : (
-              <div className="quote-content">
-                <p>{rec.message}</p>
-                {rec.activity && (
-                  <span className="quote-activity-badge">
-                    ✦ Recommended activity: {rec.activity}
-                  </span>
-                )}
-              </div>
-            )}
-            <img src={caraFrase} alt="Smiley" />
-          </section>
+          <CheckInCard onClick={() => setShowCheckIn(true)} />
+          <QuoteCard loadingRec={loadingRec} recError={recError} rec={rec} />
         </div>
 
-        {/* Sección Derecha */}
         <div className="home-right-column">
-          <section className="activities-card">
-            <div className="activities-header">
-              <h2>Next recommended activities</h2>
-              <button className="view-all">See all</button>
-            </div>
-            <div className="activities-grid">
-              {joyuItems.map((item) => (
-                <div key={item.id} className="activity-item">
-                  <img src={item.image} alt={item.title} />
-                  <div>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <ActivitiesCard items={joyuItems} />
         </div>
       </main>
 
-      {/* Fila de Acciones Inferior */}
-      <section className="home-actions-row">
-        <button
-          className="action-card action-card-schedule"
-          onClick={() => navigate('/schedule')}
-        >
-          <span>Schedule Appointment</span>
-          <img src={iconoCalendario} alt="Calendar" />
-        </button>
+      <ActionsRow
+        onSchedule={() => navigate('/schedule')}
+        onAppointments={() => navigate('/my-appointments')}
+        onStudyPlanner={() => navigate('/study-planner')}
+      />
 
-        <button
-          className="action-card action-card-see"
-          onClick={() => navigate('/my-appointments')}
-        >
-          <span>See Appointments</span>
-          <img src={burbujaChat} alt="Chat" />
-        </button>
-
-        <button
-          className="action-card action-card-study"
-          onClick={() => navigate('/study-planner')}
-        >
-          <span>Study Planner</span>
-          <img src={iconoCalendario} alt="Study" />
-        </button>
-      </section>
-
-      {/* Decoración inferior (Colinas) */}
       <div className="decor-hills"></div>
 
       {showCheckIn && (
