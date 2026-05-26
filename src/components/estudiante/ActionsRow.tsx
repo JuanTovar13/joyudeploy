@@ -7,7 +7,7 @@ interface ActionsRowProps {
   onStudyPlanner: () => void
 }
 
-export function ActionsRow({ onSchedule, onAppointments, onStudyPlanner }: ActionsRowProps) {
+export const ActionsRow = ({ onSchedule, onAppointments, onStudyPlanner }: ActionsRowProps) => {
   return (
     <section className="home-actions-row">
       <button className="action-card action-card-schedule" onClick={onSchedule}>
