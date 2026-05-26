@@ -4,7 +4,7 @@ interface HomeHeaderProps {
   displayName: string | null | undefined
 }
 
-export function HomeHeader({ displayName }: HomeHeaderProps) {
+export const HomeHeader = ({ displayName }: HomeHeaderProps) => {
   return (
     <header className="home-header">
       <div className="user-greeting">
