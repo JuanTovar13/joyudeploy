@@ -7,7 +7,7 @@ interface CheckInCardProps {
   onClick: () => void
 }
 
-export function CheckInCard({ onClick }: CheckInCardProps) {
+export const CheckInCard = ({ onClick }: CheckInCardProps) => {
   return (
     <section className="check-in-card" style={{ cursor: 'pointer' }} onClick={onClick}>
       <h2>Ready to check in?</h2>
