@@ -21,7 +21,7 @@ interface Appointment {
   professional_image: string
 }
 
-export function AppointmentsList() {
+export const AppointmentsList = () => {
   const [appointments, setAppointments]             = useState<Appointment[]>([])
   const [loading, setLoading]                       = useState(true)
   const [professionalPhotos, setProfessionalPhotos] = useState<Record<string, string>>({})
@@ -32,7 +32,7 @@ export function AppointmentsList() {
 
   // 1 — Load appointments from Supabase
   useEffect(() => {
-    async function fetchAppointments() {
+    const fetchAppointments = async () => {
       if (!user?.uid) return
       try {
         const { data, error } = await supabase
