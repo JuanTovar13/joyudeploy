@@ -13,14 +13,14 @@ import { AppointmentsList } from './pages/AppointmentsList'
 import { PsychologistDashboard } from './pages/PsychologistDashboard'
 
 
-function App() {
+const App = () => {
   const miFuente = new FontFace('title', `url(${circularFont}) format("truetype")`)
   miFuente
     .load()
-    .then(function (loadedFont) {
+    .then((loadedFont) => {
       document.fonts.add(loadedFont)
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.error('Error al cargar la fuente:', error)
     })
 
