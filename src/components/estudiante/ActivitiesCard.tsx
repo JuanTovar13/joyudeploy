@@ -4,7 +4,7 @@ interface ActivitiesCardProps {
   items: JoyuItem[]
 }
 
-export function ActivitiesCard({ items }: ActivitiesCardProps) {
+export const ActivitiesCard = ({ items }: ActivitiesCardProps) => {
   return (
     <section className="activities-card">
       <div className="activities-header">
