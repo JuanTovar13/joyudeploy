@@ -10,7 +10,7 @@ interface PendingAppointmentCardProps {
   onCancel: (id: string) => void
 }
 
-export function PendingAppointmentCard({ appointment, isCancelling, onCancel }: PendingAppointmentCardProps) {
+export const PendingAppointmentCard = ({ appointment, isCancelling, onCancel }: PendingAppointmentCardProps) => {
   return (
     <div className="pending-card">
       <div className="pending-card-body">
