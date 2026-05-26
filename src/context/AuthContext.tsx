@@ -12,7 +12,7 @@ import { store } from "../store";
 import { setUser as setReduxUser, clearUser } from "../store/slices/authSlice";
 import { supabase } from "../lib/supabaseClient";
 
-function mapFirebaseUser(fb: FirebaseUser): User {
+const mapFirebaseUser = (fb: FirebaseUser): User => {
   // authService.currentUser always has the latest profile (post-updateProfile),
   // while the onAuthStateChanged snapshot can be stale on first registration.
   return {
