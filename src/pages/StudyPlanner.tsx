@@ -174,6 +174,28 @@ export const StudyPlanner = () => {
             </div>
           )}
         </div>
+        <div className="studyplanner-concentration">
+          <div className="studyplanner-concentration-header">
+            <span>Concentration Level</span>
+            <span>{concentrationPercentage}%</span>
+          </div>
+          <div
+            className="studyplanner-concentration-bar-bg"
+            role="progressbar"
+            aria-valuenow={concentrationPercentage}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Concentration level progress"
+          >
+            <div
+              className="studyplanner-concentration-bar-fill"
+              style={{
+                width: `${concentrationPercentage}%`,
+                backgroundColor: getConcentrationColor(concentrationPercentage),
+              }}
+            />
+          </div>
+        </div>
         {activeTaskTitle && (
           <p className="studyplanner-active-task">Trabajando en: {activeTaskTitle}</p>
         )}
