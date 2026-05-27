@@ -95,11 +95,17 @@ export const StudyPlanner = () => {
           const res = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
           )
+          if (!res.ok) throw new Error('Weather fetch failed')
           const data = await res.json()
-          setWeather({
-            temp: Math.round(data.current_weather.temperature),
-            code: data.current_weather.weathercode,
-          })
+          const current = data?.current_weather
+          if (typeof current?.temperature === 'number' && typeof current?.weathercode === 'number') {
+            setWeather({
+              temp: Math.round(current.temperature),
+              code: current.weathercode,
+            })
+          } else {
+            setWeatherError(true)
+          }
         } catch {
           setWeatherError(true)
         }
@@ -154,7 +160,7 @@ export const StudyPlanner = () => {
         Skip to main content
       </a>
       <main id="main-content" role="main" className="studyplanner-screen">
-        <button className="studyplanner-back-btn" onClick={() => navigate(-1)}>
+        <button className="studyplanner-back-btn" onClick={() => navigate('/home')}>
           ‹
         </button>
         <h1 className="studyplanner-title">Study Planner</h1>
