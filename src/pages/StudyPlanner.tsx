@@ -1,5 +1,6 @@
 import '../styles/StudyPlanner.css'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
 import PomodoroTimer from '../components/PomodoroTimer'
@@ -18,6 +19,7 @@ import { supabase } from '../lib/supabaseClient'
  */
 
 export const StudyPlanner = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { todaySessionsCompleted, totalFocusTimeToday } = useSelector(
     (state: RootState) => state.studyPlanner,
@@ -91,6 +93,9 @@ export const StudyPlanner = () => {
         role="main"
         className="studyplanner-screen"
       >
+        <button className="studyplanner-back-btn" onClick={() => navigate(-1)}>
+          ‹
+        </button>
         <h1 className="studyplanner-title">Study Planner</h1>
         {activeTaskTitle && (
           <p className="studyplanner-active-task">

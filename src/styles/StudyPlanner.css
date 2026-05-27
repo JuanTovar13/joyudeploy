@@ -1,3 +1,19 @@
+.studyplanner-back-btn {
+  background: white;
+  border: 1px solid #E0E0E0;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  font-size: 30px;
+  color: #1A1A7E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  align-self: flex-start;
+}
+
 .studyplanner-screen {
   background-color: #a7dfff;
   min-height: 100vh;
