@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
 import PomodoroTimer from '../components/estudiante/PomodoroTimer'
 import TaskList from '../components/estudiante/TaskList'
+import MiniJournal from '../components/estudiante/MiniJournal'
 import type { RootState, AppDispatch } from '../store'
 import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
@@ -215,6 +216,9 @@ export const StudyPlanner = () => {
             onSkip={skip}
           />
           <TaskList />
+        </div>
+        <div className="studyplanner-bottom-row">
+          <MiniJournal />
         </div>
       </main>
     </>
