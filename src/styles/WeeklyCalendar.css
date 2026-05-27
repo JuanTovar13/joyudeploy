@@ -1,0 +1,125 @@
+.weekly-calendar {
+  position: relative;
+  z-index: 2;
+  background: white;
+  border-radius: 24px;
+  padding: 24px 28px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.weekly-calendar__title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0 0 18px;
+}
+
+/* ── 5-column grid, one per day ── */
+.weekly-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+/* ── Day column ── */
+.wc-day {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wc-day__name {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8888aa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+/* Today: highlight the day label */
+.wc-day--today .wc-day__name {
+  color: #262688;
+  border-bottom-color: #262688;
+}
+
+/* Free day label */
+.wc-day__free-label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  color: #b0b0cc;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ── Class list ── */
+.wc-classes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Single class chip ── */
+.wc-class {
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: transform 0.15s;
+}
+
+.wc-class:hover {
+  transform: translateY(-2px);
+}
+
+.wc-class__subject {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #262688;
+  line-height: 1.2;
+}
+
+.wc-class__time {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #5a5a8a;
+}
+
+/* ── Today column: subtle background glow ── */
+.wc-day--today {
+  background: rgba(38, 38, 136, 0.04);
+  border-radius: 14px;
+  padding: 8px;
+  margin: -8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .weekly-calendar__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    overflow-x: auto;
+  }
+
+  .weekly-calendar {
+    padding: 18px 16px;
+  }
+
+  .wc-class__subject {
+    font-size: 11px;
+  }
+
+  .wc-class__time {
+    font-size: 10px;
+  }
+}

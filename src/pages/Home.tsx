@@ -17,6 +17,8 @@ import { CheckInCard }    from '../components/estudiante/CheckInCard'
 import { QuoteCard }      from '../components/estudiante/QuoteCard'
 import { ActivitiesCard } from '../components/estudiante/ActivitiesCard'
 import { ActionsRow }     from '../components/estudiante/ActionsRow'
+import { WeeklyCalendar } from '../components/estudiante/WeeklyCalendar'
+import '../styles/WeeklyCalendar.css'
 
 const checkinKey   = (uid: string) => `joyu_checkin_done_${uid}`
 const recommendKey = (uid: string) => `joyu_recommendation_${uid}`
@@ -117,6 +119,8 @@ export const Home = () => {
           <ActivitiesCard items={joyuItems} />
         </div>
       </main>
+
+      <WeeklyCalendar />
 
       <ActionsRow
         onSchedule={() => navigate('/schedule')}
