@@ -38,6 +38,10 @@ const recommendationSlice = createSlice({
       state.data = action.payload
       state.status = 'succeeded'
     },
+    clearRecommendation(state) {
+      state.data = null
+      state.status = 'idle'
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -54,5 +58,5 @@ const recommendationSlice = createSlice({
   },
 })
 
-export const { loadPersistedRecommendation } = recommendationSlice.actions
+export const { loadPersistedRecommendation, clearRecommendation } = recommendationSlice.actions
 export default recommendationSlice.reducer

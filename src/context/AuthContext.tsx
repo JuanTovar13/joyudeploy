@@ -9,7 +9,9 @@ import { authService } from "../firebase/firebaseConfig";
 import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import type { User } from "../types";
 import { store } from "../store";
-import { setUser as setReduxUser, clearUser } from "../store/slices/authSlice";
+import { setUser as setReduxUser, setRole as setReduxRole, clearUser } from "../store/slices/authSlice";
+import { clearAppointments } from "../store/slices/appointmentsSlice";
+import { clearRecommendation } from "../store/slices/recommendationSlice";
 import { supabase } from "../lib/supabaseClient";
 
 const mapFirebaseUser = (fb: FirebaseUser): User => {
@@ -55,9 +57,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           .select('role')
           .eq('uid', firebaseUser.uid)
           .maybeSingle();
-        setRole((data?.role as 'student' | 'psychologist') ?? 'student');
+        const resolvedRole = (data?.role as 'student' | 'psychologist') ?? 'student';
+        setRole(resolvedRole);
+        store.dispatch(setReduxRole(resolvedRole));
       } else {
         store.dispatch(clearUser());
+        store.dispatch(clearAppointments());
+        store.dispatch(clearRecommendation());
         setUser(null);
         setRole(null);
       }

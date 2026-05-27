@@ -46,7 +46,14 @@ export const cancelAppointment = createAsyncThunk<string, string>(
 const appointmentsSlice = createSlice({
   name: 'appointments',
   initialState,
-  reducers: {},
+  reducers: {
+    clearAppointments(state) {
+      state.items = []
+      state.status = 'idle'
+      state.error = null
+      state.cancellingId = null
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAppointments.pending, (state) => {
@@ -74,4 +81,5 @@ const appointmentsSlice = createSlice({
   },
 })
 
+export const { clearAppointments } = appointmentsSlice.actions
 export default appointmentsSlice.reducer
