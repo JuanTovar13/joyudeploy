@@ -104,6 +104,11 @@ export const StudyPlanner = () => {
           ‹
         </button>
         <h1 className="studyplanner-title">Study Planner</h1>
+        <div className="studyplanner-info-row">
+          <div className="studyplanner-clock" aria-label={`Current time: ${currentTime}`}>
+            🕐 {currentTime}
+          </div>
+        </div>
         {activeTaskTitle && (
           <p className="studyplanner-active-task">Trabajando en: {activeTaskTitle}</p>
         )}
