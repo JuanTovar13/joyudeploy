@@ -12,7 +12,7 @@ import {
  * Todos los handlers usan useCallback para mantener referencias estables
  * @param config - configuración opcional para cambiar las duraciones por defecto
  */
-export function usePomodoro(config: Partial<PomodoroConfig> = {}) {
+export const usePomodoro = (config: Partial<PomodoroConfig> = {}) => {
   const mergedConfig = { ...DEFAULT_CONFIG, ...config }
 
   const [timeLeft, setTimeLeft] = useState(mergedConfig.workDuration)

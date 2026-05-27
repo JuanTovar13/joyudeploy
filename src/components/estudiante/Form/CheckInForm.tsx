@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../../styles/checkin.css'
+import '../../../styles/checkin.css'
 
 const questions = [
   {

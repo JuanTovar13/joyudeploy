@@ -5,10 +5,10 @@ export type GroqRecommendation = {
   activity: string
 }
 
-export async function getRecommendation(
+export const getRecommendation = async (
   answers: CheckInAnswers,
   activities: string[] = [],
-): Promise<GroqRecommendation> { //los valores recibidos deben ser strings
+): Promise<GroqRecommendation> => { // los valores recibidos deben ser strings
   const apiKey = import.meta.env.VITE_GROQ_API_KEY
 
   if (!apiKey) {

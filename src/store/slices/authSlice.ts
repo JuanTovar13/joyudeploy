@@ -9,11 +9,13 @@ interface AuthUser {
 interface AuthState {
   user: AuthUser | null
   isAuthenticated: boolean
+  role: 'student' | 'psychologist' | null
 }
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
+  role: null,
 }
 
 const authSlice = createSlice({
@@ -24,12 +26,16 @@ const authSlice = createSlice({
       state.user = action.payload
       state.isAuthenticated = true
     },
+    setRole(state, action: PayloadAction<'student' | 'psychologist' | null>) {
+      state.role = action.payload
+    },
     clearUser(state) {
       state.user = null
       state.isAuthenticated = false
+      state.role = null
     },
   },
 })
 
-export const { setUser, clearUser } = authSlice.actions
+export const { setUser, setRole, clearUser } = authSlice.actions
 export default authSlice.reducer

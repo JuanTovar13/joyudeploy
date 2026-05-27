@@ -40,13 +40,16 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
   sessionsBeforeLongBreak: 4,
 }
 export interface Appointment {
-  id: string;
-  user_id: string;
-  reason: string;
-  date: string;
-  hour: string;
-  mode: 'In person' | 'Virtual';
-  professional_name?: string;
-  professional_image?: string;
-  status: 'scheduled' | 'cancelled' | 'rescheduled';
+  id: string
+  user_id: string
+  student_name: string | null
+  psychologist_id: string | null
+  reason: string
+  date: string | null
+  hour: string | null
+  mode: 'In person' | 'Virtual'
+  professional_name: string
+  professional_image: string
+  status: 'pending' | 'scheduled' | 'cancelled' | 'rescheduled'
+  created_at: string
 }

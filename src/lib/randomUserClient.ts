@@ -9,10 +9,10 @@ export interface RandomUserPhoto {
  * del profesional como seed, garantizando que el mismo nombre
  * siempre devuelva la misma foto.
  */
-export async function fetchProfessionalPhoto(
+export const fetchProfessionalPhoto = async (
   professionalName: string,
   gender: 'female',
-): Promise<RandomUserPhoto> {
+): Promise<RandomUserPhoto> => {
   // Normalizar el nombre como seed: sin espacios ni tildes
   const seed = professionalName
     .normalize('NFD')
@@ -33,10 +33,10 @@ export async function fetchProfessionalPhoto(
  * Recibe un array de nombres únicos y devuelve un mapa nombre → URL de foto.
  * Las peticiones se hacen en paralelo.
  */
-export async function fetchPhotosForProfessionals(
+export const fetchPhotosForProfessionals = async (
   names: string[],
   gender: 'female' = 'female',
-): Promise<Record<string, string>> {
+): Promise<Record<string, string>> => {
   const entries = await Promise.all(
     names.map(async (name) => {
       try {

@@ -6,7 +6,7 @@ import { authService } from '../firebase/firebaseConfig'
 import '../styles/ScheduleAppointment.css'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 
-export function ScheduleAppointment() {
+export const ScheduleAppointment = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
 
