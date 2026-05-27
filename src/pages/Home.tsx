@@ -3,12 +3,14 @@ import '../styles/home.css'
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckInForm } from '../components/Form/CheckInForm'
-import { supabase } from '../lib/supabaseClient'
-import { getRecommendation, type GroqRecommendation } from '../lib/groqClient'
-import type { JoyuItem } from '../types'
 import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { fetchActivities } from '../store/slices/activitiesSlice'
+import { fetchRecommendation, loadPersistedRecommendation } from '../store/slices/recommendationSlice'
+
+import type { GroqRecommendation } from '../lib/groqClient'
 
 import { HomeHeader }     from '../components/estudiante/HomeHeader'
 import { CheckInCard }    from '../components/estudiante/CheckInCard'
@@ -25,72 +27,60 @@ const DEFAULT_REC: GroqRecommendation = {
 }
 
 export const Home = () => {
-  const [joyuItems, setJoyuItems]     = useState<JoyuItem[]>([])
-  const [loading, setLoading]         = useState(true)
+  const dispatch = useAppDispatch()
+
+  const { items: joyuItems, status: activitiesStatus } = useAppSelector(
+    (state) => state.activities,
+  )
+  const { data: rec, status: recStatus } = useAppSelector(
+    (state) => state.recommendation,
+  )
+
   const [showCheckIn, setShowCheckIn] = useState(false)
-  const [rec, setRec]                 = useState<GroqRecommendation>(DEFAULT_REC)
-  const [loadingRec, setLoadingRec]   = useState(false)
-  const [recError, setRecError]       = useState(false)
 
   const context = useContext(AuthContext)
   const uid = context?.user?.uid
   const navigate = useNavigate()
 
-  // Cargar recomendación guardada y decidir si mostrar el check-in
+  // Fetch activities once on mount
+  useEffect(() => {
+    if (activitiesStatus === 'idle') void dispatch(fetchActivities())
+  }, [dispatch, activitiesStatus])
+
+  // Load persisted recommendation and decide whether to show check-in
   useEffect(() => {
     if (!uid) return
 
     const saved = localStorage.getItem(recommendKey(uid))
     if (saved) {
       try {
-        setRec(JSON.parse(saved))
+        dispatch(loadPersistedRecommendation(JSON.parse(saved)))
       } catch {
-        setRec({ message: saved, activity: '' })
+        // ignore malformed cache
       }
     }
 
     const alreadyDone = localStorage.getItem(checkinKey(uid))
     if (!alreadyDone) setShowCheckIn(true)
-  }, [uid])
+  }, [uid, dispatch])
 
-  useEffect(() => {
-    const fetchActivities = async () => {
-      const { data, error } = await supabase.from('activities').select('*')
-      if (error) {
-        console.error('Error fetching activities:', error)
-      } else {
-        setJoyuItems(data || [])
-      }
-      setLoading(false)
-    }
-    fetchActivities()
-  }, [])
-
-  // Llamar a Groq, guardar y mostrar la recomendación
   const handleCheckInDone = async (answers?: Record<string, string>) => {
     if (uid) localStorage.setItem(checkinKey(uid), 'true')
     setShowCheckIn(false)
 
-    if (!answers) return
+    if (!answers || !uid) return
 
-    setRecError(false)
-    setLoadingRec(true)
-    try {
-      const activityTitles = joyuItems.map((item) => item.title)
-      const result = await getRecommendation(answers, activityTitles)
-      setRec(result)
-      if (uid) localStorage.setItem(recommendKey(uid), JSON.stringify(result))
-    } catch (err) {
-      console.error('[Home] Groq recommendation failed:', err)
-      setRecError(true)
-    } finally {
-      setLoadingRec(false)
-    }
+    const activityTitles = joyuItems.map((item) => item.title)
+    void dispatch(fetchRecommendation({ answers, activities: activityTitles, uid }))
   }
 
-  if (loading) {
+  if (activitiesStatus === 'loading' || activitiesStatus === 'idle') {
     return <div className="home-screen">Loading activities...</div>
   }
+
+  const loadingRec = recStatus === 'loading'
+  const recError   = recStatus === 'failed'
+  const recData    = rec ?? DEFAULT_REC
 
   return (
     <div className="home-screen">
@@ -120,7 +110,7 @@ export const Home = () => {
       <main className="home-content">
         <div className="home-left-column">
           <CheckInCard onClick={() => setShowCheckIn(true)} />
-          <QuoteCard loadingRec={loadingRec} recError={recError} rec={rec} />
+          <QuoteCard loadingRec={loadingRec} recError={recError} rec={recData} />
         </div>
 
         <div className="home-right-column">
@@ -133,8 +123,6 @@ export const Home = () => {
         onAppointments={() => navigate('/my-appointments')}
         onStudyPlanner={() => navigate('/study-planner')}
       />
-
-      <div className="decor-hills"></div>
 
       {showCheckIn && (
         <CheckInForm
