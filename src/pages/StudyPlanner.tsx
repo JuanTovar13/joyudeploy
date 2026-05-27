@@ -18,6 +18,8 @@ import { supabase } from '../lib/supabaseClient'
  * - useCallback mantiene referencias estables
  */
 
+//Luego cambiar el emoji por el clima por imagenes de la mascota de la app
+
 const getWeatherEmoji = (code: number): string => {
   if (code === 0) return '☀️'
   if (code <= 3) return '⛅'
@@ -146,6 +148,19 @@ export const StudyPlanner = () => {
           <div className="studyplanner-clock" aria-label={`Current time: ${currentTime}`}>
             🕐 {currentTime}
           </div>
+          {weather && (
+            <div
+              className="studyplanner-weather"
+              aria-label={`Current temperature: ${weather.temp} degrees`}
+            >
+              {getWeatherEmoji(weather.code)} {weather.temp}°C
+            </div>
+          )}
+          {weatherError && (
+            <div className="studyplanner-weather" aria-label="Weather unavailable">
+              🌡️ Weather unavailable
+            </div>
+          )}
         </div>
         {activeTaskTitle && (
           <p className="studyplanner-active-task">Trabajando en: {activeTaskTitle}</p>
