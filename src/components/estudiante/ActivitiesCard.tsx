@@ -14,10 +14,10 @@ export const ActivitiesCard = ({ items }: ActivitiesCardProps) => {
       <div className="activities-grid">
         {items.map((item) => (
           <div key={item.id} className="activity-item">
-            <img src={item.image} alt={item.title} />
+            {item.image && <img src={item.image} alt={item.title} />}
             <div>
               <h3>{item.title}</h3>
-              <p>{item.description}</p>
+              <p className="activity-category">{item.category}</p>
             </div>
           </div>
         ))}

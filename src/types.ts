@@ -1,8 +1,19 @@
 export interface JoyuItem {
-  id: number | string;
-  title: string;
-  description: string;
-  image: string;
+  id: string
+  title: string
+  category: string
+  image: string | null
+}
+
+export interface ActivitySchedule {
+  id: string
+  activity_id: string
+  level: string | null
+  day: string
+  start_time: string   // "HH:MM:SS" — time without time zone
+  end_time: string
+  location: string | null
+  teacher: string | null
 }
 
 export interface User {
