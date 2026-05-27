@@ -21,7 +21,43 @@ const MusicPlayer = () => {
 
   const currentTrack = STUDY_TRACKS[currentIndex]
 
-  return <div>MusicPlayer placeholder</div>
+  return (
+    <div className="musicplayer-container">
+      <h2 className="musicplayer-title">Study Music 🎵</h2>
+      <p className="musicplayer-track-name">{currentTrack.title}</p>
+      <iframe
+        className="musicplayer-iframe"
+        src={`https://www.youtube.com/embed/${currentTrack.embedId}?autoplay=1`}
+        title={currentTrack.title}
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+      />
+      <div className="musicplayer-controls">
+        <button
+          type="button"
+          className="musicplayer-btn"
+          onClick={handlePrev}
+          aria-label="Previous track"
+        >
+          ‹
+        </button>
+        <span
+          className="musicplayer-counter"
+          aria-label={`Track ${currentIndex + 1} of ${STUDY_TRACKS.length}`}
+        >
+          {currentIndex + 1} / {STUDY_TRACKS.length}
+        </span>
+        <button
+          type="button"
+          className="musicplayer-btn"
+          onClick={handleNext}
+          aria-label="Next track"
+        >
+          ›
+        </button>
+      </div>
+    </div>
+  )
 }
 
 export default MusicPlayer
