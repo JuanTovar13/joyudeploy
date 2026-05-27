@@ -1,11 +1,11 @@
-import '../styles/TaskList.css'
+import '../../styles/TaskList.css'
 import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AuthContext } from '../context/AuthContext'
-import { supabase } from '../lib/supabaseClient'
-import type { RootState, AppDispatch } from '../store'
-import { setActiveTask, clearActiveTask } from '../store/slices/studyPlannerSlice'
-import type { Task } from '../types'
+import { AuthContext } from '../../context/AuthContext'
+import { supabase } from '../../lib/supabaseClient'
+import type { RootState, AppDispatch } from '../../store'
+import { setActiveTask, clearActiveTask } from '../../store/slices/studyPlannerSlice'
+import type { Task } from '../../types'
 
 /**
  * TaskList - maneja tareas de estudio con Supabase
@@ -18,9 +18,7 @@ const TaskList = React.memo(() => {
   const user = context?.user
 
   const dispatch = useDispatch<AppDispatch>()
-  const activeTaskId = useSelector(
-    (state: RootState) => state.studyPlanner.activeTaskId,
-  )
+  const activeTaskId = useSelector((state: RootState) => state.studyPlanner.activeTaskId)
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -56,9 +54,7 @@ const TaskList = React.memo(() => {
         (payload) => {
           if (payload.eventType === 'INSERT') {
             setTasks((prev) => {
-              const alreadyExists = prev.some(
-                (t) => t.id === (payload.new as Task).id,
-              )
+              const alreadyExists = prev.some((t) => t.id === (payload.new as Task).id)
               if (alreadyExists) return prev
               return [payload.new as Task, ...prev]
             })
@@ -66,16 +62,14 @@ const TaskList = React.memo(() => {
           if (payload.eventType === 'UPDATE') {
             setTasks((prev) =>
               prev.map((t) =>
-                t.id === (payload.new as Task).id ? (payload.new as Task) : t,
-              ),
+                t.id === (payload.new as Task).id ? (payload.new as Task) : t
+              )
             )
           }
           if (payload.eventType === 'DELETE') {
-            setTasks((prev) =>
-              prev.filter((t) => t.id !== (payload.old as Task).id),
-            )
+            setTasks((prev) => prev.filter((t) => t.id !== (payload.old as Task).id))
           }
-        },
+        }
       )
       .subscribe()
 
@@ -110,9 +104,7 @@ const TaskList = React.memo(() => {
 
   const handleToggleComplete = async (taskId: string, currentStatus: boolean) => {
     setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId ? { ...t, completed: !currentStatus } : t,
-      ),
+      prev.map((t) => (t.id === taskId ? { ...t, completed: !currentStatus } : t))
     )
     await supabase
       .from('study_tasks')
@@ -129,9 +121,7 @@ const TaskList = React.memo(() => {
     <div className="tasklist-container">
       <h2 className="tasklist-title">Study Tasks</h2>
 
-      {loading ? (
-        <p className="tasklist-empty">Loading tasks...</p>
-      ) : null}
+      {loading ? <p className="tasklist-empty">Loading tasks...</p> : null}
 
       {error ? (
         <p className="tasklist-error" role="alert">
@@ -178,9 +168,7 @@ const TaskList = React.memo(() => {
               onChange={() => void handleToggleComplete(task.id, task.completed)}
               aria-label={`Mark ${task.title} as complete`}
             />
-            <span
-              className={`tasklist-item-title${task.completed ? ' completed' : ''}`}
-            >
+            <span className={`tasklist-item-title${task.completed ? ' completed' : ''}`}>
               {task.title}
             </span>
             <button

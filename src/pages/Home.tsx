@@ -2,7 +2,7 @@ import '../styles/home.css'
 
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckInForm } from '../components/Form/CheckInForm'
+import { CheckInForm } from '../components/estudiante/Form/CheckInForm'
 import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
