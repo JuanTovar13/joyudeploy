@@ -43,6 +43,7 @@ export const StudyPlanner = () => {
     (state: RootState) => state.studyPlanner.activeTaskTitle
   )
   const activeTaskId = useSelector((state: RootState) => state.studyPlanner.activeTaskId)
+  const tasks = useSelector((state: RootState) => state.studyPlanner.tasks)
 
   const {
     timeLeft,
@@ -56,11 +57,15 @@ export const StudyPlanner = () => {
     skip,
   } = usePomodoro()
 
-  const MAX_DAILY_SESSIONS = 8
-  const concentrationPercentage = Math.min(
-    Math.round((todaySessionsCompleted / MAX_DAILY_SESSIONS) * 100),
-    100
-  )
+  const goalMinutes = tasks && tasks.length > 0
+    ? tasks
+        .filter((t) => !t.completed)
+        .reduce((sum, t) => sum + (t.estimated_pomodoros ?? 0) * 25, 0)
+    : 200
+
+  const concentrationPercentage = goalMinutes > 0
+    ? Math.min(Math.round((totalFocusTimeToday / goalMinutes) * 100), 100)
+    : 0
 
   const getConcentrationColor = (pct: number): string => {
     if (pct <= 33) return '#FF9800'
