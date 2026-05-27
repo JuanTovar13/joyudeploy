@@ -39,7 +39,50 @@ const MiniJournal = () => {
     setNotes((prev) => prev.filter((n) => n.id !== id))
   }
 
-  return <div>MiniJournal placeholder</div>
+  return (
+    <div className="minijournal-container">
+      <h2 className="minijournal-title">My Notes 📝</h2>
+      <div className="minijournal-form">
+        <textarea
+          className="minijournal-textarea"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAddNote() } }}
+          placeholder="Write a note..."
+          maxLength={200}
+          aria-label="Write a new note"
+          rows={3}
+        />
+        <button
+          type="button"
+          className="minijournal-btn-add"
+          onClick={handleAddNote}
+          aria-label="Add note"
+        >
+          Add
+        </button>
+      </div>
+      {notes.length === 0 ? (
+        <p className="minijournal-empty">No notes yet. Start writing! ✨</p>
+      ) : (
+        <ul className="minijournal-list" role="list">
+          {notes.map((note) => (
+            <li key={note.id} className="minijournal-item" role="listitem">
+              <span className="minijournal-item-text">{note.text}</span>
+              <button
+                type="button"
+                className="minijournal-btn-delete"
+                onClick={() => handleDeleteNote(note.id)}
+                aria-label="Delete note"
+              >
+                ×
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
 }
 
 export default MiniJournal
