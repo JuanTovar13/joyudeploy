@@ -54,6 +54,18 @@ export const StudyPlanner = () => {
     skip,
   } = usePomodoro()
 
+  const MAX_DAILY_SESSIONS = 8
+  const concentrationPercentage = Math.min(
+    Math.round((todaySessionsCompleted / MAX_DAILY_SESSIONS) * 100),
+    100
+  )
+
+  const getConcentrationColor = (pct: number): string => {
+    if (pct <= 33) return '#FF9800'
+    if (pct <= 66) return '#3B28CC'
+    return '#4CAF50'
+  }
+
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date()
     return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
