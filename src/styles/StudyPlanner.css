@@ -99,3 +99,13 @@
   color: #262688;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
+
+.studyplanner-weather {
+  background: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  color: #262688;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
