@@ -1,5 +1,5 @@
 import '../styles/StudyPlanner.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
@@ -40,6 +40,19 @@ export const StudyPlanner = () => {
     reset,
     skip,
   } = usePomodoro()
+
+  const [currentTime, setCurrentTime] = useState(() => {
+    const now = new Date()
+    return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date()
+      setCurrentTime(now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     if (currentSession > 1 && activeTaskId) {
