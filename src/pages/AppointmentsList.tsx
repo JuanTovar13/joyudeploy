@@ -5,7 +5,6 @@ import { fetchPhotosForProfessionals } from '../lib/randomUserClient'
 import { fetchAppointments, cancelAppointment } from '../store/slices/appointmentsSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
-import hillsBottom from '../assets/hills.svg'
 import '../styles/AppointmentsList.css'
 
 import { PendingAppointmentCard }   from '../components/estudiante/PendingAppointmentCard'
@@ -106,9 +105,6 @@ export const AppointmentsList = () => {
         </div>
       )}
 
-      <div className="decor-hills-bottom">
-        <img src={hillsBottom} alt="" className="hills-svg-image" />
-      </div>
     </div>
   )
 }
