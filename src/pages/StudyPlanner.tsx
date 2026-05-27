@@ -45,6 +45,8 @@ export const StudyPlanner = () => {
     const now = new Date()
     return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
   })
+  const [weather, setWeather] = useState<{ temp: number; code: number } | null>(null)
+  const [weatherError, setWeatherError] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,6 +54,31 @@ export const StudyPlanner = () => {
       setCurrentTime(now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
     }, 1000)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setWeatherError(true)
+      return
+    }
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords
+          const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+          )
+          const data = await res.json()
+          setWeather({
+            temp: Math.round(data.current_weather.temperature),
+            code: data.current_weather.weathercode,
+          })
+        } catch {
+          setWeatherError(true)
+        }
+      },
+      () => setWeatherError(true)
+    )
   }, [])
 
   useEffect(() => {
