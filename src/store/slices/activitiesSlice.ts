@@ -20,7 +20,13 @@ export const fetchActivities = createAsyncThunk<JoyuItem[]>(
   'activities/fetchAll',
   async (_, { rejectWithValue }) => {
     const { data, error } = await supabase.from('activities').select('*')
-    if (error) return rejectWithValue(error.message)
+    if (error) {
+      console.error('[activitiesSlice] fetchActivities error:', error.message)
+      return rejectWithValue(error.message)
+    }
+    if (!data || data.length === 0) {
+      console.warn('[activitiesSlice] fetchActivities returned empty — check RLS policies on the activities table')
+    }
     return data as JoyuItem[]
   },
 )
@@ -33,7 +39,10 @@ export const fetchActivitySchedules = createAsyncThunk<ActivitySchedule[]>(
       .select('*')
       .order('day')
       .order('start_time')
-    if (error) return rejectWithValue(error.message)
+    if (error) {
+      console.error('[activitiesSlice] fetchActivitySchedules error:', error.message)
+      return rejectWithValue(error.message)
+    }
     return data as ActivitySchedule[]
   },
 )
