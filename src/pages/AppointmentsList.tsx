@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
 import { fetchPhotosForProfessionals } from '../lib/randomUserClient'
+import { fetchAppointments, cancelAppointment } from '../store/slices/appointmentsSlice'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import hillsBottom from '../assets/hills.svg'
 import '../styles/AppointmentsList.css'
@@ -10,49 +11,24 @@ import '../styles/AppointmentsList.css'
 import { PendingAppointmentCard }   from '../components/estudiante/PendingAppointmentCard'
 import { ScheduledAppointmentCard } from '../components/estudiante/ScheduledAppointmentCard'
 
-interface Appointment {
-  id: string
-  reason: string
-  date: string | null
-  hour: string | null
-  mode: string
-  status: string
-  professional_name: string
-  professional_image: string
-}
-
 export const AppointmentsList = () => {
-  const [appointments, setAppointments]             = useState<Appointment[]>([])
-  const [loading, setLoading]                       = useState(true)
-  const [professionalPhotos, setProfessionalPhotos] = useState<Record<string, string>>({})
-  const [cancellingId, setCancellingId]             = useState<string | null>(null)
-
+  const dispatch = useAppDispatch()
   const { user } = useAuth()
   const navigate  = useNavigate()
 
-  // 1 — Load appointments from Supabase
+  const { items: appointments, status, cancellingId } = useAppSelector(
+    (state) => state.appointments,
+  )
+
+  // professionalPhotos is UI-only derived state — stays local
+  const [professionalPhotos, setProfessionalPhotos] = useState<Record<string, string>>({})
+
+  // 1 — Fetch appointments on mount
   useEffect(() => {
-    const fetchAppointments = async () => {
-      if (!user?.uid) return
-      try {
-        const { data, error } = await supabase
-          .from('appointments')
-          .select('*')
-          .eq('user_id', user.uid)
-          .order('created_at', { ascending: false })
+    if (user?.uid) void dispatch(fetchAppointments(user.uid))
+  }, [dispatch, user?.uid])
 
-        if (error) throw error
-        if (data) setAppointments(data as Appointment[])
-      } catch (err: unknown) {
-        if (err instanceof Error) console.error('Error fetching appointments:', err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchAppointments()
-  }, [user])
-
-  // 2 — Fetch psychologist photos for scheduled appointments
+  // 2 — Fetch psychologist photos whenever scheduled appointments change
   useEffect(() => {
     const scheduled = appointments.filter(
       (a) => a.status === 'scheduled' && a.professional_name,
@@ -62,25 +38,13 @@ export const AppointmentsList = () => {
     fetchPhotosForProfessionals(uniqueNames, 'female').then(setProfessionalPhotos)
   }, [appointments])
 
-  // 3 — Cancel / delete appointment
+  // 3 — Cancel appointment via thunk
   const handleCancel = async (appointmentId: string) => {
     const confirmed = window.confirm('Are you sure you want to cancel this appointment?')
     if (!confirmed) return
-
-    setCancellingId(appointmentId)
-    try {
-      const { error } = await supabase
-        .from('appointments')
-        .delete()
-        .eq('id', appointmentId)
-
-      if (error) throw error
-      setAppointments((prev) => prev.filter((a) => a.id !== appointmentId))
-    } catch (err: unknown) {
-      if (err instanceof Error) console.error('Error cancelling appointment:', err.message)
+    const result = await dispatch(cancelAppointment(appointmentId))
+    if (cancelAppointment.rejected.match(result)) {
       alert('Could not cancel the appointment. Please try again.')
-    } finally {
-      setCancellingId(null)
     }
   }
 
@@ -98,18 +62,14 @@ export const AppointmentsList = () => {
         <img src={logoJoyu} alt="Joyu" className="list-logo-right" />
       </div>
 
-      {loading ? (
-        <div className="loading-container">
-          <p>Loading appointments…</p>
-        </div>
+      {status === 'loading' ? (
+        <div className="loading-container"><p>Loading appointments…</p></div>
       ) : appointments.length === 0 ? (
-        <div className="loading-container">
-          <p>No appointments yet.</p>
-        </div>
+        <div className="loading-container"><p>No appointments yet.</p></div>
       ) : (
         <div className="appointments-grid-container">
 
-          {/* ── PENDING SECTION ── */}
+          {/* ── PENDING ── */}
           {pendingAppts.length > 0 && (
             <>
               <h2 className="section-label">⏳ Awaiting Confirmation</h2>
@@ -124,7 +84,7 @@ export const AppointmentsList = () => {
             </>
           )}
 
-          {/* ── SCHEDULED SECTION ── */}
+          {/* ── SCHEDULED ── */}
           {scheduledAppts.length > 0 && (
             <>
               <h2 className="section-label">✅ Confirmed</h2>
