@@ -24,6 +24,21 @@ const MiniJournal = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes))
   }, [notes])
 
+  const handleAddNote = () => {
+    if (inputText.trim() === '') return
+    const newNote: JournalNote = {
+      id: crypto.randomUUID(),
+      text: inputText.trim().slice(0, 200),
+      createdAt: new Date().toISOString(),
+    }
+    setNotes((prev) => [newNote, ...prev].slice(0, 5))
+    setInputText('')
+  }
+
+  const handleDeleteNote = (id: string) => {
+    setNotes((prev) => prev.filter((n) => n.id !== id))
+  }
+
   return <div>MiniJournal placeholder</div>
 }
 
