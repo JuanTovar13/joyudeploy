@@ -80,3 +80,22 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+.studyplanner-info-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.studyplanner-clock {
+  background: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  color: #262688;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
