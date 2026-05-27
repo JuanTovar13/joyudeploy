@@ -1,10 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { Task } from '../../types'
 
 interface StudyPlannerState {
   todaySessionsCompleted: number
   totalFocusTimeToday: number
   activeTaskId: string | null
   activeTaskTitle: string | null
+  tasks: Task[]
 }
 
 const defaultStudyPlannerState: StudyPlannerState = {
@@ -12,6 +14,7 @@ const defaultStudyPlannerState: StudyPlannerState = {
   totalFocusTimeToday: 0,
   activeTaskId: null,
   activeTaskTitle: null,
+  tasks: [],
 }
 
 const readPersistedStudyPlannerState = (): StudyPlannerState => {
@@ -38,6 +41,7 @@ const readPersistedStudyPlannerState = (): StudyPlannerState => {
           totalFocusTimeToday,
           activeTaskId: null,
           activeTaskTitle: null,
+          tasks: [],
         }
       }
     }
@@ -71,9 +75,12 @@ const studyPlannerSlice = createSlice({
       state.activeTaskId = null
       state.activeTaskTitle = null
     },
+    setTasks(state, action: PayloadAction<Task[]>) {
+      state.tasks = action.payload
+    },
   },
 })
 
-export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask } =
+export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks } =
   studyPlannerSlice.actions
 export default studyPlannerSlice.reducer
