@@ -18,6 +18,17 @@ import { supabase } from '../lib/supabaseClient'
  * - useCallback mantiene referencias estables
  */
 
+const getWeatherEmoji = (code: number): string => {
+  if (code === 0) return '☀️'
+  if (code <= 3) return '⛅'
+  if (code <= 49) return '🌫️'
+  if (code <= 67) return '🌧️'
+  if (code <= 77) return '❄️'
+  if (code <= 82) return '🌦️'
+  if (code <= 99) return '⛈️'
+  return '🌡️'
+}
+
 export const StudyPlanner = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
