@@ -38,7 +38,7 @@ const PomodoroTimer = React.memo(({
   onPause,
   onReset,
   onSkip,
-}: PomodoroTimerProps) {
+}: PomodoroTimerProps) => {
   const circumference = 2 * Math.PI * 80
   const safeTotal = totalDuration > 0 ? totalDuration : 1
   const strokeDashoffset =
