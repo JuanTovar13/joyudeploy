@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 interface CountdownTimerDisplayProps {
   inputMinutes: number
@@ -28,6 +28,33 @@ const CountdownTimerDisplay = React.memo(({
   const circumference = 2 * Math.PI * 80
   const safeTotal = totalSeconds > 0 ? totalSeconds : 1
   const strokeDashoffset = circumference - (timeLeft / safeTotal) * circumference
+  const [inputValue, setInputValue] = useState(String(inputMinutes))
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value)
+  }
+
+  const handleInputBlur = () => {
+    const parsed = parseFloat(inputValue)
+    if (!isNaN(parsed) && parsed > 0) {
+      onSetMinutes(parsed)
+      setInputValue(String(parsed))
+    } else {
+      setInputValue(String(inputMinutes))
+    }
+  }
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const parsed = parseFloat(inputValue)
+      if (!isNaN(parsed) && parsed > 0) {
+        onSetMinutes(parsed)
+        setInputValue(String(parsed))
+      } else {
+        setInputValue(String(inputMinutes))
+      }
+    }
+  }
 
   return (
     <section aria-label="Countdown Timer" className="pomodoro-container">
@@ -51,10 +78,24 @@ const CountdownTimerDisplay = React.memo(({
       </div>
       <p className="pomodoro-session-label">{finished ? '🎉 Done!' : 'Timer'}</p>
       {!running && !finished && (
-        <div className="pomodoro-buttons">
-          <button type="button" className="pomodoro-btn-secondary" onClick={() => onSetMinutes(inputMinutes - 5)} aria-label="Decrease 5 minutes">−5</button>
-          <span style={{ fontFamily: 'Fredoka', fontSize: 18, color: '#262688' }}>{inputMinutes} min</span>
-          <button type="button" className="pomodoro-btn-secondary" onClick={() => onSetMinutes(inputMinutes + 5)} aria-label="Increase 5 minutes">+5</button>
+        <div className="countdown-input-row">
+          <label htmlFor="timer-minutes" className="countdown-input-label">
+            Minutes:
+          </label>
+          <input
+            id="timer-minutes"
+            type="number"
+            className="countdown-input"
+            value={inputValue}
+            min={0.1}
+            max={180}
+            step={0.5}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            aria-label="Set timer duration in minutes"
+          />
+          <span className="countdown-input-hint">e.g. 0.5 = 30s, 4.5 = 4m30s</span>
         </div>
       )}
       <div className="pomodoro-buttons">
