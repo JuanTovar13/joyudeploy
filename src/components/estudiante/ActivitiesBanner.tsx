@@ -97,6 +97,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
   }, [schedules, items])
 
   return (
+    <>
     <section
       className="activities-banner"
       onMouseEnter={() => setPaused(true)}
@@ -163,5 +164,6 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
         onClose={() => setSelected(null)}
       />
     )}
+    </>
   )
 }
