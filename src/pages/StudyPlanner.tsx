@@ -13,7 +13,7 @@ import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
-import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
+import { incrementSessions, addFocusTime, clearActiveTask } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
 
 /**
@@ -150,10 +150,15 @@ export const StudyPlanner = () => {
         const completedRaw = (data as { completed_pomodoros?: unknown } | null)
           ?.completed_pomodoros
         if (typeof completedRaw === 'number') {
+          const newCompleted = completedRaw + 1
           await supabase
             .from('study_tasks')
-            .update({ completed_pomodoros: completedRaw + 1 })
+            .update({ completed_pomodoros: newCompleted })
             .eq('id', activeTaskId)
+          const activeTask = tasks.find((t) => t.id === activeTaskId)
+          if (activeTask && newCompleted >= activeTask.estimated_pomodoros) {
+            dispatch(clearActiveTask())
+          }
         }
       })()
     } else if (currentSession > 1) {
