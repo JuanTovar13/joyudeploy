@@ -37,12 +37,16 @@ export const useCountdownTimer = () => {
   }, [inputMinutes])
 
   const handleSetMinutes = useCallback((mins: number) => {
-    const clamped = Math.max(1, Math.min(180, mins))
-    setInputMinutes(clamped)
-    setTimeLeft(clamped * 60)
+    const clamped = Math.max(0.1, Math.min(180, mins))
+    const rounded = Math.round(clamped * 10) / 10
+    setInputMinutes(rounded)
+    setTimeLeft(Math.round(rounded * 60))
     setRunning(false)
     setFinished(false)
-    if (intervalRef.current) clearInterval(intervalRef.current)
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
   }, [])
 
   const formatTime = (seconds: number): string => {
