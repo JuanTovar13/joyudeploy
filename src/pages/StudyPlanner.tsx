@@ -168,6 +168,12 @@ export const StudyPlanner = () => {
   }, [currentSession, dispatch, activeTaskId, playAlarm])
 
   useEffect(() => {
+    if (sessionType === 'work' && status === 'idle') {
+      playAlarm()
+    }
+  }, [sessionType])
+
+  useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
     localStorage.setItem(
       `joyu_study_sessions_${today}`,
