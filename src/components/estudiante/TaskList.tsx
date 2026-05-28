@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabaseClient'
 import type { RootState, AppDispatch } from '../../store'
-import { setActiveTask, clearActiveTask } from '../../store/slices/studyPlannerSlice'
+import { setActiveTask, clearActiveTask, setTasks, resetConcentration } from '../../store/slices/studyPlannerSlice'
 import type { Task } from '../../types'
 
 /**
@@ -13,14 +13,18 @@ import type { Task } from '../../types'
  * React.memo evita renderizados innecesarios
  */
 
-const TaskList = React.memo(() => {
+interface TaskListProps {
+  onStartPomodoro?: () => void
+}
+
+const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
   const context = useContext(AuthContext)
   const user = context?.user
 
   const dispatch = useDispatch<AppDispatch>()
   const activeTaskId = useSelector((state: RootState) => state.studyPlanner.activeTaskId)
 
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasks, setLocalTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [newTaskPomodoros, setNewTaskPomodoros] = useState(1)
@@ -37,7 +41,10 @@ const TaskList = React.memo(() => {
         .eq('user_id', user.uid)
         .order('created_at', { ascending: false })
       if (error) setError('Could not load tasks. Please try again.')
-      if (data) setTasks(data as Task[])
+      if (data) {
+        setLocalTasks(data as Task[])
+        dispatch(setTasks(data as Task[]))
+      }
       setLoading(false)
     })()
 
@@ -53,21 +60,21 @@ const TaskList = React.memo(() => {
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {
-            setTasks((prev) => {
+            setLocalTasks((prev) => {
               const alreadyExists = prev.some((t) => t.id === (payload.new as Task).id)
               if (alreadyExists) return prev
               return [payload.new as Task, ...prev]
             })
           }
           if (payload.eventType === 'UPDATE') {
-            setTasks((prev) =>
+            setLocalTasks((prev) =>
               prev.map((t) =>
                 t.id === (payload.new as Task).id ? (payload.new as Task) : t
               )
             )
           }
           if (payload.eventType === 'DELETE') {
-            setTasks((prev) => prev.filter((t) => t.id !== (payload.old as Task).id))
+            setLocalTasks((prev) => prev.filter((t) => t.id !== (payload.old as Task).id))
           }
         }
       )
@@ -79,10 +86,14 @@ const TaskList = React.memo(() => {
     }
   }, [user?.uid])
 
+  useEffect(() => {
+    dispatch(setTasks(tasks))
+  }, [tasks, dispatch])
+
   const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return
-    const { data, error } = await supabase
-      .from('study_tasks') //insert
+    const { error } = await supabase
+      .from('study_tasks')
       .insert([
         {
           title: newTaskTitle.trim(),
@@ -93,27 +104,34 @@ const TaskList = React.memo(() => {
           user_id: user?.uid,
         },
       ])
-      .select()
-      .single()
-    if (data) {
-      setTasks((prev) => [data as Task, ...prev])
+    if (error) {
+      setError('Could not add task.')
+    } else {
       setNewTaskTitle('')
+      dispatch(resetConcentration())
     }
-    if (error) setError('Could not add task.')
   }
 
   const handleToggleComplete = async (taskId: string, currentStatus: boolean) => {
-    setTasks((prev) =>
+    setLocalTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, completed: !currentStatus } : t))
     )
     await supabase
       .from('study_tasks')
       .update({ completed: !currentStatus })
       .eq('id', taskId)
+    if (taskId === activeTaskId && !currentStatus === true) {
+      dispatch(clearActiveTask())
+    }
+    dispatch(resetConcentration())
   }
 
   const handleDeleteTask = async (taskId: string) => {
-    setTasks((prev) => prev.filter((t) => t.id !== taskId))
+    if (taskId === activeTaskId) {
+      dispatch(clearActiveTask())
+    }
+    dispatch(resetConcentration())
+    setLocalTasks((prev) => prev.filter((t) => t.id !== taskId))
     await supabase.from('study_tasks').delete().eq('id', taskId)
   }
 
@@ -179,6 +197,7 @@ const TaskList = React.memo(() => {
                   dispatch(clearActiveTask())
                 } else {
                   dispatch(setActiveTask({ id: task.id, title: task.title }))
+                  if (onStartPomodoro) onStartPomodoro()
                 }
               }}
               aria-label={

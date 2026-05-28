@@ -80,3 +80,108 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+.studyplanner-info-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.studyplanner-clock {
+  background: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  color: #262688;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.studyplanner-weather {
+  background: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  color: #262688;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.studyplanner-concentration {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.studyplanner-concentration-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #262688;
+}
+
+.studyplanner-concentration-bar-bg {
+  background: #E5E7EB;
+  border-radius: 99px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.studyplanner-concentration-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.studyplanner-bottom-row {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .studyplanner-bottom-row {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.studyplanner-timer-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.studyplanner-tab-btn {
+  background: transparent;
+  border: 2px solid #262688;
+  color: #262688;
+  border-radius: 99px;
+  padding: 8px 22px;
+  font-size: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.studyplanner-tab-btn.active {
+  background: #262688;
+  color: white;
+}
+
+.studyplanner-tab-btn:hover:not(.active) {
+  background: #D5D5F5;
+}

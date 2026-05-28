@@ -1,10 +1,13 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { Task } from '../../types'
 
 interface StudyPlannerState {
   todaySessionsCompleted: number
   totalFocusTimeToday: number
   activeTaskId: string | null
   activeTaskTitle: string | null
+  tasks: Task[]
+  completedPomodorosToday: number
 }
 
 const defaultStudyPlannerState: StudyPlannerState = {
@@ -12,6 +15,8 @@ const defaultStudyPlannerState: StudyPlannerState = {
   totalFocusTimeToday: 0,
   activeTaskId: null,
   activeTaskTitle: null,
+  tasks: [],
+  completedPomodorosToday: 0,
 }
 
 const readPersistedStudyPlannerState = (): StudyPlannerState => {
@@ -38,6 +43,8 @@ const readPersistedStudyPlannerState = (): StudyPlannerState => {
           totalFocusTimeToday,
           activeTaskId: null,
           activeTaskTitle: null,
+          tasks: [],
+          completedPomodorosToday: 0,
         }
       }
     }
@@ -56,6 +63,9 @@ const studyPlannerSlice = createSlice({
     incrementSessions(state) {
       state.todaySessionsCompleted += 1
     },
+    incrementCompletedPomodoros(state) {
+      state.completedPomodorosToday += 1
+    },
     //Acumula el tiempo total de enfoque del día en la unidad que el llamador defina
     addFocusTime(state, action: PayloadAction<number>) {
       state.totalFocusTimeToday += action.payload
@@ -71,9 +81,19 @@ const studyPlannerSlice = createSlice({
       state.activeTaskId = null
       state.activeTaskTitle = null
     },
+    resetFocusTime(state) {
+      state.totalFocusTimeToday = 0
+      state.todaySessionsCompleted = 0
+    },
+    resetConcentration(state) {
+      state.completedPomodorosToday = 0
+    },
+    setTasks(state, action: PayloadAction<Task[]>) {
+      state.tasks = action.payload
+    },
   },
 })
 
-export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask } =
+export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks, resetFocusTime, incrementCompletedPomodoros, resetConcentration } =
   studyPlannerSlice.actions
 export default studyPlannerSlice.reducer
