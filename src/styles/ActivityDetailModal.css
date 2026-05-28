@@ -203,6 +203,63 @@
 .adm-schedule-teacher  { color: #6a6a9a; }
 .adm-schedule-level    { color: #8888aa; font-size: 13px; }
 
+/* ── Conflict state ── */
+.adm-schedule-item--conflict {
+  background: #FFF5F5;
+  border: 1.5px solid #FFBCBC;
+}
+
+.adm-conflict-warning {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  color: #cc3333;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ── Add button ── */
+.adm-add-btn {
+  margin-top: 10px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #262688;
+  background: white;
+  color: #262688;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  align-self: flex-start;
+}
+
+.adm-add-btn:hover {
+  background: #262688;
+  color: white;
+}
+
+/* Already added — filled blue, hover turns red (click to remove) */
+.adm-add-btn--added {
+  background: #262688;
+  color: white;
+}
+
+.adm-add-btn--added:hover {
+  background: #cc3333;
+  border-color: #cc3333;
+}
+
+/* Conflict but not yet added — orange-red border hint */
+.adm-add-btn--conflict {
+  border-color: #cc3333;
+  color: #cc3333;
+}
+
+.adm-add-btn--conflict:hover {
+  background: #cc3333;
+  color: white;
+}
+
 /* ── Mobile ── */
 @media (max-width: 480px) {
   .adm-overlay { padding: 0; align-items: flex-end; }

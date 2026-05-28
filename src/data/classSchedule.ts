@@ -48,6 +48,17 @@ export const JS_DAY_TO_KEY: Partial<Record<number, WeekDayKey>> = {
 export const getTodayKey = (): WeekDayKey | undefined =>
   JS_DAY_TO_KEY[new Date().getDay()]
 
+// Accepts any common day format (Spanish/English, full/abbreviated, any case)
+export const normalizeDay = (day: string): WeekDayKey | null => {
+  const d = day.toLowerCase().trim()
+  if (['lun', 'lunes', 'monday', 'mon'].includes(d))                           return 'Lun'
+  if (['mar', 'martes', 'tuesday', 'tue'].includes(d))                         return 'Mar'
+  if (['mié', 'mie', 'miércoles', 'miercoles', 'wednesday', 'wed'].includes(d)) return 'Mié'
+  if (['jue', 'jueves', 'thursday', 'thu'].includes(d))                        return 'Jue'
+  if (['vie', 'viernes', 'friday', 'fri'].includes(d))                         return 'Vie'
+  return null
+}
+
 // Returns true if two time intervals overlap.
 // Accepts "H:MM", "HH:MM", or "HH:MM:SS" strings.
 export const timesOverlap = (

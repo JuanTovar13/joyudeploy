@@ -4,6 +4,7 @@ import studyPlannerReducer  from './slices/studyPlannerSlice'
 import appointmentsReducer  from './slices/appointmentsSlice'
 import activitiesReducer    from './slices/activitiesSlice'
 import recommendationReducer from './slices/recommendationSlice'
+import calendarReducer       from './slices/calendarSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     appointments:   appointmentsReducer,
     activities:     activitiesReducer,
     recommendation: recommendationReducer,
+    calendar:       calendarReducer,
   },
 })
 

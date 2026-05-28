@@ -142,6 +142,13 @@
   white-space: nowrap;
 }
 
+/* ── Activity blocks (added from modal) ── */
+.wc-class-block--activity {
+  border: 1.5px dashed rgba(38, 38, 136, 0.35);
+  opacity: 0.88;
+  cursor: pointer;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .wc-gutter,
