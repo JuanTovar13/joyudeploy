@@ -155,3 +155,33 @@
     align-items: center;
   }
 }
+
+.studyplanner-timer-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.studyplanner-tab-btn {
+  background: transparent;
+  border: 2px solid #262688;
+  color: #262688;
+  border-radius: 99px;
+  padding: 8px 22px;
+  font-size: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.studyplanner-tab-btn.active {
+  background: #262688;
+  color: white;
+}
+
+.studyplanner-tab-btn:hover:not(.active) {
+  background: #D5D5F5;
+}
