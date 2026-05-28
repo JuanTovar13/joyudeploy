@@ -20,7 +20,7 @@
   font-family: 'Fredoka', sans-serif; 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
 }
 
 .home-header {
