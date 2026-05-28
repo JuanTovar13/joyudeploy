@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import type { JoyuItem, ActivitySchedule } from '../../types'
-import { CLASS_SCHEDULE, getTodayKey, timesOverlap } from '../../data/classSchedule'
+import { CLASS_SCHEDULE, getTodayKey, timesOverlap, type WeekDayKey } from '../../data/classSchedule'
 import '../../styles/ActivitiesBanner.css'
 
 const SLIDE_TITLES = ['Actividades Populares', 'Actividades Para Ti Hoy'] as const
@@ -42,32 +42,53 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
 
   // ── Slide 1: activities available today without class conflicts ───────────
   const todayActivities = useMemo<JoyuItem[]>(() => {
-    const todayKey  = getTodayKey()           // e.g. 'Lun' — undefined on weekends
+    const todayKey = getTodayKey()   // undefined on weekends
     if (!todayKey) return []
 
     const todayClasses = CLASS_SCHEDULE[todayKey] ?? []
 
-    // Keep only activity schedules that run today and don't clash with any class
-    const freeSchedules = schedules.filter((s) => {
-      if (s.day !== todayKey) return false
-      return !todayClasses.some((cls) =>
-        timesOverlap(cls.start, cls.end, s.start_time, s.end_time),
-      )
-    })
-
-    // Map schedule → activity, deduplicate, max 5
-    const seen    = new Set<string>()
-    const result: JoyuItem[] = []
-    for (const s of freeSchedules) {
-      if (seen.has(s.activity_id)) continue
-      const activity = items.find((a) => a.id === s.activity_id)
-      if (activity) {
-        seen.add(s.activity_id)
-        result.push(activity)
-      }
-      if (result.length === 5) break
+    // Flexible day matching: accepts Spanish/English, full/abbreviated, any case
+    const DAY_ALIASES: Record<WeekDayKey, string[]> = {
+      Lun: ['lun', 'lunes', 'monday', 'mon'],
+      Mar: ['mar', 'martes', 'tuesday', 'tue'],
+      Mié: ['mié', 'mie', 'miércoles', 'miercoles', 'wednesday', 'wed'],
+      Jue: ['jue', 'jueves', 'thursday', 'thu'],
+      Vie: ['vie', 'viernes', 'friday', 'fri'],
     }
-    return result
+    const matchesToday = (dbDay: string) =>
+      DAY_ALIASES[todayKey].includes(dbDay.toLowerCase().trim())
+
+    // Primary: activity_schedules that run today with no class conflict
+    const freeSchedules = schedules.filter(s =>
+      matchesToday(s.day) &&
+      !todayClasses.some(cls => timesOverlap(cls.start, cls.end, s.start_time, s.end_time))
+    )
+
+    if (freeSchedules.length > 0) {
+      const seen = new Set<string>()
+      const result: JoyuItem[] = []
+      for (const s of freeSchedules) {
+        if (seen.has(s.activity_id)) continue
+        const act = items.find(a => a.id === s.activity_id)
+        if (act) { seen.add(s.activity_id); result.push(act) }
+        if (result.length === 5) break
+      }
+      return result
+    }
+
+    // Fallback: activity_schedules has no entries for today.
+    // Compute free hours from the class schedule; if there is free time,
+    // suggest activities from the catalogue (any activity can be done then).
+    const toH = (t: string) => { const [h, m] = t.split(':').map(Number); return h + m / 60 }
+    const busyHours = todayClasses.reduce(
+      (sum, cls) => sum + toH(cls.end) - toH(cls.start), 0
+    )
+    const freeHours = 15 - busyHours   // 7 am–10 pm = 15 h total
+
+    if (freeHours < 1) return []   // day is essentially full
+
+    // Return a different slice from popular for visual variety
+    return items.length > 5 ? items.slice(5, 10) : items.slice(0, 5)
   }, [schedules, items])
 
   return (
