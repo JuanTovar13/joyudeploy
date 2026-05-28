@@ -7,6 +7,7 @@ interface StudyPlannerState {
   activeTaskId: string | null
   activeTaskTitle: string | null
   tasks: Task[]
+  completedPomodorosToday: number
 }
 
 const defaultStudyPlannerState: StudyPlannerState = {
@@ -15,6 +16,7 @@ const defaultStudyPlannerState: StudyPlannerState = {
   activeTaskId: null,
   activeTaskTitle: null,
   tasks: [],
+  completedPomodorosToday: 0,
 }
 
 const readPersistedStudyPlannerState = (): StudyPlannerState => {
@@ -42,6 +44,7 @@ const readPersistedStudyPlannerState = (): StudyPlannerState => {
           activeTaskId: null,
           activeTaskTitle: null,
           tasks: [],
+          completedPomodorosToday: 0,
         }
       }
     }
@@ -59,6 +62,9 @@ const studyPlannerSlice = createSlice({
   reducers: {
     incrementSessions(state) {
       state.todaySessionsCompleted += 1
+    },
+    incrementCompletedPomodoros(state) {
+      state.completedPomodorosToday += 1
     },
     //Acumula el tiempo total de enfoque del día en la unidad que el llamador defina
     addFocusTime(state, action: PayloadAction<number>) {
@@ -79,12 +85,15 @@ const studyPlannerSlice = createSlice({
       state.totalFocusTimeToday = 0
       state.todaySessionsCompleted = 0
     },
+    resetConcentration(state) {
+      state.completedPomodorosToday = 0
+    },
     setTasks(state, action: PayloadAction<Task[]>) {
       state.tasks = action.payload
     },
   },
 })
 
-export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks, resetFocusTime } =
+export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks, resetFocusTime, incrementCompletedPomodoros, resetConcentration } =
   studyPlannerSlice.actions
 export default studyPlannerSlice.reducer
