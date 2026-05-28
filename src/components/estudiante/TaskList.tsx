@@ -92,8 +92,8 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
 
   const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return
-    const { data, error } = await supabase
-      .from('study_tasks') //insert
+    const { error } = await supabase
+      .from('study_tasks')
       .insert([
         {
           title: newTaskTitle.trim(),
@@ -104,13 +104,11 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
           user_id: user?.uid,
         },
       ])
-      .select()
-      .single()
-    if (data) {
-      setLocalTasks((prev) => [data as Task, ...prev])
+    if (error) {
+      setError('Could not add task.')
+    } else {
       setNewTaskTitle('')
     }
-    if (error) setError('Could not add task.')
   }
 
   const handleToggleComplete = async (taskId: string, currentStatus: boolean) => {
