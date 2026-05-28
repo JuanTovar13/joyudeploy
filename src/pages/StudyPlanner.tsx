@@ -68,15 +68,15 @@ export const StudyPlanner = () => {
   const stopwatch = useStopwatch()
   const countdown = useCountdownTimer()
 
-  const goalMinutes = tasks && tasks.length > 0
-    ? tasks
-        .filter((t) => !t.completed)
-        .reduce((sum, t) => sum + (t.estimated_pomodoros ?? 0) * 25, 0)
-    : 200
-
-  const concentrationPercentage = goalMinutes > 0
-    ? Math.min(Math.round((totalFocusTimeToday / goalMinutes) * 100), 100)
-    : 0
+  const incompleteTasks = tasks ? tasks.filter((t) => !t.completed) : []
+  const goalMinutes = incompleteTasks.reduce(
+    (sum, t) => sum + (t.estimated_pomodoros ?? 0) * 25,
+    0
+  )
+  const concentrationPercentage =
+    tasks.length === 0 || goalMinutes === 0
+      ? 0
+      : Math.min(Math.round((totalFocusTimeToday / goalMinutes) * 100), 100)
 
   const getConcentrationColor = (pct: number): string => {
     if (pct <= 33) return '#FF9800'
