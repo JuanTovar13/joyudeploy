@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 
 export const useStopwatch = () => {
   const [elapsed, setElapsed] = useState(0)
@@ -6,7 +6,7 @@ export const useStopwatch = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const start = useCallback(() => {
-    if (running) return
+    if (running || intervalRef.current !== null) return
     setRunning(true)
     intervalRef.current = setInterval(() => {
       setElapsed((prev) => prev + 1)
@@ -15,13 +15,25 @@ export const useStopwatch = () => {
 
   const pause = useCallback(() => {
     setRunning(false)
-    if (intervalRef.current) clearInterval(intervalRef.current)
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
   }, [])
 
   const reset = useCallback(() => {
     setRunning(false)
-    if (intervalRef.current) clearInterval(intervalRef.current)
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
     setElapsed(0)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [])
 
   const formatTime = (seconds: number): string => {
