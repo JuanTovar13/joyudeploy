@@ -142,6 +142,7 @@ export const StudyPlanner = () => {
     if (currentSession > 1 && activeTaskId) {
       dispatch(incrementSessions())
       dispatch(addFocusTime(25))
+      dispatch(incrementCompletedPomodoros())
       void (async () => {
         const { data } = await supabase
           .from('study_tasks')
@@ -165,6 +166,7 @@ export const StudyPlanner = () => {
     } else if (currentSession > 1) {
       dispatch(incrementSessions())
       dispatch(addFocusTime(25))
+      dispatch(incrementCompletedPomodoros())
     }
   }, [currentSession, dispatch, activeTaskId, playAlarm])
 
