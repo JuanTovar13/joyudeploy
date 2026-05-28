@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { fetchActivities } from '../store/slices/activitiesSlice'
+import { fetchActivities, fetchActivitySchedules } from '../store/slices/activitiesSlice'
 import { fetchRecommendation, loadPersistedRecommendation } from '../store/slices/recommendationSlice'
 
 import type { GroqRecommendation } from '../lib/groqClient'
@@ -32,9 +32,12 @@ const DEFAULT_REC: GroqRecommendation = {
 export const Home = () => {
   const dispatch = useAppDispatch()
 
-  const { items: joyuItems, status: activitiesStatus } = useAppSelector(
-    (state) => state.activities,
-  )
+  const {
+    items: joyuItems,
+    schedules: activitySchedules,
+    status: activitiesStatus,
+    schedulesStatus,
+  } = useAppSelector((state) => state.activities)
   const { data: rec, status: recStatus } = useAppSelector(
     (state) => state.recommendation,
   )
@@ -45,10 +48,14 @@ export const Home = () => {
   const uid = context?.user?.uid
   const navigate = useNavigate()
 
-  // Fetch activities once on mount
+  // Fetch activities + schedules once on mount
   useEffect(() => {
     if (activitiesStatus === 'idle') void dispatch(fetchActivities())
   }, [dispatch, activitiesStatus])
+
+  useEffect(() => {
+    if (schedulesStatus === 'idle') void dispatch(fetchActivitySchedules())
+  }, [dispatch, schedulesStatus])
 
   // Load persisted recommendation and decide whether to show check-in
   useEffect(() => {
@@ -117,7 +124,7 @@ export const Home = () => {
         </div>
 
         <div className="home-right-column">
-          <ActivitiesBanner items={joyuItems} />
+          <ActivitiesBanner items={joyuItems} schedules={activitySchedules} />
         </div>
       </main>
 

@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import type { JoyuItem } from '../../types'
+import { useState, useMemo } from 'react'
+import type { JoyuItem, ActivitySchedule } from '../../types'
+import { CLASS_SCHEDULE, getTodayKey, timesOverlap } from '../../data/classSchedule'
 
 const SLIDE_TITLES = ['Actividades Populares', 'Actividades Para Ti Hoy'] as const
 
@@ -19,13 +20,44 @@ const BannerActivityCard = ({ item }: { item: JoyuItem }) => (
 
 interface Props {
   items: JoyuItem[]
+  schedules: ActivitySchedule[]
 }
 
-export const ActivitiesBanner = ({ items }: Props) => {
+export const ActivitiesBanner = ({ items, schedules }: Props) => {
   const [slide, setSlide] = useState<0 | 1>(0)
 
-  // Slide 0: first 5 activities = "popular"
+  // ── Slide 0: first 5 activities ("popular") ──────────────────────────────
   const popular = items.slice(0, 5)
+
+  // ── Slide 1: activities available today without class conflicts ───────────
+  const todayActivities = useMemo<JoyuItem[]>(() => {
+    const todayKey  = getTodayKey()           // e.g. 'Lun' — undefined on weekends
+    if (!todayKey) return []
+
+    const todayClasses = CLASS_SCHEDULE[todayKey] ?? []
+
+    // Keep only activity schedules that run today and don't clash with any class
+    const freeSchedules = schedules.filter((s) => {
+      if (s.day !== todayKey) return false
+      return !todayClasses.some((cls) =>
+        timesOverlap(cls.start, cls.end, s.start_time, s.end_time),
+      )
+    })
+
+    // Map schedule → activity, deduplicate, max 5
+    const seen    = new Set<string>()
+    const result: JoyuItem[] = []
+    for (const s of freeSchedules) {
+      if (seen.has(s.activity_id)) continue
+      const activity = items.find((a) => a.id === s.activity_id)
+      if (activity) {
+        seen.add(s.activity_id)
+        result.push(activity)
+      }
+      if (result.length === 5) break
+    }
+    return result
+  }, [schedules, items])
 
   return (
     <section className="activities-banner">
@@ -64,9 +96,20 @@ export const ActivitiesBanner = ({ items }: Props) => {
             }
           </div>
 
-          {/* ── Slide 1: Available today (placeholder) ── */}
+          {/* ── Slide 1: Available today ── */}
           <div className="banner-slide">
-            <p className="banner-empty">Cargando actividades para hoy…</p>
+            {todayActivities.length > 0
+              ? <ul className="banner-activity-list">
+                  {todayActivities.map((item) => (
+                    <li key={item.id} style={{ listStyle: 'none' }}>
+                      <BannerActivityCard item={item} />
+                    </li>
+                  ))}
+                </ul>
+              : <p className="banner-empty">
+                  No hay actividades disponibles en tus ratos libres hoy 🙌
+                </p>
+            }
           </div>
         </div>
       </div>
