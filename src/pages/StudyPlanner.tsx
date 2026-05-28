@@ -302,7 +302,10 @@ export const StudyPlanner = () => {
               onSetMinutes={countdown.handleSetMinutes}
             />
           )}
-          <TaskList />
+          <TaskList onStartPomodoro={() => {
+            setTimerMode('pomodoro')
+            start()
+          }} />
         </div>
         <div className="studyplanner-bottom-row">
           <MiniJournal />
