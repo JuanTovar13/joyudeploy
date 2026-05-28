@@ -5,8 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
 import PomodoroTimer from '../components/estudiante/PomodoroTimer'
 import TaskList from '../components/estudiante/TaskList'
+import StopwatchDisplay from '../components/estudiante/StopwatchDisplay'
+import CountdownTimerDisplay from '../components/estudiante/CountdownTimerDisplay'
 import MiniJournal from '../components/estudiante/MiniJournal'
 import MusicPlayer from '../components/estudiante/MusicPlayer'
+import { useStopwatch } from '../hooks/useStopwatch'
+import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import type { RootState, AppDispatch } from '../store'
 import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
@@ -60,6 +64,9 @@ export const StudyPlanner = () => {
   } = usePomodoro()
 
   const [timerMode, setTimerMode] = useState<TimerMode>('pomodoro')
+
+  const stopwatch = useStopwatch()
+  const countdown = useCountdownTimer()
 
   const goalMinutes = tasks && tasks.length > 0
     ? tasks
@@ -219,18 +226,70 @@ export const StudyPlanner = () => {
         <p className="studyplanner-stats">
           Hoy: {todaySessionsCompleted} sesiones · {totalFocusTimeToday} min concentrado
         </p>
+        <div className="studyplanner-timer-tabs">
+          <button
+            type="button"
+            className={`studyplanner-tab-btn${timerMode === 'pomodoro' ? ' active' : ''}`}
+            onClick={() => setTimerMode('pomodoro')}
+            aria-label="Pomodoro mode"
+          >
+            Pomodoro
+          </button>
+          <button
+            type="button"
+            className={`studyplanner-tab-btn${timerMode === 'timer' ? ' active' : ''}`}
+            onClick={() => setTimerMode('timer')}
+            aria-label="Timer mode"
+          >
+            Timer
+          </button>
+          <button
+            type="button"
+            className={`studyplanner-tab-btn${timerMode === 'stopwatch' ? ' active' : ''}`}
+            onClick={() => setTimerMode('stopwatch')}
+            aria-label="Stopwatch mode"
+          >
+            Stopwatch
+          </button>
+        </div>
         <div className="studyplanner-content">
-          <PomodoroTimer
-            timeLeft={timeLeft}
-            status={status}
-            sessionType={sessionType}
-            currentSession={currentSession}
-            totalDuration={totalDuration}
-            onStart={start}
-            onPause={pause}
-            onReset={reset}
-            onSkip={skip}
-          />
+          {timerMode === 'pomodoro' && (
+            <PomodoroTimer
+              timeLeft={timeLeft}
+              status={status}
+              sessionType={sessionType}
+              currentSession={currentSession}
+              totalDuration={totalDuration}
+              onStart={start}
+              onPause={pause}
+              onReset={reset}
+              onSkip={skip}
+            />
+          )}
+          {timerMode === 'stopwatch' && (
+            <StopwatchDisplay
+              elapsed={stopwatch.elapsed}
+              running={stopwatch.running}
+              formatTime={stopwatch.formatTime}
+              onStart={stopwatch.start}
+              onPause={stopwatch.pause}
+              onReset={stopwatch.reset}
+            />
+          )}
+          {timerMode === 'timer' && (
+            <CountdownTimerDisplay
+              inputMinutes={countdown.inputMinutes}
+              timeLeft={countdown.timeLeft}
+              running={countdown.running}
+              finished={countdown.finished}
+              formatTime={countdown.formatTime}
+              totalSeconds={countdown.inputMinutes * 60}
+              onStart={countdown.start}
+              onPause={countdown.pause}
+              onReset={countdown.reset}
+              onSetMinutes={countdown.handleSetMinutes}
+            />
+          )}
           <TaskList />
         </div>
         <div className="studyplanner-bottom-row">
