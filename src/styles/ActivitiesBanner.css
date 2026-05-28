@@ -152,6 +152,26 @@
   text-overflow: ellipsis;
 }
 
+/* ── Mobile: vertical list ── */
+@media (max-width: 768px) {
+  .banner-activity-list {
+    flex-direction: column;
+  }
+
+  .banner-activity-card {
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    width: 100%;
+    height: auto;
+  }
+
+  .banner-activity-card__title,
+  .banner-activity-card__category {
+    text-align: left;
+  }
+}
+
 /* ── Empty / loading states ── */
 .banner-empty {
   font-family: 'Fredoka', sans-serif;
