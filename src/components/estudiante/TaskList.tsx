@@ -108,6 +108,7 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
       setError('Could not add task.')
     } else {
       setNewTaskTitle('')
+      dispatch(resetConcentration())
     }
   }
 
