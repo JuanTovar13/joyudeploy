@@ -156,6 +156,8 @@
 @media (max-width: 768px) {
   .banner-activity-list {
     flex-direction: column;
+    padding: 0;
+    width: 100%;
   }
 
   .banner-activity-card {
