@@ -75,12 +75,16 @@ const studyPlannerSlice = createSlice({
       state.activeTaskId = null
       state.activeTaskTitle = null
     },
+    resetFocusTime(state) {
+      state.totalFocusTimeToday = 0
+      state.todaySessionsCompleted = 0
+    },
     setTasks(state, action: PayloadAction<Task[]>) {
       state.tasks = action.payload
     },
   },
 })
 
-export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks } =
+export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks, resetFocusTime } =
   studyPlannerSlice.actions
 export default studyPlannerSlice.reducer
