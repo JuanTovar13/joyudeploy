@@ -13,7 +13,7 @@ import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
-import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros, resetConcentration } from '../store/slices/studyPlannerSlice'
+import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
 
 /**
