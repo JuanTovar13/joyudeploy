@@ -117,9 +117,15 @@ const TaskList = React.memo(() => {
       .from('study_tasks')
       .update({ completed: !currentStatus })
       .eq('id', taskId)
+    if (taskId === activeTaskId && !currentStatus === true) {
+      dispatch(clearActiveTask())
+    }
   }
 
   const handleDeleteTask = async (taskId: string) => {
+    if (taskId === activeTaskId) {
+      dispatch(clearActiveTask())
+    }
     setLocalTasks((prev) => prev.filter((t) => t.id !== taskId))
     await supabase.from('study_tasks').delete().eq('id', taskId)
   }
