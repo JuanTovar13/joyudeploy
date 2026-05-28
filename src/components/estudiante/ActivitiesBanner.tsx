@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import type { JoyuItem, ActivitySchedule } from '../../types'
 import { CLASS_SCHEDULE, getTodayKey, timesOverlap } from '../../data/classSchedule'
+import '../../styles/ActivitiesBanner.css'
 
 const SLIDE_TITLES = ['Actividades Populares', 'Actividades Para Ti Hoy'] as const
 
@@ -101,7 +102,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
             {popular.length > 0
               ? <ul className="banner-activity-list">
                   {popular.map((item) => (
-                    <li key={item.id} style={{ listStyle: 'none' }}>
+                    <li key={item.id} className="banner-card-container">
                       <BannerActivityCard item={item} />
                     </li>
                   ))}
@@ -115,7 +116,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
             {todayActivities.length > 0
               ? <ul className="banner-activity-list">
                   {todayActivities.map((item) => (
-                    <li key={item.id} style={{ listStyle: 'none' }}>
+                    <li key={item.id} className="banner-card-container">
                       <BannerActivityCard item={item} />
                     </li>
                   ))}
