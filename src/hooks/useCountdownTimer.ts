@@ -42,7 +42,7 @@ export const useCountdownTimer = (onFinish?: () => void) => {
     const clamped = Math.max(0.1, Math.min(180, mins))
     const rounded = Math.round(clamped * 10) / 10
     setInputMinutes(rounded)
-    setTimeLeft(Math.round(rounded * 60))
+    setTimeLeft(Math.round(mins * 60))
     setRunning(false)
     setFinished(false)
     if (intervalRef.current) {

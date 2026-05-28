@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 interface CountdownTimerDisplayProps {
   inputMinutes: number
@@ -29,6 +29,10 @@ const CountdownTimerDisplay = React.memo(({
   const safeTotal = totalSeconds > 0 ? totalSeconds : 1
   const strokeDashoffset = circumference - (timeLeft / safeTotal) * circumference
   const [inputValue, setInputValue] = useState(String(inputMinutes))
+
+  useEffect(() => {
+    setInputValue(String(inputMinutes))
+  }, [inputMinutes])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
