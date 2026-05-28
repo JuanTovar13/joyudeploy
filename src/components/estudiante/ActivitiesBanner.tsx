@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import type { JoyuItem, ActivitySchedule } from '../../types'
 import { CLASS_SCHEDULE, getTodayKey, timesOverlap } from '../../data/classSchedule'
 
@@ -24,7 +24,17 @@ interface Props {
 }
 
 export const ActivitiesBanner = ({ items, schedules }: Props) => {
-  const [slide, setSlide] = useState<0 | 1>(0)
+  const [slide, setSlide]         = useState<0 | 1>(0)
+  const [paused, setPaused]       = useState(false)
+
+  const advance = useCallback(() => setSlide((s) => (s === 0 ? 1 : 0)), [])
+
+  // Auto-rotate every 5 s; pause while the user hovers
+  useEffect(() => {
+    if (paused) return
+    const id = setInterval(advance, 5000)
+    return () => clearInterval(id)
+  }, [paused, advance])
 
   // ── Slide 0: first 5 activities ("popular") ──────────────────────────────
   const popular = items.slice(0, 5)
@@ -60,7 +70,11 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
   }, [schedules, items])
 
   return (
-    <section className="activities-banner">
+    <section
+      className="activities-banner"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="banner-header">
         <h2 className="banner-title">{SLIDE_TITLES[slide]}</h2>
         <div className="banner-dots" role="tablist" aria-label="Banner navigation">
@@ -71,7 +85,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
               aria-selected={i === slide}
               aria-label={title}
               className={`banner-dot${i === slide ? ' banner-dot--active' : ''}`}
-              onClick={() => setSlide(i as 0 | 1)}
+              onClick={() => { setSlide(i as 0 | 1); setPaused(false) }}
             />
           ))}
         </div>
