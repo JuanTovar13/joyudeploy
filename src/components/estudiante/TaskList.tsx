@@ -13,7 +13,11 @@ import type { Task } from '../../types'
  * React.memo evita renderizados innecesarios
  */
 
-const TaskList = React.memo(() => {
+interface TaskListProps {
+  onStartPomodoro?: () => void
+}
+
+const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
   const context = useContext(AuthContext)
   const user = context?.user
 
@@ -192,6 +196,7 @@ const TaskList = React.memo(() => {
                   dispatch(clearActiveTask())
                 } else {
                   dispatch(setActiveTask({ id: task.id, title: task.title }))
+                  if (onStartPomodoro) onStartPomodoro()
                 }
               }}
               aria-label={
