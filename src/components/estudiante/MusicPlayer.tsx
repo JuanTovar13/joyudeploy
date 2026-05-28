@@ -2,10 +2,22 @@ import { useState } from 'react'
 import '../../styles/MusicPlayer.css'
 
 const STUDY_TRACKS = [
-  { title: 'Lofi Hip Hop Radio', embedId: 'jfKfPfyJRdk' },
-  { title: 'Chillhop Essentials', embedId: '5yx6BWlEVcY' },
-  { title: 'Jazz & Bossa Nova', embedId: 'Dx5qFachd3A' },
-  { title: 'Deep Focus Music', embedId: 'lTRiuFIWV54' },
+  {
+    title: 'Lofi Hip Hop Beats',
+    url: 'https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/lofirecords/sets/lofi-hip-hop-music&color=%23262688&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false',
+  },
+  {
+    title: 'Chill Study Music',
+    url: 'https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chillhop/sets/chillhop-essentials-spring-2020&color=%23262688&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false',
+  },
+  {
+    title: 'Jazz for Focus',
+    url: 'https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/jazz-and-bossa-nova/sets/jazz-bossa-nova&color=%23262688&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false',
+  },
+  {
+    title: 'Deep Focus Ambient',
+    url: 'https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/ambient-music-for-focus/sets/deep-focus&color=%23262688&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false',
+  },
 ]
 
 const MusicPlayer = () => {
@@ -27,34 +39,18 @@ const MusicPlayer = () => {
       <p className="musicplayer-track-name">{currentTrack.title}</p>
       <iframe
         className="musicplayer-iframe"
-        src={`https://www.youtube.com/embed/${currentTrack.embedId}?autoplay=1`}
+        src={currentTrack.url}
         title={currentTrack.title}
-        allow="autoplay; encrypted-media"
-        allowFullScreen
+        allow="autoplay"
+        scrolling="no"
+        frameBorder="0"
       />
       <div className="musicplayer-controls">
-        <button
-          type="button"
-          className="musicplayer-btn"
-          onClick={handlePrev}
-          aria-label="Previous track"
-        >
-          ‹
-        </button>
-        <span
-          className="musicplayer-counter"
-          aria-label={`Track ${currentIndex + 1} of ${STUDY_TRACKS.length}`}
-        >
+        <button type="button" className="musicplayer-btn" onClick={handlePrev} aria-label="Previous track">‹</button>
+        <span className="musicplayer-counter" aria-label={`Track ${currentIndex + 1} of ${STUDY_TRACKS.length}`}>
           {currentIndex + 1} / {STUDY_TRACKS.length}
         </span>
-        <button
-          type="button"
-          className="musicplayer-btn"
-          onClick={handleNext}
-          aria-label="Next track"
-        >
-          ›
-        </button>
+        <button type="button" className="musicplayer-btn" onClick={handleNext} aria-label="Next track">›</button>
       </div>
     </div>
   )
