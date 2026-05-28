@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import type { JoyuItem, ActivitySchedule } from '../../types'
-import { CLASS_SCHEDULE, getTodayKey, timesOverlap, type WeekDayKey } from '../../data/classSchedule'
+import { CLASS_SCHEDULE, getTodayKey, normalizeDay, timesOverlap } from '../../data/classSchedule'
 import { ActivityDetailModal } from './ActivityDetailModal'
 import '../../styles/ActivitiesBanner.css'
 
@@ -52,16 +52,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
 
     const todayClasses = CLASS_SCHEDULE[todayKey] ?? []
 
-    // Flexible day matching: accepts Spanish/English, full/abbreviated, any case
-    const DAY_ALIASES: Record<WeekDayKey, string[]> = {
-      Lun: ['lun', 'lunes', 'monday', 'mon'],
-      Mar: ['mar', 'martes', 'tuesday', 'tue'],
-      Mié: ['mié', 'mie', 'miércoles', 'miercoles', 'wednesday', 'wed'],
-      Jue: ['jue', 'jueves', 'thursday', 'thu'],
-      Vie: ['vie', 'viernes', 'friday', 'fri'],
-    }
-    const matchesToday = (dbDay: string) =>
-      DAY_ALIASES[todayKey].includes(dbDay.toLowerCase().trim())
+    const matchesToday = (dbDay: string) => normalizeDay(dbDay) === todayKey
 
     // Primary: activity_schedules that run today with no class conflict
     const freeSchedules = schedules.filter(s =>
