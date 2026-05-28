@@ -22,6 +22,8 @@ import { supabase } from '../lib/supabaseClient'
 
 //Luego cambiar el emoji por el clima por imagenes de la mascota de la app
 
+type TimerMode = 'pomodoro' | 'timer' | 'stopwatch'
+
 const getWeatherEmoji = (code: number): string => {
   if (code === 0) return '☀️'
   if (code <= 3) return '⛅'
@@ -56,6 +58,8 @@ export const StudyPlanner = () => {
     reset,
     skip,
   } = usePomodoro()
+
+  const [timerMode, setTimerMode] = useState<TimerMode>('pomodoro')
 
   const goalMinutes = tasks && tasks.length > 0
     ? tasks
