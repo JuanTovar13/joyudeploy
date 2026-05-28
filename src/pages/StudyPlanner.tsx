@@ -11,6 +11,7 @@ import MiniJournal from '../components/estudiante/MiniJournal'
 import MusicPlayer from '../components/estudiante/MusicPlayer'
 import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
+import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
 import { incrementSessions, addFocusTime } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
@@ -62,6 +63,8 @@ export const StudyPlanner = () => {
     reset,
     skip,
   } = usePomodoro()
+
+  const { playAlarm } = useAlarmSound()
 
   const [timerMode, setTimerMode] = useState<TimerMode>('pomodoro')
 
@@ -131,6 +134,9 @@ export const StudyPlanner = () => {
   }, [])
 
   useEffect(() => {
+    if (currentSession > 1) {
+      playAlarm()
+    }
     if (currentSession > 1 && activeTaskId) {
       dispatch(incrementSessions())
       dispatch(addFocusTime(25))
@@ -153,7 +159,7 @@ export const StudyPlanner = () => {
       dispatch(incrementSessions())
       dispatch(addFocusTime(25))
     }
-  }, [currentSession, dispatch, activeTaskId])
+  }, [currentSession, dispatch, activeTaskId, playAlarm])
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
