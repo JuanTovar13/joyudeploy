@@ -72,23 +72,24 @@
   display: flex;
   flex-direction: row;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .banner-activity-card {
+  flex: 1;
+  min-width: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: #F8F8FF;
   border-radius: 14px;
-  padding: 10px 14px;
+  padding: 12px 8px;
   transition: transform 0.15s;
-  flex-direction: column;
-  width:fit-content;
+  text-align: center;
 }
 
 .banner-activity-card:hover {
-  transform: translateX(3px);
+  transform: translateY(-3px);
 }
 
 .banner-activity-card__img {
@@ -112,26 +113,31 @@
 }
 
 .banner-activity-card__info {
-  flex: 1;
+  width: 100%;
   min-width: 0;
 }
 
 .banner-activity-card__title {
   font-family: 'Fredoka', sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   color: #262688;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+  text-align: center;
 }
 
 .banner-activity-card__category {
   font-family: 'Fredoka', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   color: #8888aa;
   margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ── Empty / loading states ── */
