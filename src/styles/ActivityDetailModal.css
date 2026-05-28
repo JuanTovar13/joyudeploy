@@ -1,0 +1,210 @@
+/* ── Overlay ── */
+.adm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: adm-fade-in 0.2s ease;
+}
+
+@keyframes adm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Card ── */
+.adm-card {
+  background: white;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: adm-slide-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes adm-slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Header ── */
+.adm-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 22px 16px;
+  flex-shrink: 0;
+}
+
+.adm-header__img {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.adm-header__placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #E8E8F8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.adm-header__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.adm-header__title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adm-header__category {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  color: #8888aa;
+}
+
+.adm-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #E0E0E0;
+  background: white;
+  font-size: 16px;
+  color: #8888aa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.adm-close:hover {
+  background: #f4f4f9;
+  color: #262688;
+}
+
+/* ── Divider ── */
+.adm-divider {
+  border: none;
+  border-top: 1px solid #f0f0f8;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* ── Scrollable body ── */
+.adm-body {
+  overflow-y: auto;
+  padding: 20px 22px 24px;
+  flex: 1;
+}
+
+.adm-body::-webkit-scrollbar       { width: 4px; }
+.adm-body::-webkit-scrollbar-track { background: transparent; }
+.adm-body::-webkit-scrollbar-thumb { background: #d5d5f5; border-radius: 2px; }
+
+.adm-section-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0 0 14px;
+}
+
+/* ── Empty state ── */
+.adm-empty {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #b0b0cc;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}
+
+/* ── Schedule list ── */
+.adm-schedule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.adm-schedule-item {
+  display: flex;
+  gap: 14px;
+  background: #F8F8FF;
+  border-radius: 16px;
+  padding: 14px 16px;
+  align-items: flex-start;
+}
+
+/* Day badge */
+.adm-schedule-day {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #262688;
+  border-radius: 10px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Detail lines */
+.adm-schedule-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.adm-schedule-time,
+.adm-schedule-location,
+.adm-schedule-teacher,
+.adm-schedule-level {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  color: #4a4a8a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adm-schedule-time     { font-weight: 500; color: #262688; }
+.adm-schedule-location { color: #6a6a9a; }
+.adm-schedule-teacher  { color: #6a6a9a; }
+.adm-schedule-level    { color: #8888aa; font-size: 13px; }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .adm-overlay { padding: 0; align-items: flex-end; }
+  .adm-card    { border-radius: 28px 28px 0 0; max-height: 90vh; }
+}

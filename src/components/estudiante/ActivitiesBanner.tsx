@@ -1,13 +1,17 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import type { JoyuItem, ActivitySchedule } from '../../types'
 import { CLASS_SCHEDULE, getTodayKey, timesOverlap, type WeekDayKey } from '../../data/classSchedule'
+import { ActivityDetailModal } from './ActivityDetailModal'
 import '../../styles/ActivitiesBanner.css'
 
 const SLIDE_TITLES = ['Actividades Populares', 'Actividades Para Ti Hoy'] as const
 
 // ── Activity card shared by both slides ──────────────────────────────────────
-const BannerActivityCard = ({ item }: { item: JoyuItem }) => (
-  <div className="banner-activity-card">
+const BannerActivityCard = ({ item, onClick }: { item: JoyuItem; onClick: () => void }) => (
+  <div className="banner-activity-card" onClick={onClick} role="button" tabIndex={0}
+    onKeyDown={e => e.key === 'Enter' && onClick()}
+    style={{ cursor: 'pointer' }}
+  >
     {item.image
       ? <img src={item.image} alt={item.title} className="banner-activity-card__img" />
       : <div className="banner-activity-card__placeholder">🌟</div>
@@ -25,8 +29,9 @@ interface Props {
 }
 
 export const ActivitiesBanner = ({ items, schedules }: Props) => {
-  const [slide, setSlide]         = useState<0 | 1>(0)
-  const [paused, setPaused]       = useState(false)
+  const [slide, setSlide]           = useState<0 | 1>(0)
+  const [paused, setPaused]         = useState(false)
+  const [selected, setSelected]     = useState<JoyuItem | null>(null)
 
   const advance = useCallback(() => setSlide((s) => (s === 0 ? 1 : 0)), [])
 
@@ -124,7 +129,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
               ? <ul className="banner-activity-list">
                   {popular.map((item) => (
                     <li key={item.id} className="banner-card-container">
-                      <BannerActivityCard item={item} />
+                      <BannerActivityCard item={item} onClick={() => setSelected(item)} />
                     </li>
                   ))}
                 </ul>
@@ -138,7 +143,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
               ? <ul className="banner-activity-list">
                   {todayActivities.map((item) => (
                     <li key={item.id} className="banner-card-container">
-                      <BannerActivityCard item={item} />
+                      <BannerActivityCard item={item} onClick={() => setSelected(item)} />
                     </li>
                   ))}
                 </ul>
@@ -150,5 +155,13 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
         </div>
       </div>
     </section>
+
+    {selected && (
+      <ActivityDetailModal
+        activity={selected}
+        schedules={schedules}
+        onClose={() => setSelected(null)}
+      />
+    )}
   )
 }
