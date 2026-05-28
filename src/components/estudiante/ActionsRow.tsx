@@ -5,10 +5,9 @@ interface ActionsRowProps {
   onSchedule: () => void
   onAppointments: () => void
   onStudyPlanner: () => void
-  onActivities: () => void
 }
 
-export const ActionsRow = ({ onSchedule, onAppointments, onStudyPlanner, onActivities }: ActionsRowProps) => {
+export const ActionsRow = ({ onSchedule, onAppointments, onStudyPlanner }: ActionsRowProps) => {
   return (
     <section className="home-actions-row">
       <button className="action-card action-card-schedule" onClick={onSchedule}>
@@ -24,11 +23,6 @@ export const ActionsRow = ({ onSchedule, onAppointments, onStudyPlanner, onActiv
       <button className="action-card action-card-study" onClick={onStudyPlanner}>
         <span>Study Planner</span>
         <img src={iconoCalendario} alt="Study" />
-      </button>
-
-      <button className="action-card action-card-activities" onClick={onActivities}>
-        <span>Actividades</span>
-        <img src={burbujaChat} alt="Activities" />
       </button>
     </section>
   )

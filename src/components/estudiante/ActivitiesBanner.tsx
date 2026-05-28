@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { JoyuItem, ActivitySchedule } from '../../types'
 import { CLASS_SCHEDULE, getTodayKey, normalizeDay, timesOverlap } from '../../data/classSchedule'
 import { ActivityDetailModal } from './ActivityDetailModal'
@@ -29,6 +30,7 @@ interface Props {
 }
 
 export const ActivitiesBanner = ({ items, schedules }: Props) => {
+  const navigate                    = useNavigate()
   const [slide, setSlide]           = useState<0 | 1>(0)
   const [paused, setPaused]         = useState(false)
   const [selected, setSelected]     = useState<JoyuItem | null>(null)
@@ -145,6 +147,12 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
             }
           </div>
         </div>
+      </div>
+
+      <div className="banner-footer">
+        <button className="banner-view-all" onClick={() => navigate('/activities')}>
+          Ver todas las actividades →
+        </button>
       </div>
     </section>
 

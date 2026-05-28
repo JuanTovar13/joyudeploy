@@ -130,7 +130,6 @@ export const Home = () => {
         onSchedule={() => navigate('/schedule')}
         onAppointments={() => navigate('/my-appointments')}
         onStudyPlanner={() => navigate('/study-planner')}
-        onActivities={() => navigate('/activities')}
       />
 
       {showCheckIn && (
