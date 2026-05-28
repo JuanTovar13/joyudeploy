@@ -13,7 +13,7 @@ import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
-import { incrementSessions, addFocusTime, clearActiveTask } from '../store/slices/studyPlannerSlice'
+import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros, resetConcentration } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
 
 /**
@@ -51,6 +51,9 @@ export const StudyPlanner = () => {
   )
   const activeTaskId = useSelector((state: RootState) => state.studyPlanner.activeTaskId)
   const tasks = useSelector((state: RootState) => state.studyPlanner.tasks)
+  const completedPomodorosToday = useSelector(
+    (state: RootState) => state.studyPlanner.completedPomodorosToday
+  )
 
   const {
     timeLeft,
@@ -71,16 +74,14 @@ export const StudyPlanner = () => {
   const stopwatch = useStopwatch()
   const countdown = useCountdownTimer(playAlarm)
 
-  const incompleteTasks = tasks ? tasks.filter((t) => !t.completed) : []
-  const goalSeconds = incompleteTasks.reduce(
-    (sum, t) => sum + (t.estimated_pomodoros ?? 0) * 25 * 60,
+  const totalGoalPomodoros = tasks.reduce(
+    (sum, t) => sum + (t.estimated_pomodoros ?? 0),
     0
   )
-  const workedSeconds = totalFocusTimeToday * 60
   const concentrationPercentage =
-    tasks.length === 0 || goalSeconds === 0
+    tasks.length === 0 || totalGoalPomodoros === 0
       ? 0
-      : Math.min(Math.round((workedSeconds / goalSeconds) * 100), 100)
+      : Math.min(Math.round((completedPomodorosToday / totalGoalPomodoros) * 100), 100)
 
   const getConcentrationColor = (pct: number): string => {
     if (pct <= 33) return '#FF9800'
