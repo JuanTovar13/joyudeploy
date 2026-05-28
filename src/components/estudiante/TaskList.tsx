@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabaseClient'
 import type { RootState, AppDispatch } from '../../store'
-import { setActiveTask, clearActiveTask, setTasks } from '../../store/slices/studyPlannerSlice'
+import { setActiveTask, clearActiveTask, setTasks, resetConcentration } from '../../store/slices/studyPlannerSlice'
 import type { Task } from '../../types'
 
 /**
@@ -124,12 +124,14 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
     if (taskId === activeTaskId && !currentStatus === true) {
       dispatch(clearActiveTask())
     }
+    dispatch(resetConcentration())
   }
 
   const handleDeleteTask = async (taskId: string) => {
     if (taskId === activeTaskId) {
       dispatch(clearActiveTask())
     }
+    dispatch(resetConcentration())
     setLocalTasks((prev) => prev.filter((t) => t.id !== taskId))
     await supabase.from('study_tasks').delete().eq('id', taskId)
   }
