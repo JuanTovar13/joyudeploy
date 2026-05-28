@@ -11,6 +11,7 @@ import { StudyPlanner } from './pages/StudyPlanner'
 import { ScheduleAppointment } from './pages/ScheduleAppointment'
 import { AppointmentsList } from './pages/AppointmentsList'
 import { PsychologistDashboard } from './pages/PsychologistDashboard'
+import { ActivitiesPage } from './pages/ActivitiesPage'
 
 
 const App = () => {
@@ -64,6 +65,15 @@ const App = () => {
           element={
             <RoleRoute allowedRole="student">
               <AppointmentsList />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/activities"
+          element={
+            <RoleRoute allowedRole="student">
+              <ActivitiesPage />
             </RoleRoute>
           }
         />
