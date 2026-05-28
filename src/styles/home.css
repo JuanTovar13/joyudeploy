@@ -50,20 +50,19 @@
 }
 
 
-.home-content {
+/* ── CheckIn + Quote side by side ── */
+.home-cards-row {
   display: flex;
   gap: 25px;
-  z-index: 2; 
   position: relative;
+  z-index: 2;
+  align-items: stretch;
 }
 
-.home-left-column {
-  flex: 1.2;
-}
-
-.home-right-column {
-  width: calc(50% - 12px);
-  flex: none;
+.home-cards-row .check-in-card,
+.home-cards-row .quote-card {
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .check-in-card {
@@ -370,19 +369,9 @@
   }
 
  
-  .home-content {
+  .home-cards-row {
     flex-direction: column;
-    gap: 20px;
-  }
-
-  .home-left-column {
-    flex: none;
-    width: 100%;
-  }
-
-  .home-right-column {
-    flex: none;
-    width: 100% !important; 
+    gap: 16px;
   }
 
   

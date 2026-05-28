@@ -117,16 +117,12 @@ export const Home = () => {
 
       <HomeHeader displayName={context?.user?.displayName} />
 
-      <main className="home-content">
-        <div className="home-left-column">
-          <CheckInCard onClick={() => setShowCheckIn(true)} />
-          <QuoteCard loadingRec={loadingRec} recError={recError} rec={recData} />
-        </div>
+      <ActivitiesBanner items={joyuItems} schedules={activitySchedules} />
 
-        <div className="home-right-column">
-          <ActivitiesBanner items={joyuItems} schedules={activitySchedules} />
-        </div>
-      </main>
+      <div className="home-cards-row">
+        <CheckInCard onClick={() => setShowCheckIn(true)} />
+        <QuoteCard loadingRec={loadingRec} recError={recError} rec={recData} />
+      </div>
 
       <WeeklyCalendar />
 
