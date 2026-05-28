@@ -69,7 +69,7 @@ export const StudyPlanner = () => {
   const [timerMode, setTimerMode] = useState<TimerMode>('pomodoro')
 
   const stopwatch = useStopwatch()
-  const countdown = useCountdownTimer()
+  const countdown = useCountdownTimer(playAlarm)
 
   const incompleteTasks = tasks ? tasks.filter((t) => !t.completed) : []
   const goalMinutes = incompleteTasks.reduce(
