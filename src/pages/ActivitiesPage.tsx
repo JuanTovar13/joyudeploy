@@ -15,11 +15,6 @@ const PREFERRED: { normalized: string; display: string; section: 'Cultura' | 'De
   { normalized: 'deportes de conjunto', display: 'Deportes de Conjunto', section: 'Deportes'  },
 ]
 
-const SECTION_EMOJI: Record<'Cultura' | 'Deportes', string> = {
-  Cultura:  '🎨',
-  Deportes: '⚽',
-}
-
 // Strip accents and lowercase for fuzzy comparison
 const norm = (s: string) =>
   s.toLowerCase()
@@ -27,9 +22,6 @@ const norm = (s: string) =>
    .replace(/[̀-ͯ]/g, '')   // remove combining diacritics
    .trim()
 
-// Match a DB category string to one of our preferred entries
-const matchPreferred = (dbCat: string) =>
-  PREFERRED.find(p => p.normalized === norm(dbCat)) ?? null
 
 // ── Activity card ─────────────────────────────────────────────────────────────
 const ActivityCard = ({ item, onClick }: { item: JoyuItem; onClick: () => void }) => (
@@ -124,27 +116,25 @@ export const ActivitiesPage = () => {
         <button
           className="acts-page__back"
           onClick={() => navigate(-1)}
-          aria-label="Volver"
+          aria-label="Back"
         >
           ‹
         </button>
-        <h1 className="acts-page__title">Actividades</h1>
+        <h1 className="acts-page__title">Activities</h1>
       </div>
 
       {/* ── Body ── */}
       <div className="acts-page__body">
         {loading ? (
-          <div className="acts-page__loading">Cargando actividades…</div>
+          <div className="acts-page__loading">Loading activities…</div>
         ) : items.length === 0 ? (
-          <div className="acts-page__loading">No hay actividades disponibles.</div>
+          <div className="acts-page__loading">There are no activities available.</div>
         ) : sections.length === 0 ? (
-          <div className="acts-page__loading">No hay actividades disponibles.</div>
+          <div className="acts-page__loading">No activities available.</div>
         ) : (
           sections.map(({ section, groups }) => (
             <section key={section} className="acts-section">
-              <h2 className="acts-section__heading">
-                {SECTION_EMOJI[section as 'Cultura' | 'Deportes'] ?? '📋'} {section}
-              </h2>
+              
 
               {groups.map(group => (
                 <div key={group.display} className="acts-category">

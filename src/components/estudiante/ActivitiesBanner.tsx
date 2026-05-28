@@ -5,7 +5,7 @@ import { CLASS_SCHEDULE, getTodayKey, normalizeDay, timesOverlap } from '../../d
 import { ActivityDetailModal } from './ActivityDetailModal'
 import '../../styles/ActivitiesBanner.css'
 
-const SLIDE_TITLES = ['Actividades Populares', 'Actividades Para Ti Hoy'] as const
+const SLIDE_TITLES = ['Popular Activities', 'Activities For You Today'] as const
 
 // ── Activity card shared by both slides ──────────────────────────────────────
 const BannerActivityCard = ({ item, onClick }: { item: JoyuItem; onClick: () => void }) => (
@@ -127,7 +127,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
                     </li>
                   ))}
                 </ul>
-              : <p className="banner-empty">No hay actividades disponibles.</p>
+              : <p className="banner-empty">There are no activities available.</p>
             }
           </div>
 
@@ -142,7 +142,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
                   ))}
                 </ul>
               : <p className="banner-empty">
-                  No hay actividades disponibles en tus ratos libres hoy 🙌
+                  No activities available during your free time today 🙌
                 </p>
             }
           </div>
@@ -151,7 +151,7 @@ export const ActivitiesBanner = ({ items, schedules }: Props) => {
 
       <div className="banner-footer">
         <button className="banner-view-all" onClick={() => navigate('/activities')}>
-          Ver todas las actividades →
+          View all activities →
         </button>
       </div>
     </section>
