@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 
 interface CountdownTimerDisplayProps {
-  inputMinutes: number
   timeLeft: number
   running: boolean
   finished: boolean
@@ -10,11 +9,10 @@ interface CountdownTimerDisplayProps {
   onStart: () => void
   onPause: () => void
   onReset: () => void
-  onSetMinutes: (mins: number) => void
+  onSetSeconds: (secs: number) => void
 }
 
 const CountdownTimerDisplay = React.memo(({
-  inputMinutes,
   timeLeft,
   running,
   finished,
@@ -23,40 +21,24 @@ const CountdownTimerDisplay = React.memo(({
   onStart,
   onPause,
   onReset,
-  onSetMinutes,
+  onSetSeconds,
 }: CountdownTimerDisplayProps) => {
   const circumference = 2 * Math.PI * 80
   const safeTotal = totalSeconds > 0 ? totalSeconds : 1
   const strokeDashoffset = circumference - (timeLeft / safeTotal) * circumference
-  const [inputValue, setInputValue] = useState(String(inputMinutes))
 
-  useEffect(() => {
-    setInputValue(String(inputMinutes))
-  }, [inputMinutes])
+  const [minsInput, setMinsInput] = useState('00')
+  const [secsInput, setSecsInput] = useState('00')
+  const secsRef = useRef<HTMLInputElement>(null)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
-  }
-
-  const handleInputBlur = () => {
-    const parsed = parseFloat(inputValue)
-    if (!isNaN(parsed) && parsed > 0) {
-      onSetMinutes(parsed)
-      setInputValue(String(parsed))
-    } else {
-      setInputValue(String(inputMinutes))
-    }
-  }
-
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const parsed = parseFloat(inputValue)
-      if (!isNaN(parsed) && parsed > 0) {
-        onSetMinutes(parsed)
-        setInputValue(String(parsed))
-      } else {
-        setInputValue(String(inputMinutes))
-      }
+  const applyTime = () => {
+    const mins = Math.max(0, parseInt(minsInput || '0', 10))
+    const secs = Math.max(0, Math.min(59, parseInt(secsInput || '0', 10)))
+    const total = mins * 60 + secs
+    if (total > 0) {
+      onSetSeconds(total)
+      setMinsInput(String(mins).padStart(2, '0'))
+      setSecsInput(String(secs).padStart(2, '0'))
     }
   }
 
@@ -80,33 +62,41 @@ const CountdownTimerDisplay = React.memo(({
         </svg>
         <span className="pomodoro-time-text">{formatTime(timeLeft)}</span>
       </div>
-      <p className="pomodoro-session-label">{finished ? '🎉 Done!' : 'Timer'}</p>
-      {!running && !finished && (
-        <div className="countdown-input-row">
-          <label htmlFor="timer-minutes" className="countdown-input-label">
-            Minutes:
-          </label>
+      <p className="pomodoro-session-label">Timer</p>
+      {!running && (
+        <div className="countdown-timeinput-row">
           <input
-            id="timer-minutes"
+            className="countdown-timeinput"
             type="number"
-            className="countdown-input"
-            value={inputValue}
-            min={0.1}
-            max={180}
-            step={0.5}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            onKeyDown={handleInputKeyDown}
-            aria-label="Set timer duration in minutes"
+            min={0}
+            max={99}
+            value={minsInput}
+            onChange={(e) => setMinsInput(e.target.value)}
+            onBlur={applyTime}
+            onKeyDown={(e) => { if (e.key === 'Enter') { applyTime(); secsRef.current?.focus() } if (e.key === 'Tab') { e.preventDefault(); secsRef.current?.focus() } }}
+            aria-label="Minutes"
           />
-          <span className="countdown-input-hint">e.g. 0.5 = 30s, 4.5 = 4m30s</span>
+          <span className="countdown-timeinput-sep">:</span>
+          <input
+            ref={secsRef}
+            className="countdown-timeinput"
+            type="number"
+            min={0}
+            max={59}
+            value={secsInput}
+            onChange={(e) => setSecsInput(e.target.value)}
+            onBlur={applyTime}
+            onKeyDown={(e) => { if (e.key === 'Enter') applyTime() }}
+            aria-label="Seconds"
+          />
+          <span className="countdown-input-hint">mm : ss</span>
         </div>
       )}
       <div className="pomodoro-buttons">
         {running ? (
           <button type="button" className="pomodoro-btn-primary" onClick={onPause} aria-label="Pause timer">Pause</button>
         ) : (
-          <button type="button" className="pomodoro-btn-primary" onClick={onStart} aria-label="Start timer" disabled={finished}>Start</button>
+          <button type="button" className="pomodoro-btn-primary" onClick={onStart} aria-label="Start timer">Start</button>
         )}
         <button type="button" className="pomodoro-btn-secondary" onClick={onReset} aria-label="Reset timer">Reset</button>
       </div>

@@ -1,5 +1,5 @@
 import '../styles/StudyPlanner.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
@@ -68,6 +68,7 @@ export const StudyPlanner = () => {
   } = usePomodoro()
 
   const { playAlarm } = useAlarmSound()
+  const prevSessionTypeRef = useRef<string | null>(null)
 
   const [timerMode, setTimerMode] = useState<TimerMode>('pomodoro')
 
@@ -171,10 +172,16 @@ export const StudyPlanner = () => {
   }, [currentSession, dispatch, activeTaskId, playAlarm])
 
   useEffect(() => {
-    if (sessionType === 'work' && status === 'idle') {
+    if (
+      prevSessionTypeRef.current !== null &&
+      prevSessionTypeRef.current !== 'work' &&
+      sessionType === 'work' &&
+      status === 'idle'
+    ) {
       playAlarm()
     }
-  }, [sessionType])
+    prevSessionTypeRef.current = sessionType
+  }, [sessionType, status, playAlarm])
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
@@ -299,16 +306,15 @@ export const StudyPlanner = () => {
           )}
           {timerMode === 'timer' && (
             <CountdownTimerDisplay
-              inputMinutes={countdown.inputMinutes}
               timeLeft={countdown.timeLeft}
               running={countdown.running}
               finished={countdown.finished}
               formatTime={countdown.formatTime}
-              totalSeconds={countdown.inputMinutes * 60}
+              totalSeconds={countdown.totalSeconds}
               onStart={countdown.start}
               onPause={countdown.pause}
               onReset={countdown.reset}
-              onSetMinutes={countdown.handleSetMinutes}
+              onSetSeconds={countdown.handleSetSeconds}
             />
           )}
           <TaskList onStartPomodoro={() => {
