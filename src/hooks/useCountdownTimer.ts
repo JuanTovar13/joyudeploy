@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 
-export const useCountdownTimer = () => {
+export const useCountdownTimer = (onFinish?: () => void) => {
   const [inputMinutes, setInputMinutes] = useState(25)
   const [timeLeft, setTimeLeft] = useState(25 * 60)
   const [running, setRunning] = useState(false)
@@ -15,8 +15,10 @@ export const useCountdownTimer = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(intervalRef.current!)
+          intervalRef.current = null
           setRunning(false)
           setFinished(true)
+          if (onFinish) queueMicrotask(() => onFinish())
           return 0
         }
         return prev - 1
