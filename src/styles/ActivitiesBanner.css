@@ -1,0 +1,140 @@
+.activities-banner {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header: title + dot nav ── */
+.banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 14px;
+}
+
+.banner-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+  transition: opacity 0.3s;
+}
+
+.banner-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.banner-dot {
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: width 0.3s, background 0.3s;
+  background: #D5D5F5;
+  width: 8px;
+}
+
+.banner-dot--active {
+  background: #262688;
+  width: 20px;
+}
+
+/* ── Sliding track ── */
+.banner-track-wrapper {
+  overflow: hidden;
+  flex: 1;
+}
+
+.banner-track {
+  display: flex;
+  width: 200%;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Each slide occupies 50% of the 200%-wide track = 100% of the wrapper */
+.banner-slide {
+  width: 50%;
+  padding: 0 24px 22px;
+  box-sizing: border-box;
+}
+
+/* ── Activity card row ── */
+.banner-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.banner-activity-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #F8F8FF;
+  border-radius: 14px;
+  padding: 10px 14px;
+  transition: transform 0.15s;
+}
+
+.banner-activity-card:hover {
+  transform: translateX(3px);
+}
+
+.banner-activity-card__img {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.banner-activity-card__placeholder {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #E8E8F8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.banner-activity-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.banner-activity-card__title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #262688;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.banner-activity-card__category {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  color: #8888aa;
+  margin: 0;
+}
+
+/* ── Empty / loading states ── */
+.banner-empty {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #b0b0cc;
+  text-align: center;
+  padding: 24px 0;
+  margin: 0;
+}

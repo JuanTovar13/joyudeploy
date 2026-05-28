@@ -15,10 +15,11 @@ import type { GroqRecommendation } from '../lib/groqClient'
 import { HomeHeader }     from '../components/estudiante/HomeHeader'
 import { CheckInCard }    from '../components/estudiante/CheckInCard'
 import { QuoteCard }      from '../components/estudiante/QuoteCard'
-import { ActivitiesCard } from '../components/estudiante/ActivitiesCard'
-import { ActionsRow }     from '../components/estudiante/ActionsRow'
-import { WeeklyCalendar } from '../components/estudiante/WeeklyCalendar'
+import { ActionsRow }        from '../components/estudiante/ActionsRow'
+import { WeeklyCalendar }    from '../components/estudiante/WeeklyCalendar'
+import { ActivitiesBanner }  from '../components/estudiante/ActivitiesBanner'
 import '../styles/WeeklyCalendar.css'
+import '../styles/ActivitiesBanner.css'
 
 const checkinKey   = (uid: string) => `joyu_checkin_done_${uid}`
 const recommendKey = (uid: string) => `joyu_recommendation_${uid}`
@@ -116,7 +117,7 @@ export const Home = () => {
         </div>
 
         <div className="home-right-column">
-          <ActivitiesCard items={joyuItems} />
+          <ActivitiesBanner items={joyuItems} />
         </div>
       </main>
 
