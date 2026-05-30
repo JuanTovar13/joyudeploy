@@ -187,6 +187,13 @@
   background: #fff5f5;
 }
 
+.accept-hint {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 0;
+}
+
 .conflict-error {
   background: #fef2f2;
   border: 1.5px solid #fca5a5;
