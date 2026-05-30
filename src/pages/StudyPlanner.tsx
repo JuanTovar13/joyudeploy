@@ -207,7 +207,7 @@ export const StudyPlanner = () => {
         <button className="studyplanner-back-btn" onClick={() => navigate('/home')}>
           ‹
         </button>
-        <h1 className="studyplanner-title">Study Planner</h1>
+        <h1 className="studyplanner-title">Study Toolkit</h1>
         <div className="studyplanner-info-row">
           <div className="studyplanner-clock" aria-label={`Current time: ${currentTime}`}>
             🕐 {currentTime}

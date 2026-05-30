@@ -21,7 +21,7 @@ export const ActionsRow = ({ onSchedule, onAppointments, onStudyPlanner }: Actio
       </button>
 
       <button className="action-card action-card-study" onClick={onStudyPlanner}>
-        <span>Study Planner</span>
+        <span>Study Toolkit</span>
         <img src={iconoCalendario} alt="Study" />
       </button>
     </section>
