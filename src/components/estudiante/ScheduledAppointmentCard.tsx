@@ -57,7 +57,6 @@ export const ScheduledAppointmentCard = ({
         </div>
 
         <div className="right-actions">
-          <button className="btn-reschedule" disabled>Reschedule</button>
           <button
             className="btn-cancel"
             onClick={() => onCancel(appointment.id)}
