@@ -82,15 +82,13 @@ const MusicPlayer = () => {
       </div>
       <p className="musicplayer-week-label">This week's playlist</p>
       <p className="musicplayer-track-name">{currentTrack.title}</p>
-      {videoVisible && (
-        <iframe
-          className="musicplayer-iframe"
-          src={`https://www.youtube.com/embed/${currentTrack.embedId}?autoplay=1&mute=0`}
-          title={currentTrack.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      )}
+      <iframe
+        className={`musicplayer-iframe${videoVisible ? '' : ' musicplayer-iframe--hidden'}`}
+        src={`https://www.youtube.com/embed/${currentTrack.embedId}?autoplay=1&mute=0`}
+        title={currentTrack.title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
       <div className="musicplayer-controls">
         <button
           type="button"

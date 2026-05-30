@@ -63,6 +63,13 @@
   height: 100%;
   border: none;
   border-radius: 12px;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.musicplayer-iframe--hidden {
+  height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .musicplayer-controls {
