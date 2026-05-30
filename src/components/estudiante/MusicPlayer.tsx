@@ -45,6 +45,7 @@ const getWeekNumber = (date: Date): number => {
 
 const MusicPlayer = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [videoVisible, setVideoVisible] = useState(true)
 
   const weeklyTracks = useMemo(() => {
     const weekNumber = getWeekNumber(new Date())
@@ -67,17 +68,29 @@ const MusicPlayer = () => {
   const currentTrack = weeklyTracks[currentIndex]
 
   return (
-    <div className="musicplayer-container">
-      <h2 className="musicplayer-title">Study Music 🎵</h2>
+    <div className={`musicplayer-container${videoVisible ? '' : ' musicplayer-container--compact'}`}>
+      <div className="musicplayer-header">
+        <h2 className="musicplayer-title">Study Music 🎵</h2>
+        <button
+          type="button"
+          className="musicplayer-toggle-btn"
+          onClick={() => setVideoVisible(v => !v)}
+          aria-label={videoVisible ? 'Hide video' : 'Show video'}
+        >
+          {videoVisible ? '🙈 Hide video' : '▶ Show video'}
+        </button>
+      </div>
       <p className="musicplayer-week-label">This week's playlist</p>
       <p className="musicplayer-track-name">{currentTrack.title}</p>
-      <iframe
-        className="musicplayer-iframe"
-        src={`https://www.youtube.com/embed/${currentTrack.embedId}?autoplay=1&mute=0`}
-        title={currentTrack.title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
+      {videoVisible && (
+        <iframe
+          className="musicplayer-iframe"
+          src={`https://www.youtube.com/embed/${currentTrack.embedId}?autoplay=1&mute=0`}
+          title={currentTrack.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      )}
       <div className="musicplayer-controls">
         <button
           type="button"
