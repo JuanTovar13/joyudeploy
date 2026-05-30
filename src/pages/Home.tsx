@@ -9,6 +9,7 @@ import { signOut } from 'firebase/auth'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { fetchActivities, fetchActivitySchedules } from '../store/slices/activitiesSlice'
 import { fetchRecommendation, loadPersistedRecommendation } from '../store/slices/recommendationSlice'
+import { fetchAppointments } from '../store/slices/appointmentsSlice'
 
 import type { GroqRecommendation } from '../lib/groqClient'
 
@@ -38,6 +39,8 @@ export const Home = () => {
     status: activitiesStatus,
     schedulesStatus,
   } = useAppSelector((state) => state.activities)
+
+  const { status: appointmentsStatus } = useAppSelector((state) => state.appointments)
   const { data: rec, status: recStatus } = useAppSelector(
     (state) => state.recommendation,
   )
@@ -56,6 +59,10 @@ export const Home = () => {
   useEffect(() => {
     if (schedulesStatus === 'idle') void dispatch(fetchActivitySchedules())
   }, [dispatch, schedulesStatus])
+
+  useEffect(() => {
+    if (uid && appointmentsStatus === 'idle') void dispatch(fetchAppointments(uid))
+  }, [dispatch, uid, appointmentsStatus])
 
   // Load persisted recommendation and decide whether to show check-in
   useEffect(() => {
