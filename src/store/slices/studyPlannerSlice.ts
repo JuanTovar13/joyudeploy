@@ -27,26 +27,21 @@ const readPersistedStudyPlannerState = (): StudyPlannerState => {
     const raw = localStorage.getItem(`joyu_study_sessions_${today}`)
     if (!raw) return defaultStudyPlannerState
     const parsed: unknown = JSON.parse(raw)
-    if (
-      parsed !== null &&
-      typeof parsed === 'object' &&
-      'todaySessionsCompleted' in parsed &&
-      'totalFocusTimeToday' in parsed
-    ) {
+    if (parsed !== null && typeof parsed === 'object') {
       const rec = parsed as Record<string, unknown>
-      const todaySessionsCompleted = Number(rec.todaySessionsCompleted)
-      const totalFocusTimeToday = Number(rec.totalFocusTimeToday)
+      const todaySessionsCompleted  = Number(rec.todaySessionsCompleted  ?? 0)
+      const totalFocusTimeToday     = Number(rec.totalFocusTimeToday     ?? 0)
+      const completedPomodorosToday = Number(rec.completedPomodorosToday ?? 0)
       if (
         Number.isFinite(todaySessionsCompleted) &&
-        Number.isFinite(totalFocusTimeToday)
+        Number.isFinite(totalFocusTimeToday) &&
+        Number.isFinite(completedPomodorosToday)
       ) {
         return {
+          ...defaultStudyPlannerState,
           todaySessionsCompleted,
           totalFocusTimeToday,
-          activeTaskId: null,
-          activeTaskTitle: null,
-          tasks: [],
-          completedPomodorosToday: 0,
+          completedPomodorosToday,
         }
       }
     }

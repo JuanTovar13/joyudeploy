@@ -180,9 +180,9 @@ export const StudyPlanner = () => {
     const today = new Date().toISOString().split('T')[0]
     localStorage.setItem(
       `joyu_study_sessions_${today}`,
-      JSON.stringify({ todaySessionsCompleted, totalFocusTimeToday })
+      JSON.stringify({ todaySessionsCompleted, totalFocusTimeToday, completedPomodorosToday })
     )
-  }, [todaySessionsCompleted, totalFocusTimeToday])
+  }, [todaySessionsCompleted, totalFocusTimeToday, completedPomodorosToday])
 
   return (
     <>
