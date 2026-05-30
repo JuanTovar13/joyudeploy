@@ -9,6 +9,7 @@ import StopwatchDisplay from '../components/estudiante/StopwatchDisplay'
 import CountdownTimerDisplay from '../components/estudiante/CountdownTimerDisplay'
 import MiniJournal from '../components/estudiante/MiniJournal'
 import MusicPlayer from '../components/estudiante/MusicPlayer'
+import { StudyCoach } from '../components/estudiante/StudyCoach'
 import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
@@ -322,6 +323,8 @@ export const StudyPlanner = () => {
             start()
           }} />
         </div>
+        <StudyCoach />
+
         <div className="studyplanner-bottom-row">
           <MiniJournal />
           <MusicPlayer />
