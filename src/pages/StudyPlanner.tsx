@@ -1,5 +1,5 @@
 import '../styles/StudyPlanner.css'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePomodoro } from '../hooks/usePomodoro'
@@ -14,7 +14,7 @@ import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
-import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros } from '../store/slices/studyPlannerSlice'
+import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros, incrementWorkSkip, resetWorkSkips } from '../store/slices/studyPlannerSlice'
 import { supabase } from '../lib/supabaseClient'
 
 /**
@@ -67,6 +67,20 @@ export const StudyPlanner = () => {
     reset,
     skip,
   } = usePomodoro()
+
+  // Track whether the last session transition was triggered by skip (vs natural end)
+  const skipFiredRef = useRef(false)
+
+  // Wrap skip: count work-session skips; skipping a break resets the counter
+  const handleSkip = useCallback(() => {
+    if (sessionType === 'work') {
+      skipFiredRef.current = true
+      dispatch(incrementWorkSkip())
+    } else {
+      dispatch(resetWorkSkips())
+    }
+    skip()
+  }, [sessionType, skip, dispatch])
 
   const { playAlarm } = useAlarmSound()
   const prevSessionTypeRef = useRef<string | null>(null)
@@ -140,6 +154,9 @@ export const StudyPlanner = () => {
   useEffect(() => {
     if (currentSession > 1) {
       playAlarm()
+      // Natural completion resets the skip counter; skips are already counted above
+      if (!skipFiredRef.current) dispatch(resetWorkSkips())
+      skipFiredRef.current = false
     }
     if (currentSession > 1 && activeTaskId) {
       dispatch(incrementSessions())
@@ -292,7 +309,7 @@ export const StudyPlanner = () => {
               onStart={start}
               onPause={pause}
               onReset={reset}
-              onSkip={skip}
+              onSkip={handleSkip}
             />
           )}
           {timerMode === 'stopwatch' && (
