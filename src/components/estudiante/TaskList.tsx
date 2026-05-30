@@ -112,16 +112,31 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
     }
   }
 
-  const handleToggleComplete = async (taskId: string, currentStatus: boolean) => {
-    setLocalTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, completed: !currentStatus } : t))
-    )
-    await supabase
-      .from('study_tasks')
-      .update({ completed: !currentStatus })
-      .eq('id', taskId)
-    if (taskId === activeTaskId && !currentStatus === true) {
-      dispatch(clearActiveTask())
+  const handleToggleComplete = async (task: Task) => {
+    if (task.completed) {
+      // Uncheck: reset progress entirely
+      setLocalTasks(prev =>
+        prev.map(t => t.id === task.id ? { ...t, completed: false, completed_pomodoros: 0 } : t)
+      )
+      await supabase
+        .from('study_tasks')
+        .update({ completed: false, completed_pomodoros: 0 })
+        .eq('id', task.id)
+    } else {
+      // Check: increment by 1; mark done only when it reaches the goal
+      const newCount    = task.completed_pomodoros + 1
+      const willFinish  = newCount >= task.estimated_pomodoros
+      setLocalTasks(prev =>
+        prev.map(t => t.id === task.id
+          ? { ...t, completed: willFinish, completed_pomodoros: newCount }
+          : t
+        )
+      )
+      await supabase
+        .from('study_tasks')
+        .update({ completed: willFinish, completed_pomodoros: newCount })
+        .eq('id', task.id)
+      if (willFinish && task.id === activeTaskId) dispatch(clearActiveTask())
     }
     dispatch(resetConcentration())
   }
@@ -183,7 +198,7 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
             <input
               type="checkbox"
               checked={task.completed}
-              onChange={() => void handleToggleComplete(task.id, task.completed)}
+              onChange={() => void handleToggleComplete(task)}
               aria-label={`Mark ${task.title} as complete`}
             />
             <span className={`tasklist-item-title${task.completed ? ' completed' : ''}`}>
