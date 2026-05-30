@@ -219,6 +219,11 @@ export const WeeklyCalendar = () => {
                           {appt.professional_name}
                         </span>
                       )}
+                      {appt.mode && (
+                        <span className="wc-class-block__detail">
+                          {appt.mode === 'Virtual' ? '💻 Virtual' : '🏢 Presencial'}
+                        </span>
+                      )}
                     </div>
                   )
                 })}
