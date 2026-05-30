@@ -13,7 +13,7 @@
 }
 
 .musicplayer-container--compact {
-  height: auto;
+  height: 25vh;
 }
 
 /* Header row: title + toggle button */
@@ -110,4 +110,15 @@
   margin: 0;
   text-align: center;
   font-family: 'Fredoka', sans-serif;
+}
+
+@media (max-width: 600px) {
+  .musicplayer-container {
+    padding: 16px;
+    height: auto;
+  }
+  .musicplayer-iframe {
+    width: 100%;
+    height: 200px;
+  }
 }

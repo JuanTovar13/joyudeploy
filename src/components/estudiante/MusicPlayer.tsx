@@ -70,7 +70,7 @@ const MusicPlayer = () => {
   return (
     <div className={`musicplayer-container${videoVisible ? '' : ' musicplayer-container--compact'}`}>
       <div className="musicplayer-header">
-        <h2 className="musicplayer-title">Study Music 🎵</h2>
+        <h2 className="musicplayer-title">Music Player 🎵</h2>
         <button
           type="button"
           className="musicplayer-toggle-btn"
@@ -80,7 +80,6 @@ const MusicPlayer = () => {
           {videoVisible ? '🙈 Hide video' : '▶ Show video'}
         </button>
       </div>
-      <p className="musicplayer-week-label">This week's playlist</p>
       <p className="musicplayer-track-name">{currentTrack.title}</p>
       <iframe
         className={`musicplayer-iframe${videoVisible ? '' : ' musicplayer-iframe--hidden'}`}
