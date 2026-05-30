@@ -15,7 +15,6 @@ import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
 import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros, incrementWorkSkip, resetWorkSkips } from '../store/slices/studyPlannerSlice'
-import { supabase } from '../lib/supabaseClient'
 
 /**
  * StudyPlanner - página principal con temporizador Pomodoro y tareas
@@ -158,31 +157,7 @@ export const StudyPlanner = () => {
       if (!skipFiredRef.current) dispatch(resetWorkSkips())
       skipFiredRef.current = false
     }
-    if (currentSession > 1 && activeTaskId) {
-      dispatch(incrementSessions())
-      dispatch(addFocusTime(25))
-      dispatch(incrementCompletedPomodoros())
-      void (async () => {
-        const { data } = await supabase
-          .from('study_tasks')
-          .select('completed_pomodoros')
-          .eq('id', activeTaskId)
-          .single()
-        const completedRaw = (data as { completed_pomodoros?: unknown } | null)
-          ?.completed_pomodoros
-        if (typeof completedRaw === 'number') {
-          const newCompleted = completedRaw + 1
-          await supabase
-            .from('study_tasks')
-            .update({ completed_pomodoros: newCompleted })
-            .eq('id', activeTaskId)
-          const activeTask = tasks.find((t) => t.id === activeTaskId)
-          if (activeTask && newCompleted >= activeTask.estimated_pomodoros) {
-            dispatch(clearActiveTask())
-          }
-        }
-      })()
-    } else if (currentSession > 1) {
+    if (currentSession > 1) {
       dispatch(incrementSessions())
       dispatch(addFocusTime(25))
       dispatch(incrementCompletedPomodoros())
