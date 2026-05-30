@@ -66,6 +66,60 @@
   line-height: 1.2;
 }
 
+/* ── Skip help prompt ── */
+.sc-skip-alert {
+  background: #FFF7ED;
+  border: 1.5px solid #FED7AA;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: sc-fade-in 0.25s ease;
+}
+
+.sc-skip-alert__text {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #92400e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sc-skip-alert__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sc-skip-btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.12s;
+}
+
+.sc-skip-btn:active { transform: scale(0.96); }
+
+.sc-skip-btn--help {
+  background: #262688;
+  color: white;
+}
+
+.sc-skip-btn--help:hover { opacity: 0.88; }
+
+.sc-skip-btn--ok {
+  background: white;
+  color: #92400e;
+  border: 1.5px solid #FED7AA;
+}
+
+.sc-skip-btn--ok:hover { background: #FFF7ED; }
+
 /* ── Analyze button ── */
 .sc-analyze-btn {
   font-family: 'Fredoka', sans-serif;

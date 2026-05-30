@@ -1,5 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch } from '../../store/hooks'
+import { resetWorkSkips } from '../../store/slices/studyPlannerSlice'
 import { getStudyAnalysis, type StudyAnalysis } from '../../lib/groqClient'
 import '../../styles/StudyCoach.css'
 
@@ -22,12 +24,25 @@ const StatCard = ({ emoji, label, value, sub }: {
 
 // ── Main component ────────────────────────────────────────────────────────────
 export const StudyCoach = () => {
-  const { tasks, todaySessionsCompleted, totalFocusTimeToday, completedPomodorosToday } =
-    useAppSelector(s => s.studyPlanner)
+  const dispatch = useAppDispatch()
+  const {
+    tasks,
+    todaySessionsCompleted,
+    totalFocusTimeToday,
+    completedPomodorosToday,
+    consecutiveWorkSkips,
+    activeTaskTitle,
+  } = useAppSelector(s => s.studyPlanner)
 
   const [analysis, setAnalysis]   = useState<StudyAnalysis | null>(null)
   const [loading, setLoading]     = useState(false)
   const [error, setError]         = useState<string | null>(null)
+  const [helpDismissed, setHelpDismissed] = useState(false)
+
+  // Re-show the prompt when a new skip cycle begins (counter reset to 0 then rises again)
+  useEffect(() => {
+    if (consecutiveWorkSkips === 0) setHelpDismissed(false)
+  }, [consecutiveWorkSkips])
 
   // ── Derived stats ──────────────────────────────────────────────────────────
   const totalTasks        = tasks.length
@@ -52,9 +67,12 @@ export const StudyCoach = () => {
     })),
     totalGoalPomodoros,
     completedPomodorosToday,
-    focusMinutesToday: totalFocusTimeToday,
-    sessionsToday:     todaySessionsCompleted,
-  }), [tasks, completedPomodorosToday, totalFocusTimeToday, todaySessionsCompleted])
+    focusMinutesToday:    totalFocusTimeToday,
+    sessionsToday:        todaySessionsCompleted,
+    consecutiveWorkSkips,
+    skippedTaskTitle:     activeTaskTitle,
+  }), [tasks, completedPomodorosToday, totalFocusTimeToday, todaySessionsCompleted,
+       consecutiveWorkSkips, activeTaskTitle])
 
   const handleAnalyze = async () => {
     setLoading(true)
@@ -100,6 +118,35 @@ export const StudyCoach = () => {
           sub={pendingTasks.length === 0 ? '¡Todo listo!' : `${pendingTasks.length} por hacer`}
         />
       </div>
+
+      {/* ── Skip help prompt ── */}
+      {consecutiveWorkSkips >= 2 && !helpDismissed && (
+        <div className="sc-skip-alert">
+          <p className="sc-skip-alert__text">
+            ⚠️ Llevas <strong>{consecutiveWorkSkips} skips seguidos</strong>
+            {activeTaskTitle ? <> en <em>"{activeTaskTitle}"</em></> : ' en el focus time'}.
+            {' '}¿Necesitas ayuda con esta tarea?
+          </p>
+          <div className="sc-skip-alert__actions">
+            <button
+              className="sc-skip-btn sc-skip-btn--help"
+              onClick={() => {
+                setHelpDismissed(true)
+                dispatch(resetWorkSkips())
+                void handleAnalyze()
+              }}
+            >
+              Sí, analiza mi situación
+            </button>
+            <button
+              className="sc-skip-btn sc-skip-btn--ok"
+              onClick={() => { setHelpDismissed(true); dispatch(resetWorkSkips()) }}
+            >
+              Estoy bien, continúo
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── Analyze button ── */}
       <button

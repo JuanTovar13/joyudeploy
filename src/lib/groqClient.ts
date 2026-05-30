@@ -15,13 +15,15 @@ export type StudyAnalysis = {
 }
 
 export interface StudyContext {
-  totalTasks:            number
-  completedTasks:        number
-  pendingTasks:          { title: string; estimated_pomodoros: number; completed_pomodoros: number }[]
-  totalGoalPomodoros:    number
+  totalTasks:              number
+  completedTasks:          number
+  pendingTasks:            { title: string; estimated_pomodoros: number; completed_pomodoros: number }[]
+  totalGoalPomodoros:      number
   completedPomodorosToday: number
-  focusMinutesToday:     number
-  sessionsToday:         number
+  focusMinutesToday:       number
+  sessionsToday:           number
+  consecutiveWorkSkips:    number
+  skippedTaskTitle:        string | null   // active task when skips happened
 }
 
 export const getStudyAnalysis = async (ctx: StudyContext): Promise<StudyAnalysis> => {
@@ -45,6 +47,9 @@ ${pendingList}
 - Pomodoros completados hoy: ${ctx.completedPomodorosToday} / ${ctx.totalGoalPomodoros} en total
 - Minutos de concentración hoy: ${ctx.focusMinutesToday}
 - Sesiones de trabajo hoy: ${ctx.sessionsToday}
+${ctx.consecutiveWorkSkips >= 2
+  ? `- IMPORTANTE: El estudiante ha saltado ${ctx.consecutiveWorkSkips} veces seguidas la sesión de trabajo${ctx.skippedTaskTitle ? ` en la tarea "${ctx.skippedTaskTitle}"` : ''}. Puede estar bloqueado, desmotivado o con dificultades con esa tarea.`
+  : ''}
 
 Responde ÚNICAMENTE con este JSON (sin texto extra):
 {
