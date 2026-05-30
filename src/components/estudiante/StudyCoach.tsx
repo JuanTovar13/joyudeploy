@@ -53,9 +53,6 @@ export const StudyCoach = () => {
   const completionPct = totalTasks === 0 ? 0
     : Math.round((completedTasks / totalTasks) * 100)
 
-  const pomodoroPct = totalGoalPomodoros === 0 ? 0
-    : Math.min(Math.round((completedPomodorosToday / totalGoalPomodoros) * 100), 100)
-
   // Context object sent to Groq
   const studyContext = useMemo(() => ({
     totalTasks,
@@ -102,8 +99,8 @@ export const StudyCoach = () => {
         <StatCard
           emoji="🍅"
           label="Pomodoros hoy"
-          value={`${completedPomodorosToday} / ${totalGoalPomodoros}`}
-          sub={`${pomodoroPct}% del objetivo`}
+          value={completedPomodorosToday}
+          sub="sesiones hoy"
         />
         <StatCard
           emoji="⏱️"
