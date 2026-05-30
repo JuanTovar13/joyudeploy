@@ -9,7 +9,7 @@ export interface ClassSlot {
   color: string
 }
 
-export type WeekDayKey = 'Lun' | 'Mar' | 'Mié' | 'Jue' | 'Vie'
+export type WeekDayKey = 'Lun' | 'Mar' | 'Mié' | 'Jue' | 'Vie' | 'Sáb'
 
 export const SUBJECT_COLORS: Record<string, string> = {
   'Ecosistemas':              '#B5EAD7',
@@ -38,11 +38,12 @@ export const CLASS_SCHEDULE: Record<WeekDayKey, ClassSlot[]> = {
     { subject: 'Ecosistemas',             start: '7:00',  end: '9:00',  color: SUBJECT_COLORS['Ecosistemas'] },
     { subject: 'Investigación en Diseño', start: '14:00', end: '17:00', color: SUBJECT_COLORS['Investigación en Diseño'] },
   ],
+  Sáb: [],
 }
 
 // JS Date.getDay() → WeekDayKey (undefined on weekends)
 export const JS_DAY_TO_KEY: Partial<Record<number, WeekDayKey>> = {
-  1: 'Lun', 2: 'Mar', 3: 'Mié', 4: 'Jue', 5: 'Vie',
+  1: 'Lun', 2: 'Mar', 3: 'Mié', 4: 'Jue', 5: 'Vie', 6: 'Sáb',
 }
 
 export const getTodayKey = (): WeekDayKey | undefined =>
@@ -56,6 +57,7 @@ export const normalizeDay = (day: string): WeekDayKey | null => {
   if (['mié', 'mie', 'miércoles', 'miercoles', 'wednesday', 'wed'].includes(d)) return 'Mié'
   if (['jue', 'jueves', 'thursday', 'thu'].includes(d))                        return 'Jue'
   if (['vie', 'viernes', 'friday', 'fri'].includes(d))                         return 'Vie'
+  if (['sáb', 'sab', 'sabado', 'sábado', 'saturday', 'sat'].includes(d))      return 'Sáb'
   return null
 }
 

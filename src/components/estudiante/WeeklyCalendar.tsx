@@ -11,7 +11,7 @@ const PX_PER_HOUR  = 56
 const TOTAL_HEIGHT = TOTAL_HOURS * PX_PER_HOUR
 
 const HOURS    = Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => START_HOUR + i)
-const DAY_KEYS: WeekDayKey[] = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie']
+const DAY_KEYS: WeekDayKey[] = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const fmtHour = (h: number) => {
@@ -59,17 +59,17 @@ const getWeekMonday = (date: Date): Date => {
   return d
 }
 
-// Map an appointment that falls this week to the DAY_KEYS index (0=Lun … 4=Vie)
-// Returns -1 if it doesn't fall Mon-Fri of the current week
+// Map an appointment that falls this week to the DAY_KEYS index (0=Lun … 5=Sáb)
+// Returns -1 if it falls on Sunday or outside the current week
 const apptDayIndex = (appt: Appointment, weekMonday: Date): number => {
   if (!appt.date || !appt.hour || appt.status !== 'scheduled') return -1
   const d = new Date(appt.date + 'T00:00:00')
-  const weekDay = d.getDay()   // 1=Mon … 5=Fri (0=Sun, 6=Sat → skip)
-  if (weekDay < 1 || weekDay > 5) return -1
-  // Check same week
+  const weekDay = d.getDay()   // 1=Mon … 6=Sat (0=Sun → skip)
+  if (weekDay < 1 || weekDay > 6) return -1
+  // Check same week: Saturday shares the Monday anchor of its week
   const apptMonday = getWeekMonday(d)
   if (apptMonday.getTime() !== weekMonday.getTime()) return -1
-  return weekDay - 1           // Mon→0, Tue→1, Wed→2, Thu→3, Fri→4
+  return weekDay - 1           // Mon→0, Tue→1, Wed→2, Thu→3, Fri→4, Sat→5
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -86,7 +86,7 @@ export const WeeklyCalendar = () => {
 
   // Pre-bucket scheduled appointments by day index for O(1) column lookup
   const apptsByDay = useMemo(() => {
-    const map: Record<number, Appointment[]> = { 0: [], 1: [], 2: [], 3: [], 4: [] }
+    const map: Record<number, Appointment[]> = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] }
     for (const appt of appointments) {
       const idx = apptDayIndex(appt, weekMonday)
       if (idx >= 0) map[idx].push(appt)
