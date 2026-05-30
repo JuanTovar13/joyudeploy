@@ -4,7 +4,7 @@ import { useAppSelector } from '../../store/hooks'
 import type { Appointment } from '../../types'
 
 // ── Time constants ────────────────────────────────────────────────────────────
-const START_HOUR   = 7
+const START_HOUR   = 6
 const END_HOUR     = 22
 const TOTAL_HOURS  = END_HOUR - START_HOUR
 const PX_PER_HOUR  = 56
@@ -143,7 +143,7 @@ export const WeeklyCalendar = () => {
             const dayEntries  = calendarEntries.filter(
               e => normalizeDay(e.schedule.day) === day
             )
-            const dayAppts    = apptsByDay[i] ?? []
+            const dayAppts    = apptsByDay[i] ?? [] 
 
             return (
               <div
@@ -210,7 +210,7 @@ export const WeeklyCalendar = () => {
                         height: spanToPx(start, end),
                       }}
                     >
-                      <span className="wc-class-block__name">🧠 Cita psicológica</span>
+                      <span className="wc-class-block__name">Cita de psicología</span>
                       <span className="wc-class-block__time">
                         {fmtTime(start)} – {fmtTime(end)}
                       </span>
