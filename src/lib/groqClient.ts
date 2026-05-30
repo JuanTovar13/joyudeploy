@@ -5,6 +5,84 @@ export type GroqRecommendation = {
   activity: string
 }
 
+// ── Study Coach ───────────────────────────────────────────────────────────────
+
+export type StudyAnalysis = {
+  diagnosis:   string   // 1-2 sentences: honest snapshot of their current state
+  highlight:   string   // what they are doing well
+  alert:       string   // what needs attention (or a positive note if nothing critical)
+  next_action: string   // one concrete, specific thing to do right now
+}
+
+export interface StudyContext {
+  totalTasks:            number
+  completedTasks:        number
+  pendingTasks:          { title: string; estimated_pomodoros: number; completed_pomodoros: number }[]
+  totalGoalPomodoros:    number
+  completedPomodorosToday: number
+  focusMinutesToday:     number
+  sessionsToday:         number
+}
+
+export const getStudyAnalysis = async (ctx: StudyContext): Promise<StudyAnalysis> => {
+  const apiKey = import.meta.env.VITE_GROQ_API_KEY
+  if (!apiKey) throw new Error('Missing VITE_GROQ_API_KEY')
+
+  const pendingList = ctx.pendingTasks.length > 0
+    ? ctx.pendingTasks
+        .map(t => `   - "${t.title}" (${t.completed_pomodoros}/${t.estimated_pomodoros} pomodoros)`)
+        .join('\n')
+    : '   (ninguna tarea pendiente)'
+
+  const prompt = `Eres un coach de estudio empático para estudiantes universitarios. \
+Analiza el estado actual del estudiante y responde SOLO con un JSON válido.
+
+Datos del estudiante hoy:
+- Tareas totales: ${ctx.totalTasks}
+- Tareas completadas: ${ctx.completedTasks}
+- Tareas pendientes:
+${pendingList}
+- Pomodoros completados hoy: ${ctx.completedPomodorosToday} / ${ctx.totalGoalPomodoros} en total
+- Minutos de concentración hoy: ${ctx.focusMinutesToday}
+- Sesiones de trabajo hoy: ${ctx.sessionsToday}
+
+Responde ÚNICAMENTE con este JSON (sin texto extra):
+{
+  "diagnosis": "<1-2 oraciones honestas sobre el estado actual del estudiante>",
+  "highlight": "<una cosa concreta que está haciendo bien>",
+  "alert": "<una cosa que necesita atención, o un refuerzo positivo si todo va bien>",
+  "next_action": "<una acción específica y concreta que debería hacer ahora mismo>"
+}`
+
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 300,
+      temperature: 0.6,
+      response_format: { type: 'json_object' },
+    }),
+  })
+
+  if (!response.ok) {
+    const errText = await response.text()
+    throw new Error(`Groq API error ${response.status}: ${errText}`)
+  }
+
+  const data = await response.json()
+  const raw = data?.choices?.[0]?.message?.content?.trim()
+  if (!raw) throw new Error('Groq returned an empty response')
+
+  const parsed = JSON.parse(raw) as StudyAnalysis
+  if (!parsed.diagnosis || !parsed.next_action) throw new Error('Groq response missing fields')
+  return parsed
+}
+
 export const getRecommendation = async (
   answers: CheckInAnswers,
   activities: string[] = [],
