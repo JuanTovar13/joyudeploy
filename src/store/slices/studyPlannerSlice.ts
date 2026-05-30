@@ -8,6 +8,7 @@ interface StudyPlannerState {
   activeTaskTitle: string | null
   tasks: Task[]
   completedPomodorosToday: number
+  consecutiveWorkSkips: number   // resets on natural completion or break-skip
 }
 
 const defaultStudyPlannerState: StudyPlannerState = {
@@ -17,6 +18,7 @@ const defaultStudyPlannerState: StudyPlannerState = {
   activeTaskTitle: null,
   tasks: [],
   completedPomodorosToday: 0,
+  consecutiveWorkSkips: 0,
 }
 
 const readPersistedStudyPlannerState = (): StudyPlannerState => {
@@ -91,9 +93,15 @@ const studyPlannerSlice = createSlice({
     setTasks(state, action: PayloadAction<Task[]>) {
       state.tasks = action.payload
     },
+    incrementWorkSkip(state) {
+      state.consecutiveWorkSkips += 1
+    },
+    resetWorkSkips(state) {
+      state.consecutiveWorkSkips = 0
+    },
   },
 })
 
-export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks, resetFocusTime, incrementCompletedPomodoros, resetConcentration } =
+export const { incrementSessions, addFocusTime, setActiveTask, clearActiveTask, setTasks, resetFocusTime, incrementCompletedPomodoros, resetConcentration, incrementWorkSkip, resetWorkSkips } =
   studyPlannerSlice.actions
 export default studyPlannerSlice.reducer
