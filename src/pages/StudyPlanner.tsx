@@ -14,7 +14,7 @@ import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
 import type { RootState, AppDispatch } from '../store'
-import { incrementSessions, addFocusTime, clearActiveTask, incrementCompletedPomodoros, incrementWorkSkip, resetWorkSkips } from '../store/slices/studyPlannerSlice'
+import { incrementSessions, addFocusTime, incrementCompletedPomodoros, incrementWorkSkip, resetWorkSkips } from '../store/slices/studyPlannerSlice'
 
 /**
  * StudyPlanner - página principal con temporizador Pomodoro y tareas
