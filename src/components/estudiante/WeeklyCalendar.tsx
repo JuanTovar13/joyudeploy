@@ -72,7 +72,7 @@ const apptDayIndex = (appt: Appointment, weekMonday: Date): number => {
   return weekDay - 1           // Mon→0, Tue→1, Wed→2, Thu→3, Fri→4, Sat→5
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+//Component 
 export const WeeklyCalendar = () => {
   const scrollRef       = useRef<HTMLDivElement>(null)
   const calendarEntries = useAppSelector(s => s.calendar.entries)
