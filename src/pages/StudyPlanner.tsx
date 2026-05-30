@@ -247,79 +247,91 @@ export const StudyPlanner = () => {
         <p className="studyplanner-stats">
           Hoy: {todaySessionsCompleted} sesiones · {totalFocusTimeToday} min concentrado
         </p>
-        <div className="studyplanner-timer-tabs">
-          <button
-            type="button"
-            className={`studyplanner-tab-btn${timerMode === 'pomodoro' ? ' active' : ''}`}
-            onClick={() => setTimerMode('pomodoro')}
-            aria-label="Pomodoro mode"
-          >
-            Pomodoro
-          </button>
-          <button
-            type="button"
-            className={`studyplanner-tab-btn${timerMode === 'timer' ? ' active' : ''}`}
-            onClick={() => setTimerMode('timer')}
-            aria-label="Timer mode"
-          >
-            Timer
-          </button>
-          <button
-            type="button"
-            className={`studyplanner-tab-btn${timerMode === 'stopwatch' ? ' active' : ''}`}
-            onClick={() => setTimerMode('stopwatch')}
-            aria-label="Stopwatch mode"
-          >
-            Stopwatch
-          </button>
-        </div>
-        <div className="studyplanner-content">
-          {timerMode === 'pomodoro' && (
-            <PomodoroTimer
-              timeLeft={timeLeft}
-              status={status}
-              sessionType={sessionType}
-              currentSession={currentSession}
-              totalDuration={totalDuration}
-              onStart={start}
-              onPause={pause}
-              onReset={reset}
-              onSkip={handleSkip}
-            />
-          )}
-          {timerMode === 'stopwatch' && (
-            <StopwatchDisplay
-              elapsed={stopwatch.elapsed}
-              running={stopwatch.running}
-              formatTime={stopwatch.formatTime}
-              onStart={stopwatch.start}
-              onPause={stopwatch.pause}
-              onReset={stopwatch.reset}
-            />
-          )}
-          {timerMode === 'timer' && (
-            <CountdownTimerDisplay
-              timeLeft={countdown.timeLeft}
-              running={countdown.running}
-              finished={countdown.finished}
-              formatTime={countdown.formatTime}
-              totalSeconds={countdown.totalSeconds}
-              onStart={countdown.start}
-              onPause={countdown.pause}
-              onReset={countdown.reset}
-              onSetSeconds={countdown.handleSetSeconds}
-            />
-          )}
-          <TaskList onStartPomodoro={() => {
-            setTimerMode('pomodoro')
-            start()
-          }} />
-        </div>
-        <StudyCoach />
+        <div className="studyplanner-grid">
+          {/* Col 1 — Timer */}
+          <div className="studyplanner-timer-cell">
+            <div className="studyplanner-timer-tabs">
+              <button
+                type="button"
+                className={`studyplanner-tab-btn${timerMode === 'pomodoro' ? ' active' : ''}`}
+                onClick={() => setTimerMode('pomodoro')}
+                aria-label="Pomodoro mode"
+              >
+                Pomodoro
+              </button>
+              <button
+                type="button"
+                className={`studyplanner-tab-btn${timerMode === 'timer' ? ' active' : ''}`}
+                onClick={() => setTimerMode('timer')}
+                aria-label="Timer mode"
+              >
+                Timer
+              </button>
+              <button
+                type="button"
+                className={`studyplanner-tab-btn${timerMode === 'stopwatch' ? ' active' : ''}`}
+                onClick={() => setTimerMode('stopwatch')}
+                aria-label="Stopwatch mode"
+              >
+                Stopwatch
+              </button>
+            </div>
+            {timerMode === 'pomodoro' && (
+              <PomodoroTimer
+                timeLeft={timeLeft}
+                status={status}
+                sessionType={sessionType}
+                currentSession={currentSession}
+                totalDuration={totalDuration}
+                onStart={start}
+                onPause={pause}
+                onReset={reset}
+                onSkip={handleSkip}
+              />
+            )}
+            {timerMode === 'stopwatch' && (
+              <StopwatchDisplay
+                elapsed={stopwatch.elapsed}
+                running={stopwatch.running}
+                formatTime={stopwatch.formatTime}
+                onStart={stopwatch.start}
+                onPause={stopwatch.pause}
+                onReset={stopwatch.reset}
+              />
+            )}
+            {timerMode === 'timer' && (
+              <CountdownTimerDisplay
+                timeLeft={countdown.timeLeft}
+                running={countdown.running}
+                finished={countdown.finished}
+                formatTime={countdown.formatTime}
+                totalSeconds={countdown.totalSeconds}
+                onStart={countdown.start}
+                onPause={countdown.pause}
+                onReset={countdown.reset}
+                onSetSeconds={countdown.handleSetSeconds}
+              />
+            )}
+          </div>
 
-        <div className="studyplanner-bottom-row">
+          {/* Col 2 — Task list (matches timer height, scrolls on overflow) */}
+          <div className="studyplanner-tasks-cell">
+            <TaskList onStartPomodoro={() => {
+              setTimerMode('pomodoro')
+              start()
+            }} />
+          </div>
+
+          {/* Col 1 — Mini journal */}
           <MiniJournal />
+
+          {/* Col 2 — Music player */}
           <MusicPlayer />
+
+          {/* Full width — AI Coach */}
+          <div className="studyplanner-coach-cell">
+            <StudyCoach />
+          </div>
         </div>
       </main>
     </>
