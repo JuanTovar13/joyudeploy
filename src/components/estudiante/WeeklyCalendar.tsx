@@ -1,6 +1,7 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { CLASS_SCHEDULE, JS_DAY_TO_KEY, normalizeDay, type WeekDayKey } from '../../data/classSchedule'
 import { useAppSelector } from '../../store/hooks'
+import type { Appointment } from '../../types'
 
 // ── Time constants ────────────────────────────────────────────────────────────
 const START_HOUR   = 7
@@ -36,13 +37,62 @@ const spanToPx = (start: string, end: string) => {
   return (toH(end) - toH(start)) * PX_PER_HOUR
 }
 
+// Parse "08:00 AM" / "02:00 PM" → "8:00" / "14:00"
+const parseApptHour = (raw: string): string => {
+  const match = raw.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+  if (!match) return raw   // fallback: return as-is
+  let h = parseInt(match[1], 10)
+  const m = match[2]
+  const period = match[3].toUpperCase()
+  if (period === 'PM' && h !== 12) h += 12
+  if (period === 'AM' && h === 12) h = 0
+  return `${h}:${m}`
+}
+
+// Return the Monday of the week that contains `date`
+const getWeekMonday = (date: Date): Date => {
+  const d = new Date(date)
+  const day = d.getDay()                        // 0=Sun … 6=Sat
+  const diff = day === 0 ? -6 : 1 - day        // shift to Monday
+  d.setDate(d.getDate() + diff)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+// Map an appointment that falls this week to the DAY_KEYS index (0=Lun … 4=Vie)
+// Returns -1 if it doesn't fall Mon-Fri of the current week
+const apptDayIndex = (appt: Appointment, weekMonday: Date): number => {
+  if (!appt.date || !appt.hour || appt.status !== 'scheduled') return -1
+  const d = new Date(appt.date + 'T00:00:00')
+  const weekDay = d.getDay()   // 1=Mon … 5=Fri (0=Sun, 6=Sat → skip)
+  if (weekDay < 1 || weekDay > 5) return -1
+  // Check same week
+  const apptMonday = getWeekMonday(d)
+  if (apptMonday.getTime() !== weekMonday.getTime()) return -1
+  return weekDay - 1           // Mon→0, Tue→1, Wed→2, Thu→3, Fri→4
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export const WeeklyCalendar = () => {
-  const scrollRef     = useRef<HTMLDivElement>(null)
+  const scrollRef       = useRef<HTMLDivElement>(null)
   const calendarEntries = useAppSelector(s => s.calendar.entries)
+  const appointments    = useAppSelector(s => s.appointments.items)
 
   const todayKey   = JS_DAY_TO_KEY[new Date().getDay()]
   const todayIndex = todayKey ? DAY_KEYS.indexOf(todayKey) : -1
+
+  // Compute once per render (stable across the same day)
+  const weekMonday = useMemo(() => getWeekMonday(new Date()), [])
+
+  // Pre-bucket scheduled appointments by day index for O(1) column lookup
+  const apptsByDay = useMemo(() => {
+    const map: Record<number, Appointment[]> = { 0: [], 1: [], 2: [], 3: [], 4: [] }
+    for (const appt of appointments) {
+      const idx = apptDayIndex(appt, weekMonday)
+      if (idx >= 0) map[idx].push(appt)
+    }
+    return map
+  }, [appointments, weekMonday])
 
   useEffect(() => {
     if (!scrollRef.current) return
@@ -90,9 +140,10 @@ export const WeeklyCalendar = () => {
 
           {/* Day columns */}
           {DAY_KEYS.map((day, i) => {
-            const dayEntries = calendarEntries.filter(
+            const dayEntries  = calendarEntries.filter(
               e => normalizeDay(e.schedule.day) === day
             )
+            const dayAppts    = apptsByDay[i] ?? []
 
             return (
               <div
@@ -143,6 +194,34 @@ export const WeeklyCalendar = () => {
                     </span>
                   </div>
                 ))}
+
+                {/* Appointment blocks (scheduled by psychologist) */}
+                {dayAppts.map(appt => {
+                  const start = parseApptHour(appt.hour!)
+                  const [h, m] = start.split(':').map(Number)
+                  const endH = h + 1
+                  const end  = `${endH}:${m.toString().padStart(2, '0')}`
+                  return (
+                    <div
+                      key={appt.id}
+                      className="wc-class-block wc-class-block--appointment"
+                      style={{
+                        top:    timeToY(start),
+                        height: spanToPx(start, end),
+                      }}
+                    >
+                      <span className="wc-class-block__name">🧠 Cita psicológica</span>
+                      <span className="wc-class-block__time">
+                        {fmtTime(start)} – {fmtTime(end)}
+                      </span>
+                      {appt.professional_name && (
+                        <span className="wc-class-block__detail">
+                          {appt.professional_name}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )
           })}

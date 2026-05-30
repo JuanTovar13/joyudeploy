@@ -150,6 +150,31 @@
   cursor: pointer;
 }
 
+/* ── Appointment blocks (scheduled by psychologist) ── */
+.wc-class-block--appointment {
+  background-color: #EDE7F6;
+  border: 1.5px solid #9575CD;
+  cursor: default;
+}
+
+.wc-class-block--appointment .wc-class-block__name {
+  color: #4527A0;
+}
+
+.wc-class-block--appointment .wc-class-block__time {
+  color: #7E57C2;
+}
+
+.wc-class-block__detail {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 10px;
+  color: #9575CD;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .wc-gutter,
