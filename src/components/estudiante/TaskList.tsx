@@ -153,6 +153,7 @@ const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
   return (
     <div className="tasklist-container">
       <h2 className="tasklist-title">Study Tasks</h2>
+      <p className="tasklist-subtitle">Add all the tasks you're planning to do today</p>
 
       {loading ? <p className="tasklist-empty">Loading tasks...</p> : null}
 
