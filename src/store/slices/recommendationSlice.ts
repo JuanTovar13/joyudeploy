@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
-import { getRecommendation, type GroqRecommendation } from '../../lib/groqClient'
+import { getRecommendation, type GroqRecommendation } from '../../lib/groqRecommendations'
 
 interface RecommendationState {
   data: GroqRecommendation | null
