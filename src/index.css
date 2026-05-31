@@ -1,0 +1,14 @@
+.skip-to-main {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #262688;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 16px;
+  z-index: 9999;
+  clip: rect(0,0,0,0);
+  text-decoration: none;
+}
