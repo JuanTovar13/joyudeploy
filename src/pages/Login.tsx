@@ -2,7 +2,6 @@ import { useNavigate, Link } from 'react-router-dom'
 import '../styles/global.css'
 import '../styles/auth.css'
 import logo from '../assets/logo.svg'
-import { BackgroundHills } from '../components/BackgroundHills'
 import { authService } from '../firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { supabase } from '../lib/supabaseClient'
@@ -44,7 +43,6 @@ export const Login = () => {
     <SkipToMain />
     <div id="main-content" className="container">
       <img src={logo} className="auth-logo" alt="JoyU logo" />
-      <BackgroundHills />
       <div className="content">
         <h2 className="title">
           Log in with your
