@@ -47,7 +47,7 @@ export const MonthlyMoodChart = ({ entries, onClose }: MonthlyMoodChartProps) =>
           </button>
         </div>
         <div className="monthly-mood-legend">
-          {['Muy bien', 'Bien', 'Neutral', 'Estresado/a', 'Agotado/a'].map((em) => {
+          {['Muy bien', 'Bien', 'Estresado/a', 'Agotado/a'].map((em) => {
             const cfg = getEmotionConfig(em)
             return (
               <div key={em} className="monthly-mood-legend-item">
