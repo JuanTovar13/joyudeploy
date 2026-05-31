@@ -430,13 +430,17 @@
 }
 
 @media (max-width: 768px) {
-  .psychologist-screen {
+  .psych-screen {
     padding: 20px;
   }
-  .psychologist-content {
+  .psych-content {
     flex-direction: column;
   }
-  .psychologist-title {
-    font-size: 24px;
+  .psych-title {
+    font-size: 22px;
+  }
+  .psych-tabs {
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }

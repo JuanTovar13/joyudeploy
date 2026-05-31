@@ -344,14 +344,18 @@
 }
 
 @media (max-width: 768px) {
-  .appointments-screen {
+  .list-screen-container {
     padding: 20px;
+    padding-bottom: 80px;
   }
-  .appointments-list {
-    gap: 12px;
+  .appointments-grid-container {
+    width: 100%;
+    gap: 16px;
   }
-  .appointment-card {
-    padding: 16px;
-    font-size: 14px;
+  .list-title {
+    font-size: 22px;
+  }
+  .list-header-section {
+    padding: 20px 0;
   }
 }
