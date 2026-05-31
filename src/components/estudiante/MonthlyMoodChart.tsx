@@ -20,7 +20,21 @@ export const MonthlyMoodChart = ({ entries, onClose }: MonthlyMoodChartProps) =>
   return (
     <div className="monthly-mood-overlay" role="dialog" aria-label="Monthly mood chart">
       <div className="monthly-mood-modal">
-        <p>MonthlyMoodChart placeholder</p>
+        <div className="monthly-mood-header">
+          <h2 className="monthly-mood-title">
+            {MONTH_NAMES[month]} {year} Mood
+          </h2>
+          <button
+            type="button"
+            className="monthly-mood-close"
+            onClick={onClose}
+            aria-label="Close monthly view"
+          >
+            ✕
+          </button>
+        </div>
+        <p>Legend placeholder</p>
+        <p>Grid placeholder</p>
       </div>
     </div>
   )
