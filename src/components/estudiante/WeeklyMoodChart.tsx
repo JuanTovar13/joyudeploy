@@ -15,7 +15,23 @@ export const WeeklyMoodChart = ({ entries, onViewMonthly }: WeeklyMoodChartProps
 
   return (
     <section className="weekly-mood-container" aria-label="Weekly mood chart">
-      <p>WeeklyMoodChart placeholder</p>
+      <div className="weekly-mood-header">
+        <h2 className="weekly-mood-title">This Week's Mood 🌈</h2>
+        <button
+          type="button"
+          className="weekly-mood-view-btn"
+          onClick={onViewMonthly}
+          aria-label="View monthly mood chart"
+        >
+          View month
+        </button>
+      </div>
+      {progressMessage && (
+        <p className="weekly-mood-progress" aria-live="polite">
+          {progressMessage}
+        </p>
+      )}
+      <p>Grid placeholder</p>
     </section>
   )
 }
