@@ -23,10 +23,17 @@ export const QuoteCard = ({ loadingRec, recError, rec }: QuoteCardProps) => {
       ) : (
         <div className="quote-content">
           <p>{rec.message}</p>
-          {rec.activity && (
-            <span className="quote-activity-badge">
-              ✦ Recommended activity: {rec.activity}
-            </span>
+          {rec.activities && rec.activities.length > 0 && (
+            <div className="quote-activities">
+              <span className="quote-activities-label">✦ Recommended for you</span>
+              <div className="quote-activities-list">
+                {rec.activities.map((activity) => (
+                  <span key={activity} className="quote-activity-badge">
+                    {activity}
+                  </span>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

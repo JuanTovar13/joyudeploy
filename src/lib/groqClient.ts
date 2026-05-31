@@ -1,8 +1,8 @@
 type CheckInAnswers = Record<string, string>
 
 export type GroqRecommendation = {
-  message: string
-  activity: string
+  message:    string
+  activities: string[]
 }
 
 // ── Study Coach ───────────────────────────────────────────────────────────────
@@ -111,7 +111,7 @@ Based on the following student responses, do TWO things:
 1. Write ONE short, warm, and motivating sentence in English (maximum 20 words).
    It should feel like a personalized inspirational message, not medical advice.
 
-2. Recommend EXACTLY ONE option from this list:
+2. Recommend EXACTLY 3 different options from this list (choose the most relevant ones):
 ${activityList}
 
 Student responses:
@@ -124,7 +124,7 @@ Student responses:
 Reply ONLY with a valid JSON object in this exact format, no extra text:
 {
   "message": "<motivating sentence>",
-  "activity": "<one option from the list above, copied exactly>"
+  "activities": ["<first option>", "<second option>", "<third option>"]
 }`
 
   console.log('[Groq] Sending request...')
@@ -138,7 +138,7 @@ Reply ONLY with a valid JSON object in this exact format, no extra text:
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 120,
+      max_tokens: 200,
       temperature: 0.7,
       response_format: { type: 'json_object' },
     }),
@@ -167,7 +167,7 @@ Reply ONLY with a valid JSON object in this exact format, no extra text:
     throw new Error('Groq response was not valid JSON')
   }
 
-  if (!parsed.message || !parsed.activity) {
+  if (!parsed.message || !Array.isArray(parsed.activities) || parsed.activities.length === 0) {
     console.error('[Groq] Missing fields in response:', parsed)
     throw new Error('Groq response missing required fields')
   }

@@ -26,8 +26,8 @@ const checkinKey   = (uid: string) => `joyu_checkin_done_${uid}`
 const recommendKey = (uid: string) => `joyu_recommendation_${uid}`
 
 const DEFAULT_REC: GroqRecommendation = {
-  message:  'Listen to your emotions, take care of your mind, and bloom.',
-  activity: '',
+  message:    'Listen to your emotions, take care of your mind, and bloom.',
+  activities: [],
 }
 
 export const Home = () => {
