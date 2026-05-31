@@ -2,12 +2,27 @@
   background: #f5f6f8;
   border-radius: 20px;
   padding: 24px;
-  max-width: 320px;
+  max-width: 100%;
+  height: 35vh;
   font-family: 'Fredoka', sans-serif;
   display: flex;
   flex-direction: column;
   gap: 14px;
   align-items: center;
+  transition: height 0.3s ease;
+}
+
+.musicplayer-container--compact {
+  height: 25vh;
+}
+
+/* Header row: title + toggle button */
+.musicplayer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
 }
 
 .musicplayer-title {
@@ -15,7 +30,25 @@
   font-weight: 500;
   color: #262688;
   margin: 0;
-  align-self: flex-start;
+}
+
+.musicplayer-toggle-btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #262688;
+  background: white;
+  border: 1.5px solid #d5d5f5;
+  border-radius: 99px;
+  padding: 4px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.musicplayer-toggle-btn:hover {
+  background: #d5d5f5;
+  border-color: #262688;
 }
 
 .musicplayer-track-name {
@@ -26,10 +59,17 @@
 }
 
 .musicplayer-iframe {
-  width: 100%;
-  height: 120px;
+  width: 80%;
+  height: 100%;
   border: none;
   border-radius: 12px;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.musicplayer-iframe--hidden {
+  height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .musicplayer-controls {
@@ -70,4 +110,15 @@
   margin: 0;
   text-align: center;
   font-family: 'Fredoka', sans-serif;
+}
+
+@media (max-width: 600px) {
+  .musicplayer-container {
+    padding: 16px;
+    height: auto;
+  }
+  .musicplayer-iframe {
+    width: 100%;
+    height: 200px;
+  }
 }

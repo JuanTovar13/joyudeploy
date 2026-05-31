@@ -56,17 +56,60 @@
   margin: 0 auto;
 }
 
-.studyplanner-content {
-  display: flex;
-  flex-direction: row;
+/* ── Main 2-column grid ── */
+.studyplanner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
-  align-items: flex-start;
-  justify-content: center;
+  align-items: start;
+  padding: 0 20vh;
 }
 
-@media (max-width: 768px) {
-  .studyplanner-content {
-    flex-direction: column;
+/* Timer cell: tabs + whichever timer is active */
+.studyplanner-timer-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f5f6f8;
+  border-radius: 30px;
+  padding: 30px;
+}
+
+/* Tasks cell: stretches to timer height; list scrolls on overflow */
+.studyplanner-tasks-cell {
+  /* fill the row height set by the timer cell */
+  align-self: stretch;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.studyplanner-tasks-cell .tasklist-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.studyplanner-tasks-cell .tasklist-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* AI Coach spans both columns */
+.studyplanner-coach-cell {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .studyplanner-grid {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+  .studyplanner-coach-cell {
+    grid-column: 1;
   }
 }
 
@@ -138,22 +181,6 @@
   height: 100%;
   border-radius: 99px;
   transition: width 0.5s ease, background-color 0.5s ease;
-}
-
-.studyplanner-bottom-row {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .studyplanner-bottom-row {
-    flex-direction: column;
-    align-items: center;
-  }
 }
 
 .studyplanner-timer-tabs {
