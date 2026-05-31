@@ -101,24 +101,7 @@ export const Home = () => {
 
   return (
     <div className="home-screen">
-      <button
-        style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          zIndex: 10,
-          padding: '8px 15px',
-          borderRadius: '20px',
-          border: 'none',
-          backgroundColor: '#ff4d4d',
-          color: 'white',
-          cursor: 'pointer',
-          fontWeight: 'bold'
-        }}
-        onClick={() => signOut(authService)}
-      >
-        Sign Out
-      </button>
+      
 
       <div className="home-white-background"></div>
 
@@ -138,6 +121,10 @@ export const Home = () => {
         onAppointments={() => navigate('/my-appointments')}
         onStudyPlanner={() => navigate('/study-planner')}
       />
+
+      <button className="home-signout-btn" onClick={() => signOut(authService)}>
+        Sign Out
+      </button>
 
       {showCheckIn && (
         <CheckInForm
