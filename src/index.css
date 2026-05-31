@@ -1,3 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #a7dfff;
+}
+
 .skip-to-main {
   position: absolute;
   top: 8px;

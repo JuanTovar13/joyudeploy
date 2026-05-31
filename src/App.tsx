@@ -25,7 +25,20 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', fontFamily: 'Fredoka, sans-serif', fontSize: 24, color: '#262688' }}>Loading...</div>}>
+      <Suspense fallback={
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          backgroundColor: '#a7dfff',
+          fontFamily: 'Fredoka, sans-serif',
+          fontSize: 24,
+          color: '#262688'
+        }}>
+          Loading...
+        </div>
+      }>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />

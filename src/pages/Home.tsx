@@ -53,6 +53,7 @@ export const Home = () => {
   )
 
   const moodEntries = useSelector((state: RootState) => state.mood.entries)
+  const moodStatus = useSelector((state: RootState) => state.mood.status)
 
   const [showCheckIn, setShowCheckIn] = useState(false)
   const [showMonthly, setShowMonthly] = useState(false)
@@ -105,14 +106,17 @@ export const Home = () => {
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
     const emotion = answers.emotion ?? 'Bien'
 
-    await supabase
-      .from('mood_entries')
-      .upsert(
-        { user_id: uid, date: today, emotion },
-        { onConflict: 'user_id,date' }
-      )
-
-    if (uid) void dispatch(fetchMoodEntries(uid))
+    try {
+      await supabase
+        .from('mood_entries')
+        .upsert(
+          { user_id: uid, date: today, emotion },
+          { onConflict: 'user_id,date' }
+        )
+      if (uid) void dispatch(fetchMoodEntries(uid))
+    } catch {
+      console.error('Could not save mood entry')
+    }
 
     const activityTitles = joyuItems.map((item) => item.title)
     void dispatch(fetchRecommendation({ answers, activities: activityTitles, uid }))
@@ -143,10 +147,22 @@ export const Home = () => {
         <QuoteCard loadingRec={loadingRec} recError={recError} rec={recData} />
       </div>
 
-      <WeeklyMoodChart
-        entries={moodEntries}
-        onViewMonthly={() => setShowMonthly(true)}
-      />
+      {moodStatus === 'loading' && (
+        <p style={{ textAlign: 'center', fontFamily: 'Fredoka', color: '#262688' }}>
+          Loading mood data...
+        </p>
+      )}
+      {moodStatus === 'failed' && (
+        <p style={{ textAlign: 'center', fontFamily: 'Fredoka', color: '#a04040' }}>
+          Could not load mood data.
+        </p>
+      )}
+      {moodStatus === 'succeeded' && (
+        <WeeklyMoodChart
+          entries={moodEntries}
+          onViewMonthly={() => setShowMonthly(true)}
+        />
+      )}
 
       <WeeklyCalendar />
 
