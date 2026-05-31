@@ -41,8 +41,6 @@ export const AppointmentsList = () => {
   // 3 — Cancel appointment via thunk
   const handleCancel = async (appointmentId: string) => {
     setCancelError(null)
-    const confirmed = window.confirm('Are you sure you want to cancel this appointment?')
-    if (!confirmed) return
     const result = await dispatch(cancelAppointment(appointmentId))
     if (cancelAppointment.rejected.match(result)) {
       setCancelError('Could not cancel the appointment. Please try again.')
