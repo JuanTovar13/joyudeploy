@@ -1,4 +1,5 @@
 import '../styles/StudyPlanner.css'
+import '../styles/ui.css'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +11,8 @@ import CountdownTimerDisplay from '../components/estudiante/CountdownTimerDispla
 import MiniJournal from '../components/estudiante/MiniJournal'
 import MusicPlayer from '../components/estudiante/MusicPlayer'
 import { StudyCoach } from '../components/estudiante/StudyCoach'
+import { BackButton } from '../components/ui/BackButton'
+import { TabBar } from '../components/ui/TabBar'
 import { useStopwatch } from '../hooks/useStopwatch'
 import { useCountdownTimer } from '../hooks/useCountdownTimer'
 import { useAlarmSound } from '../hooks/useAlarmSound'
@@ -28,6 +31,12 @@ import { incrementSessions, addFocusTime, incrementCompletedPomodoros, increment
 //Luego cambiar el emoji por el clima por imagenes de la mascota de la app
 
 type TimerMode = 'pomodoro' | 'timer' | 'stopwatch'
+
+const TIMER_TABS = [
+  { id: 'pomodoro',  label: 'Pomodoro'  },
+  { id: 'timer',     label: 'Timer'     },
+  { id: 'stopwatch', label: 'Stopwatch' },
+]
 
 const getWeatherEmoji = (code: number): string => {
   if (code === 0) return '☀️'
@@ -197,9 +206,7 @@ export const StudyPlanner = () => {
         Skip to main content
       </a>
       <main id="main-content" role="main" className="studyplanner-screen">
-        <button className="studyplanner-back-btn" onClick={() => navigate('/home')}>
-          ‹
-        </button>
+        <BackButton onClick={() => navigate('/home')} aria-label="Back to home" />
         <h1 className="studyplanner-title">Study Toolkit</h1>
         <div className="studyplanner-info-row">
           <div className="studyplanner-clock" aria-label={`Current time: ${currentTime}`}>
@@ -250,32 +257,12 @@ export const StudyPlanner = () => {
         <div className="studyplanner-grid">
           {/* Col 1 — Timer */}
           <div className="studyplanner-timer-cell">
-            <div className="studyplanner-timer-tabs">
-              <button
-                type="button"
-                className={`studyplanner-tab-btn${timerMode === 'pomodoro' ? ' active' : ''}`}
-                onClick={() => setTimerMode('pomodoro')}
-                aria-label="Pomodoro mode"
-              >
-                Pomodoro
-              </button>
-              <button
-                type="button"
-                className={`studyplanner-tab-btn${timerMode === 'timer' ? ' active' : ''}`}
-                onClick={() => setTimerMode('timer')}
-                aria-label="Timer mode"
-              >
-                Timer
-              </button>
-              <button
-                type="button"
-                className={`studyplanner-tab-btn${timerMode === 'stopwatch' ? ' active' : ''}`}
-                onClick={() => setTimerMode('stopwatch')}
-                aria-label="Stopwatch mode"
-              >
-                Stopwatch
-              </button>
-            </div>
+            <TabBar
+              tabs={TIMER_TABS}
+              activeId={timerMode}
+              onChange={(id) => setTimerMode(id as TimerMode)}
+              className="studyplanner-timer-tabs"
+            />
             {timerMode === 'pomodoro' && (
               <PomodoroTimer
                 timeLeft={timeLeft}

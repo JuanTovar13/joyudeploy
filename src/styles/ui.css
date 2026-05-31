@@ -1,0 +1,103 @@
+/* ── BackButton ───────────────────────────────────────────────────────────── */
+.ui-back-btn {
+  background: white;
+  border: 1px solid #E0E0E0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 32px;
+  color: #1A1A7E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.ui-back-btn:active {
+  transform: scale(0.9);
+}
+
+/* ── FormMessage ──────────────────────────────────────────────────────────── */
+.ui-form-message {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  border-radius: 12px;
+  padding: 10px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  text-align: center;
+}
+
+.ui-form-message--error {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+}
+
+.ui-form-message--success {
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1.5px solid #6ee7b7;
+}
+
+.ui-form-message--warning {
+  color: #92400e;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+}
+
+/* ── ModeBadge ────────────────────────────────────────────────────────────── */
+.ui-mode-badge {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ui-mode-badge--virtual {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.ui-mode-badge--presencial {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ── TabBar ───────────────────────────────────────────────────────────────── */
+.ui-tab-bar {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.ui-tab-btn {
+  background: transparent;
+  border: 2px solid #262688;
+  color: #262688;
+  border-radius: 99px;
+  padding: 8px 22px;
+  font-size: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.ui-tab-btn--active {
+  background: #262688;
+  color: white;
+}
+
+.ui-tab-btn:hover:not(.ui-tab-btn--active) {
+  background: #D5D5F5;
+}

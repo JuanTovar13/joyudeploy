@@ -16,25 +16,6 @@
   padding: 30px 0;
 }
 
-.back-button-top {
-  background: white;
-  border: 1px solid #E0E0E0;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 32px;
-  color: #1A1A7E;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.back-button-top:active {
-  transform: scale(0.9);
-}
 
 .list-title {
   color: #1A1A7E;
@@ -161,27 +142,6 @@
   font-size: 17px;
 }
 
-/* mode badge */
-.appt-card__mode-badge {
-  font-size: 13px;
-  font-weight: 500;
-  padding: 5px 14px;
-  border-radius: 99px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.appt-card__mode-badge--virtual {
-  background: rgba(255,255,255,0.18);
-  color: #ffffff;
-  border: 1.5px solid rgba(255,255,255,0.4);
-}
-
-.appt-card__mode-badge--presencial {
-  background: rgba(255,255,255,0.18);
-  color: #ffffff;
-  border: 1.5px solid rgba(255,255,255,0.4);
-}
 
 /* ── Body ── */
 .appt-card__body {

@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
+import { BackButton } from '../components/ui/BackButton'
+import { FormMessage } from '../components/ui/FormMessage'
 import '../styles/ScheduleAppointment.css'
+import '../styles/ui.css'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 
 export const ScheduleAppointment = () => {
@@ -62,9 +65,7 @@ export const ScheduleAppointment = () => {
       </div>
 
       <div className="schedule-container">
-        <button className="back-button-solo" onClick={() => navigate(-1)}>
-          <span>‹</span>
-        </button>
+        <BackButton onClick={() => navigate(-1)} className="back-button-solo" />
 
         <h1 className="schedule-header">Request an Appointment</h1>
 
@@ -105,16 +106,8 @@ export const ScheduleAppointment = () => {
             📅 A psychologist will review your request and confirm a date and time.
           </p>
 
-          {formError && (
-            <p className="schedule-message schedule-message--error" role="alert">
-              {formError}
-            </p>
-          )}
-          {formSuccess && (
-            <p className="schedule-message schedule-message--success" role="status">
-              ✅ Your request has been sent! Redirecting…
-            </p>
-          )}
+          {formError   && <FormMessage type="error">  {formError}</FormMessage>}
+          {formSuccess && <FormMessage type="success">✅ Your request has been sent! Redirecting…</FormMessage>}
 
           <button
             className="btn-schedule"

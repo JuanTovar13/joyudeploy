@@ -1,3 +1,5 @@
+import { ModeBadge } from '../ui/ModeBadge'
+
 interface Appointment {
   id: string
   reason: string
@@ -19,10 +21,7 @@ export const ScheduledAppointmentCard = ({
   photoUrl,
   isCancelling,
   onCancel,
-}: ScheduledAppointmentCardProps) => {
-  const isVirtual = appointment.mode === 'Virtual'
-
-  return (
+}: ScheduledAppointmentCardProps) => (
     <div className="appt-card">
       {/* Header strip */}
       <div className="appt-card__header">
@@ -39,9 +38,7 @@ export const ScheduledAppointmentCard = ({
           <span className="appt-card__label">Scheduled appointment</span>
           <h3 className="appt-card__name">{appointment.professional_name}</h3>
         </div>
-        <span className={`appt-card__mode-badge appt-card__mode-badge--${isVirtual ? 'virtual' : 'presencial'}`}>
-          {isVirtual ? '💻 Virtual' : '🏢 In person'}
-        </span>
+        <ModeBadge mode={appointment.mode} />
       </div>
 
       {/* Body */}
@@ -82,5 +79,4 @@ export const ScheduledAppointmentCard = ({
         </button>
       </div>
     </div>
-  )
-}
+)

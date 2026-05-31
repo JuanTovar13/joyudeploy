@@ -6,9 +6,12 @@ import { fetchAppointments, cancelAppointment } from '../store/slices/appointmen
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import '../styles/AppointmentsList.css'
+import '../styles/ui.css'
 
 import { PendingAppointmentCard }   from '../components/estudiante/PendingAppointmentCard'
 import { ScheduledAppointmentCard } from '../components/estudiante/ScheduledAppointmentCard'
+import { BackButton }  from '../components/ui/BackButton'
+import { FormMessage } from '../components/ui/FormMessage'
 
 export const AppointmentsList = () => {
   const dispatch = useAppDispatch()
@@ -54,15 +57,13 @@ export const AppointmentsList = () => {
     <div className="list-screen-container">
       {/* Header */}
       <div className="list-header-section">
-        <button className="back-button-top" onClick={() => navigate('/home')}>
-          <span>‹</span>
-        </button>
+        <BackButton onClick={() => navigate('/home')} />
         <h1 className="list-title">My Appointments</h1>
         <img src={logoJoyu} alt="Joyu" className="list-logo-right" />
       </div>
 
       {cancelError && (
-        <p className="appt-list-error" role="alert">{cancelError}</p>
+        <FormMessage type="error" className="appt-list-error">{cancelError}</FormMessage>
       )}
 
       {status === 'loading' ? (

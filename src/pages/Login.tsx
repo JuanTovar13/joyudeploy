@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { supabase } from '../lib/supabaseClient'
 import React, { useState } from 'react'
 import { SkipToMain } from '../components/SkipToMain'
+import { FormMessage } from '../components/ui/FormMessage'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -77,9 +78,7 @@ export const Login = () => {
             <input type="checkbox" id="login-remember" />
             <label htmlFor="login-remember">Remember me</label>
           </div>
-          {loginError && (
-            <p className="auth-error" role="alert">{loginError}</p>
-          )}
+          {loginError && <FormMessage type="error">{loginError}</FormMessage>}
           <button className='button' type="submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Log in'}
           </button>

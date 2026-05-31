@@ -1,23 +1,3 @@
-.studyplanner-back-btn {
-  background: white;
-  border: 1px solid #E0E0E0;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 32px;
-  color: #1A1A7E;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-  align-self: flex-start;
-}
-
-.studyplanner-back-btn:active {
-  transform: scale(0.9);
-}
 
 .studyplanner-screen {
   background-color: #a7dfff;
@@ -183,32 +163,8 @@
   transition: width 0.5s ease, background-color 0.5s ease;
 }
 
+/* Timer tabs use .ui-tab-bar from ui.css; only centering override needed */
 .studyplanner-timer-tabs {
-  display: flex;
-  flex-direction: row;
   justify-content: center;
-  gap: 8px;
   margin-bottom: 4px;
-}
-
-.studyplanner-tab-btn {
-  background: transparent;
-  border: 2px solid #262688;
-  color: #262688;
-  border-radius: 99px;
-  padding: 8px 22px;
-  font-size: 16px;
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.studyplanner-tab-btn.active {
-  background: #262688;
-  color: white;
-}
-
-.studyplanner-tab-btn:hover:not(.active) {
-  background: #D5D5F5;
 }

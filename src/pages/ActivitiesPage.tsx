@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { fetchActivities, fetchActivitySchedules } from '../store/slices/activitiesSlice'
 import { ActivityDetailModal } from '../components/estudiante/ActivityDetailModal'
+import { BackButton } from '../components/ui/BackButton'
 import type { JoyuItem } from '../types'
 import '../styles/ActivitiesPage.css'
+import '../styles/ui.css'
 
 // ── Preferred display order ───────────────────────────────────────────────────
 // Normalized strings (lowercase, no accents) that map to a display name + section
@@ -113,13 +115,7 @@ export const ActivitiesPage = () => {
 
       {/* ── Header ── */}
       <div className="acts-page__header">
-        <button
-          className="acts-page__back"
-          onClick={() => navigate(-1)}
-          aria-label="Back"
-        >
-          ‹
-        </button>
+        <BackButton onClick={() => navigate(-1)} />
         <h1 className="acts-page__title">Activities</h1>
       </div>
 
