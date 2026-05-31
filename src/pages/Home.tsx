@@ -1,5 +1,6 @@
 import '../styles/home.css'
 
+import { supabase } from '../lib/supabaseClient'
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckInForm } from '../components/estudiante/Form/CheckInForm'
@@ -86,6 +87,16 @@ export const Home = () => {
     setShowCheckIn(false)
 
     if (!answers || !uid) return
+
+    const today = new Date().toISOString().split('T')[0]
+    const emotion = answers.emotion ?? 'Neutral'
+
+    await supabase
+      .from('mood_entries')
+      .upsert(
+        { user_id: uid, date: today, emotion },
+        { onConflict: 'user_id,date' }
+      )
 
     const activityTitles = joyuItems.map((item) => item.title)
     void dispatch(fetchRecommendation({ answers, activities: activityTitles, uid }))
