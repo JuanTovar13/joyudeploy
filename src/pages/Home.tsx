@@ -110,6 +110,8 @@ export const Home = () => {
         { onConflict: 'user_id,date' }
       )
 
+    if (uid) void dispatch(fetchMoodEntries(uid))
+
     const activityTitles = joyuItems.map((item) => item.title)
     void dispatch(fetchRecommendation({ answers, activities: activityTitles, uid }))
   }
