@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import circularFont from './assets/Circular.ttf'
 import { ProtectedRoute } from './utils/ProtectedRoute'
@@ -16,12 +16,12 @@ const PsychologistDashboard = lazy(() => import('./pages/PsychologistDashboard')
 const ActivitiesPage = lazy(() => import('./pages/ActivitiesPage').then(m => ({ default: m.ActivitiesPage })))
 
 const App = () => {
-  const miFuente = new FontFace('title', `url(${circularFont}) format("truetype")`)
-  miFuente.load().then((loadedFont) => {
-    document.fonts.add(loadedFont)
-  }).catch((error) => {
-    console.error('Error al cargar la fuente:', error)
-  })
+  useEffect(() => {
+    const miFuente = new FontFace('title', `url(${circularFont}) format("truetype")`)
+    miFuente.load()
+      .then((loadedFont) => { document.fonts.add(loadedFont) })
+      .catch((error) => { console.error('Error loading font:', error) })
+  }, []) // runs once on mount
 
   return (
     <AuthProvider>
