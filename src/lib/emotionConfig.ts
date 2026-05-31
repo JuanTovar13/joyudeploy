@@ -13,7 +13,6 @@ export interface EmotionConfig {
 export const EMOTION_CONFIG: Record<string, EmotionConfig> = {
   'Muy bien': { label: 'Muy bien', icon: feliz, color: '#B39DDB', score: 5 },
   'Bien': { label: 'Bien', icon: neutral, color: '#81C784', score: 4 },
-  'Neutral': { label: 'Neutral', icon: neutral, color: '#A5D6A7', score: 3 },
   'Estresado/a': { label: 'Estresado/a', icon: enojado, color: '#FFD54F', score: 2 },
   'Agotado/a': { label: 'Agotado/a', icon: triste, color: '#90CAF9', score: 1 },
 }
