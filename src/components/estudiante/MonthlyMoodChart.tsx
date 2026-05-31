@@ -57,7 +57,32 @@ export const MonthlyMoodChart = ({ entries, onClose }: MonthlyMoodChartProps) =>
             )
           })}
         </div>
-        <p>Grid placeholder</p>
+        <div className="monthly-mood-day-headers">
+          {DAY_LABELS.map((d) => (
+            <span key={d} className="monthly-mood-day-header">{d}</span>
+          ))}
+        </div>
+
+        <div className="monthly-mood-grid">
+          {Array.from({ length: firstDayOffset }).map((_, i) => (
+            <div key={`empty-${i}`} className="monthly-mood-cell empty" />
+          ))}
+          {days.map(({ day, dateStr, config }) => (
+            <div
+              key={dateStr}
+              className="monthly-mood-cell"
+              style={{ backgroundColor: config ? config.color + '55' : '#F5F6F8' }}
+              aria-label={config ? `Day ${day}: ${config.label}` : `Day ${day}: no entry`}
+              title={config ? config.label : 'No entry'}
+            >
+              {config ? (
+                <img src={config.icon} alt={config.label} className="monthly-mood-cell-icon" />
+              ) : (
+                <span className="monthly-mood-cell-day">{day}</span>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
