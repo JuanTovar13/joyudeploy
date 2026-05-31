@@ -11,7 +11,7 @@ export const Landing = () => {
     <div className="landing">
       <BackgroundDecor />
       <div className="landing-content">
-        <img src={logo} className="landing-logo" />
+        <img src={logo} className="landing-logo" alt="JoyU - Begin your journey towards better well-being" />
         <div className="landing-text">
           <h1>
             Begin your journey towards

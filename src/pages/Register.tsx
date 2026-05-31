@@ -46,7 +46,7 @@ export const Register = () => {
     <>
     <SkipToMain />
     <div id="main-content" className="container">
-      <img src={logo} className="auth-logo" />
+      <img src={logo} className="auth-logo" alt="JoyU logo" />
       <BackgroundHills />
       <div className="content">
         <h2 className="title">
@@ -55,29 +55,38 @@ export const Register = () => {
           institutional account
         </h2>
         <form onSubmit={handleRegister}>
+          <label htmlFor="register-email" className="sr-only">Email Address</label>
           <input
+            id="register-email"
             placeholder="Email Address"
             className='input'
-            type="text"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
+            aria-label="Email Address"
           />
+          <label htmlFor="register-name" className="sr-only">Full Name</label>
           <input
+            id="register-name"
             placeholder="Name"
             className='input'
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             disabled={loading}
+            aria-label="Full Name"
           />
+          <label htmlFor="register-password" className="sr-only">Password</label>
           <input
+            id="register-password"
             placeholder="Password"
             className='input'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
+            aria-label="Password"
           />
 
           {/* Role selection */}
@@ -99,8 +108,8 @@ export const Register = () => {
           </div>
 
           <div className="remember">
-            <input type="checkbox" />
-            <label>Remember me</label>
+            <input type="checkbox" id="register-remember" />
+            <label htmlFor="register-remember">Remember me</label>
           </div>
           <button className="button" type="submit" disabled={loading}>
             {loading ? 'Creating account...' : 'Sign up'}

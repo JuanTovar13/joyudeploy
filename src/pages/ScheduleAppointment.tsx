@@ -69,13 +69,16 @@ export const ScheduleAppointment = () => {
         <h1 className="schedule-header">Request an Appointment</h1>
 
         <div className="schedule-card">
+          <label htmlFor="schedule-reason" className="sr-only">Reason for the consultation</label>
           <input
+            id="schedule-reason"
             type="text"
             placeholder="Reason for the consultation"
             className="input-reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             disabled={loading}
+            aria-label="Reason for the consultation"
           />
 
           {/* Mode selector */}

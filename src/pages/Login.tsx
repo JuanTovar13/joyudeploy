@@ -42,7 +42,7 @@ export const Login = () => {
     <>
     <SkipToMain />
     <div id="main-content" className="container">
-      <img src={logo} className="auth-logo" />
+      <img src={logo} className="auth-logo" alt="JoyU logo" />
       <BackgroundHills />
       <div className="content">
         <h2 className="title">
@@ -51,25 +51,31 @@ export const Login = () => {
           institutional account
         </h2>
         <form onSubmit={handleLogin}>
+          <label htmlFor="login-email" className="sr-only">Email Address</label>
           <input
+            id="login-email"
             className='input'
             placeholder="Email Address"
-            type="text"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
+            aria-label="Email Address"
           />
+          <label htmlFor="login-password" className="sr-only">Password</label>
           <input
+            id="login-password"
             className='input'
             placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
+            aria-label="Password"
           />
           <div className="remember">
-            <input type="checkbox" />
-            <label>Remember me</label>
+            <input type="checkbox" id="login-remember" />
+            <label htmlFor="login-remember">Remember me</label>
           </div>
           {loginError && (
             <p className="auth-error" role="alert">{loginError}</p>
