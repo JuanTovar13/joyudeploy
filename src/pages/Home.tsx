@@ -160,6 +160,13 @@ export const Home = () => {
           onComplete={(answers) => handleCheckInDone(answers)}
         />
       )}
+
+      {showMonthly && (
+        <MonthlyMoodChart
+          entries={moodEntries}
+          onClose={() => setShowMonthly(false)}
+        />
+      )}
     </div>
   )
 }
