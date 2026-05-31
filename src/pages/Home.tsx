@@ -25,6 +25,7 @@ import { WeeklyCalendar }    from '../components/estudiante/WeeklyCalendar'
 import { WeeklyMoodChart } from '../components/estudiante/WeeklyMoodChart'
 import { MonthlyMoodChart } from '../components/estudiante/MonthlyMoodChart'
 import { ActivitiesBanner }  from '../components/estudiante/ActivitiesBanner'
+import { SkipToMain } from '../components/SkipToMain'
 import '../styles/WeeklyCalendar.css'
 import '../styles/ActivitiesBanner.css'
 
@@ -126,7 +127,9 @@ export const Home = () => {
   const recData    = rec ?? DEFAULT_REC
 
   return (
-    <div className="home-screen">
+    <>
+    <SkipToMain />
+    <main id="main-content" className="home-screen">
       
 
       <div className="home-white-background"></div>
@@ -170,6 +173,7 @@ export const Home = () => {
           onClose={() => setShowMonthly(false)}
         />
       )}
-    </div>
+    </main>
+    </>
   )
 }

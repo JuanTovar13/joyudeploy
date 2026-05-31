@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { authService } from '../firebase/firebaseConfig'
 import { supabase } from '../lib/supabaseClient'
+import { SkipToMain } from '../components/SkipToMain'
 
 export const Register = () => {
   const [email, setEmail] = useState<string>('')
@@ -42,7 +43,9 @@ export const Register = () => {
   }
 
   return (
-    <div className="container">
+    <>
+    <SkipToMain />
+    <div id="main-content" className="container">
       <img src={logo} className="auth-logo" />
       <BackgroundHills />
       <div className="content">
@@ -109,5 +112,6 @@ export const Register = () => {
         </Link>
       </div>
     </div>
+    </>
   )
 }

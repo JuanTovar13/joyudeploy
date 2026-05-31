@@ -7,6 +7,7 @@ import { authService } from '../firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { supabase } from '../lib/supabaseClient'
 import React, { useState } from 'react'
+import { SkipToMain } from '../components/SkipToMain'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -38,7 +39,9 @@ export const Login = () => {
   }
 
   return (
-    <div className="container">
+    <>
+    <SkipToMain />
+    <div id="main-content" className="container">
       <img src={logo} className="auth-logo" />
       <BackgroundHills />
       <div className="content">
@@ -80,5 +83,6 @@ export const Login = () => {
         </Link>
       </div>
     </div>
+    </>
   )
 }
