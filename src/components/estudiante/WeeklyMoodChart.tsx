@@ -31,7 +31,38 @@ export const WeeklyMoodChart = ({ entries, onViewMonthly }: WeeklyMoodChartProps
           {progressMessage}
         </p>
       )}
-      <p>Grid placeholder</p>
+      <div className="weekly-mood-grid" role="list">
+        {last7Days.map((date) => {
+          const emotion = entryMap.get(date)
+          const config = emotion ? getEmotionConfig(emotion) : null
+          const dayLabel = getWeekDayLabel(date)
+
+          return (
+            <div
+              key={date}
+              className="weekly-mood-day"
+              role="listitem"
+              aria-label={emotion ? `${dayLabel}: ${emotion}` : `${dayLabel}: no entry`}
+            >
+              <span className="weekly-mood-day-label">{dayLabel}</span>
+              <div
+                className="weekly-mood-icon-wrapper"
+                style={{ backgroundColor: config ? config.color + '33' : '#F5F6F8' }}
+              >
+                {config ? (
+                  <img
+                    src={config.icon}
+                    alt={config.label}
+                    className="weekly-mood-icon"
+                  />
+                ) : (
+                  <span className="weekly-mood-empty">·</span>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </section>
   )
 }
