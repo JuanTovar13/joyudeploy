@@ -47,6 +47,7 @@ export const Home = () => {
   )
 
   const [showCheckIn, setShowCheckIn] = useState(false)
+  const [showMonthly, setShowMonthly] = useState(false)
 
   const context = useContext(AuthContext)
   const uid = context?.user?.uid
