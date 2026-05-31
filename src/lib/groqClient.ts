@@ -34,29 +34,29 @@ export const getStudyAnalysis = async (ctx: StudyContext): Promise<StudyAnalysis
     ? ctx.pendingTasks
         .map(t => `   - "${t.title}" (${t.completed_pomodoros}/${t.estimated_pomodoros} pomodoros)`)
         .join('\n')
-    : '   (ninguna tarea pendiente)'
+    : '   (no pending tasks)'
 
-  const prompt = `Eres un coach de estudio empático para estudiantes universitarios. \
-Analiza el estado actual del estudiante y responde SOLO con un JSON válido.
+  const prompt = `You are an empathetic study coach for university students. \
+Analyze the student's current state and reply ONLY with valid JSON.
 
-Datos del estudiante hoy:
-- Tareas totales: ${ctx.totalTasks}
-- Tareas completadas: ${ctx.completedTasks}
-- Tareas pendientes:
+Student data for today:
+- Total tasks: ${ctx.totalTasks}
+- Completed tasks: ${ctx.completedTasks}
+- Pending tasks:
 ${pendingList}
-- Pomodoros completados hoy: ${ctx.completedPomodorosToday} / ${ctx.totalGoalPomodoros} en total
-- Minutos de concentración hoy: ${ctx.focusMinutesToday}
-- Sesiones de trabajo hoy: ${ctx.sessionsToday}
+- Pomodoros completed today: ${ctx.completedPomodorosToday} / ${ctx.totalGoalPomodoros} total
+- Focus minutes today: ${ctx.focusMinutesToday}
+- Work sessions today: ${ctx.sessionsToday}
 ${ctx.consecutiveWorkSkips >= 2
-  ? `- IMPORTANTE: El estudiante ha saltado ${ctx.consecutiveWorkSkips} veces seguidas la sesión de trabajo${ctx.skippedTaskTitle ? ` en la tarea "${ctx.skippedTaskTitle}"` : ''}. Puede estar bloqueado, desmotivado o con dificultades con esa tarea.`
+  ? `- IMPORTANT: The student has skipped the work session ${ctx.consecutiveWorkSkips} times in a row${ctx.skippedTaskTitle ? ` on the task "${ctx.skippedTaskTitle}"` : ''}. They may be blocked, unmotivated, or struggling with that task.`
   : ''}
 
-Responde ÚNICAMENTE con este JSON (sin texto extra):
+Reply ONLY with this JSON (no extra text):
 {
-  "diagnosis": "<1-2 oraciones honestas sobre el estado actual del estudiante>",
-  "highlight": "<una cosa concreta que está haciendo bien>",
-  "alert": "<una cosa que necesita atención, o un refuerzo positivo si todo va bien>",
-  "next_action": "<una acción específica y concreta que debería hacer ahora mismo>"
+  "diagnosis": "<1-2 honest sentences about the student's current state>",
+  "highlight": "<one specific thing they are doing well>",
+  "alert": "<one thing that needs attention, or positive reinforcement if everything looks good>",
+  "next_action": "<one specific, concrete action they should take right now>"
 }`
 
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

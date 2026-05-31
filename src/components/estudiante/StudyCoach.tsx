@@ -78,7 +78,7 @@ export const StudyCoach = () => {
       const result = await getStudyAnalysis(studyContext)
       setAnalysis(result)
     } catch {
-      setError('No se pudo generar el análisis. Inténtalo de nuevo.')
+      setError('Could not generate the analysis. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -92,27 +92,27 @@ export const StudyCoach = () => {
       <div className="sc-stats-grid">
         <StatCard
           emoji="✅"
-          label="Tareas"
+          label="Tasks"
           value={`${completedTasks} / ${totalTasks}`}
-          sub={`${completionPct}% completado`}
+          sub={`${completionPct}% complete`}
         />
         <StatCard
           emoji="🍅"
-          label="Pomodoros hoy"
+          label="Pomodoros today"
           value={completedPomodorosToday}
-          sub="sesiones hoy"
+          sub="sessions today"
         />
         <StatCard
           emoji="⏱️"
-          label="Minutos enfocado"
+          label="Focus minutes"
           value={totalFocusTimeToday}
-          sub={`${todaySessionsCompleted} sesiones`}
+          sub={`${todaySessionsCompleted} sessions`}
         />
         <StatCard
           emoji="📋"
-          label="Pendientes"
+          label="Pending"
           value={pendingTasks.length}
-          sub={pendingTasks.length === 0 ? '¡Todo listo!' : `${pendingTasks.length} por hacer`}
+          sub={pendingTasks.length === 0 ? 'All done!' : `${pendingTasks.length} remaining`}
         />
       </div>
 
@@ -120,9 +120,9 @@ export const StudyCoach = () => {
       {consecutiveWorkSkips >= 2 && !helpDismissed && (
         <div className="sc-skip-alert">
           <p className="sc-skip-alert__text">
-            ⚠️ Llevas <strong>{consecutiveWorkSkips} skips seguidos</strong>
-            {activeTaskTitle ? <> en <em>"{activeTaskTitle}"</em></> : ' en el focus time'}.
-            {' '}¿Necesitas ayuda con esta tarea?
+            ⚠️ You've skipped <strong>{consecutiveWorkSkips} times in a row</strong>
+            {activeTaskTitle ? <> on <em>"{activeTaskTitle}"</em></> : ' during focus time'}.
+            {' '}Do you need help with this task?
           </p>
           <div className="sc-skip-alert__actions">
             <button
@@ -133,13 +133,13 @@ export const StudyCoach = () => {
                 void handleAnalyze()
               }}
             >
-              Sí, analiza mi situación
+              Yes, analyze my situation
             </button>
             <button
               className="sc-skip-btn sc-skip-btn--ok"
               onClick={() => { setHelpDismissed(true); dispatch(resetWorkSkips()) }}
             >
-              Estoy bien, continúo
+              I'm fine, keep going
             </button>
           </div>
         </div>
@@ -154,12 +154,12 @@ export const StudyCoach = () => {
         {loading ? (
           <>
             <span className="sc-spinner" />
-            Analizando tu progreso…
+            Analyzing your progress…
           </>
         ) : analysis ? (
-          '🔄 Actualizar análisis'
+          '🔄 Refresh analysis'
         ) : (
-          '✨ Analizar mi estado actual'
+          '✨ Analyze my current state'
         )}
       </button>
 
@@ -172,7 +172,7 @@ export const StudyCoach = () => {
           <div className="sc-analysis__card sc-analysis__card--diagnosis">
             <span className="sc-analysis__icon">🧠</span>
             <div>
-              <p className="sc-analysis__heading">Estado actual</p>
+              <p className="sc-analysis__heading">Current state</p>
               <p className="sc-analysis__text">{analysis.diagnosis}</p>
             </div>
           </div>
@@ -180,7 +180,7 @@ export const StudyCoach = () => {
           <div className="sc-analysis__card sc-analysis__card--highlight">
             <span className="sc-analysis__icon">⭐</span>
             <div>
-              <p className="sc-analysis__heading">Lo que estás haciendo bien</p>
+              <p className="sc-analysis__heading">What you're doing well</p>
               <p className="sc-analysis__text">{analysis.highlight}</p>
             </div>
           </div>
@@ -188,7 +188,7 @@ export const StudyCoach = () => {
           <div className="sc-analysis__card sc-analysis__card--alert">
             <span className="sc-analysis__icon">⚡</span>
             <div>
-              <p className="sc-analysis__heading">Atención</p>
+              <p className="sc-analysis__heading">Watch out</p>
               <p className="sc-analysis__text">{analysis.alert}</p>
             </div>
           </div>
@@ -196,7 +196,7 @@ export const StudyCoach = () => {
           <div className="sc-analysis__card sc-analysis__card--action">
             <span className="sc-analysis__icon">🎯</span>
             <div>
-              <p className="sc-analysis__heading">Siguiente paso</p>
+              <p className="sc-analysis__heading">Next step</p>
               <p className="sc-analysis__text">{analysis.next_action}</p>
             </div>
           </div>
