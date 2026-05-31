@@ -1,5 +1,5 @@
 import caraFrase from '../../assets/home-icons/Cara sonriente(frase motivadora).svg'
-import type { GroqRecommendation } from '../../lib/groqClient'
+import type { GroqRecommendation } from '../../lib/groqRecommendations'
 
 interface QuoteCardProps {
   loadingRec: boolean
