@@ -1,11 +1,11 @@
-import '../styles/TaskList.css'
+import '../../styles/TaskList.css'
 import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AuthContext } from '../context/AuthContext'
-import { supabase } from '../lib/supabaseClient'
-import type { RootState, AppDispatch } from '../store'
-import { setActiveTask, clearActiveTask } from '../store/slices/studyPlannerSlice'
-import type { Task } from '../types'
+import { AuthContext } from '../../context/AuthContext'
+import { supabase } from '../../lib/supabaseClient'
+import type { RootState, AppDispatch } from '../../store'
+import { setActiveTask, clearActiveTask, setTasks, resetConcentration } from '../../store/slices/studyPlannerSlice'
+import type { Task } from '../../types'
 
 /**
  * TaskList - maneja tareas de estudio con Supabase
@@ -13,16 +13,18 @@ import type { Task } from '../types'
  * React.memo evita renderizados innecesarios
  */
 
-const TaskList = React.memo(function TaskList() {
+interface TaskListProps {
+  onStartPomodoro?: () => void
+}
+
+const TaskList = React.memo(({ onStartPomodoro }: TaskListProps) => {
   const context = useContext(AuthContext)
   const user = context?.user
 
   const dispatch = useDispatch<AppDispatch>()
-  const activeTaskId = useSelector(
-    (state: RootState) => state.studyPlanner.activeTaskId,
-  )
+  const activeTaskId = useSelector((state: RootState) => state.studyPlanner.activeTaskId)
 
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasks, setLocalTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [newTaskPomodoros, setNewTaskPomodoros] = useState(1)
@@ -31,7 +33,7 @@ const TaskList = React.memo(function TaskList() {
   useEffect(() => {
     if (!user?.uid) return
 
-    // Initial fetch
+    // Initial fetch llama tabla de tasks
     void (async () => {
       const { data, error } = await supabase
         .from('study_tasks')
@@ -39,13 +41,13 @@ const TaskList = React.memo(function TaskList() {
         .eq('user_id', user.uid)
         .order('created_at', { ascending: false })
       if (error) setError('Could not load tasks. Please try again.')
-      if (data) setTasks(data as Task[])
+      if (data) {
+        setLocalTasks(data as Task[])
+        dispatch(setTasks(data as Task[]))
+      }
       setLoading(false)
     })()
 
-    // Realtime subscription
-    // Listens for INSERT, UPDATE, DELETE in study_tasks table
-    // Updates local state automatically without re-fetching all data
     const channel = supabase
       .channel(`study_tasks_${user.uid}`)
       .on(
@@ -58,27 +60,23 @@ const TaskList = React.memo(function TaskList() {
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {
-            setTasks((prev) => {
-              const alreadyExists = prev.some(
-                (t) => t.id === (payload.new as Task).id,
-              )
+            setLocalTasks((prev) => {
+              const alreadyExists = prev.some((t) => t.id === (payload.new as Task).id)
               if (alreadyExists) return prev
               return [payload.new as Task, ...prev]
             })
           }
           if (payload.eventType === 'UPDATE') {
-            setTasks((prev) =>
+            setLocalTasks((prev) =>
               prev.map((t) =>
-                t.id === (payload.new as Task).id ? (payload.new as Task) : t,
-              ),
+                t.id === (payload.new as Task).id ? (payload.new as Task) : t
+              )
             )
           }
           if (payload.eventType === 'DELETE') {
-            setTasks((prev) =>
-              prev.filter((t) => t.id !== (payload.old as Task).id),
-            )
+            setLocalTasks((prev) => prev.filter((t) => t.id !== (payload.old as Task).id))
           }
-        },
+        }
       )
       .subscribe()
 
@@ -88,9 +86,13 @@ const TaskList = React.memo(function TaskList() {
     }
   }, [user?.uid])
 
-  async function handleAddTask() {
+  useEffect(() => {
+    dispatch(setTasks(tasks))
+  }, [tasks, dispatch])
+
+  const handleAddTask = async () => {
     if (newTaskTitle.trim() === '') return
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('study_tasks')
       .insert([
         {
@@ -102,39 +104,58 @@ const TaskList = React.memo(function TaskList() {
           user_id: user?.uid,
         },
       ])
-      .select()
-      .single()
-    if (data) {
-      setTasks((prev) => [data as Task, ...prev])
+    if (error) {
+      setError('Could not add task.')
+    } else {
       setNewTaskTitle('')
+      dispatch(resetConcentration())
     }
-    if (error) setError('Could not add task.')
   }
 
-  async function handleToggleComplete(taskId: string, currentStatus: boolean) {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId ? { ...t, completed: !currentStatus } : t,
-      ),
-    )
-    await supabase
-      .from('study_tasks')
-      .update({ completed: !currentStatus })
-      .eq('id', taskId)
+  const handleToggleComplete = async (task: Task) => {
+    if (task.completed) {
+      // Uncheck: reset progress entirely
+      setLocalTasks(prev =>
+        prev.map(t => t.id === task.id ? { ...t, completed: false, completed_pomodoros: 0 } : t)
+      )
+      await supabase
+        .from('study_tasks')
+        .update({ completed: false, completed_pomodoros: 0 })
+        .eq('id', task.id)
+    } else {
+      // Check: increment by 1; mark done only when it reaches the goal
+      const newCount    = task.completed_pomodoros + 1
+      const willFinish  = newCount >= task.estimated_pomodoros
+      setLocalTasks(prev =>
+        prev.map(t => t.id === task.id
+          ? { ...t, completed: willFinish, completed_pomodoros: newCount }
+          : t
+        )
+      )
+      await supabase
+        .from('study_tasks')
+        .update({ completed: willFinish, completed_pomodoros: newCount })
+        .eq('id', task.id)
+      if (willFinish && task.id === activeTaskId) dispatch(clearActiveTask())
+    }
+    dispatch(resetConcentration())
   }
 
-  async function handleDeleteTask(taskId: string) {
-    setTasks((prev) => prev.filter((t) => t.id !== taskId))
+  const handleDeleteTask = async (taskId: string) => {
+    if (taskId === activeTaskId) {
+      dispatch(clearActiveTask())
+    }
+    dispatch(resetConcentration())
+    setLocalTasks((prev) => prev.filter((t) => t.id !== taskId))
     await supabase.from('study_tasks').delete().eq('id', taskId)
   }
 
   return (
     <div className="tasklist-container">
       <h2 className="tasklist-title">Study Tasks</h2>
+      <p className="tasklist-subtitle">Add all the tasks you're planning to do today</p>
 
-      {loading ? (
-        <p className="tasklist-empty">Loading tasks...</p>
-      ) : null}
+      {loading ? <p className="tasklist-empty">Loading tasks...</p> : null}
 
       {error ? (
         <p className="tasklist-error" role="alert">
@@ -178,12 +199,10 @@ const TaskList = React.memo(function TaskList() {
             <input
               type="checkbox"
               checked={task.completed}
-              onChange={() => void handleToggleComplete(task.id, task.completed)}
+              onChange={() => void handleToggleComplete(task)}
               aria-label={`Mark ${task.title} as complete`}
             />
-            <span
-              className={`tasklist-item-title${task.completed ? ' completed' : ''}`}
-            >
+            <span className={`tasklist-item-title${task.completed ? ' completed' : ''}`}>
               {task.title}
             </span>
             <button
@@ -194,6 +213,7 @@ const TaskList = React.memo(function TaskList() {
                   dispatch(clearActiveTask())
                 } else {
                   dispatch(setActiveTask({ id: task.id, title: task.title }))
+                  if (onStartPomodoro) onStartPomodoro()
                 }
               }}
               aria-label={

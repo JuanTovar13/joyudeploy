@@ -1,59 +1,54 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient' 
+import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
+import { authService } from '../firebase/firebaseConfig'
 import '../styles/ScheduleAppointment.css'
-
-// Importamos el logo
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 
-export function ScheduleAppointment() {
+export const ScheduleAppointment = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
-  
+
   const [reason, setReason] = useState('')
-  const [date, setDate] = useState('')
-  const [hour, setHour] = useState('')
+  const [mode, setMode] = useState<'In person' | 'Virtual'>('In person')
   const [loading, setLoading] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formSuccess, setFormSuccess] = useState(false)
 
   const handleSchedule = async () => {
-    if (!reason || !date || !hour) {
-      alert('Por favor, completa todos los campos')
+    setFormError(null)
+    if (!reason.trim()) {
+      setFormError('Please enter a reason for the consultation.')
       return
     }
-
     if (!user?.uid) {
-      alert('Error: No se encontró sesión de usuario.')
+      setFormError('Error: No user session found.')
       return
     }
 
     setLoading(true)
     try {
-      const { error } = await supabase.from('appointments').insert([
-        {
-          user_id: user.uid, 
-          reason: reason,
-          date: date,
-          hour: hour,
-          mode: 'In person',
-          status: 'scheduled',
-          professional_name: 'Maria Elvira Rosa',
-          professional_image: 'https://cdn-icons-png.flaticon.com/512/387/387561.png'
-        }
-      ])
+      const { error } = await supabase.from('appointments').insert([{
+        user_id: user.uid,
+        student_name: authService.currentUser?.displayName ?? user.displayName ?? user.email ?? 'Student',
+        reason: reason.trim(),
+        mode,
+        status: 'pending',
+        date: null,
+        hour: null,
+        professional_name: null,
+        professional_image: null,
+      }])
 
       if (error) throw error
 
-      alert('¡Cita agendada con éxito!')
-      navigate('/my-appointments')
+      setFormSuccess(true)
+      setTimeout(() => navigate('/my-appointments'), 2000)
     } catch (err: unknown) {
-      // CORRECCIÓN AQUÍ: Manejo de error tipo 'unknown' en lugar de 'any'
       if (err instanceof Error) {
-        console.error('Error detallado:', err.message)
-        alert(`Error al guardar: ${err.message}`)
-      } else {
-        console.error('Error inesperado:', err)
-        alert('Ocurrió un error inesperado al guardar la cita.')
+        console.error('Error saving appointment:', err.message)
+        setFormError(`Could not send request: ${err.message}`)
       }
     } finally {
       setLoading(false)
@@ -70,49 +65,60 @@ export function ScheduleAppointment() {
         <button className="back-button-solo" onClick={() => navigate(-1)}>
           <span>‹</span>
         </button>
-        
-        <h1 className="schedule-header">Appointments Available</h1>
+
+        <h1 className="schedule-header">Request an Appointment</h1>
 
         <div className="schedule-card">
-          <input 
-            type="text" 
-            placeholder="Reason for the consultation" 
+          <input
+            type="text"
+            placeholder="Reason for the consultation"
             className="input-reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             disabled={loading}
           />
 
-          <div className="calendar-section">
-            <label>Select a Date</label>
-            <input 
-              type="date" 
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+          {/* Mode selector */}
+          <div className="mode-selector">
+            <button
+              type="button"
+              className={`mode-btn${mode === 'In person' ? ' mode-btn--active' : ''}`}
+              onClick={() => setMode('In person')}
               disabled={loading}
-            />
+            >
+              🏢 In person
+            </button>
+            <button
+              type="button"
+              className={`mode-btn${mode === 'Virtual' ? ' mode-btn--active' : ''}`}
+              onClick={() => setMode('Virtual')}
+              disabled={loading}
+            >
+              💻 Virtual
+            </button>
           </div>
 
-          <select 
-            className="time-select" 
-            value={hour}
-            onChange={(e) => setHour(e.target.value)}
-            disabled={loading}
-          >
-            <option value="">Select an Hour</option>
-            <option value="09:00 AM">09:00 AM</option>
-            <option value="10:00 AM">10:00 AM</option>
-            <option value="11:00 AM">11:00 AM</option>
-            <option value="03:00 PM">03:00 PM</option>
-            <option value="04:00 PM">04:00 PM</option>
-          </select>
+          <p className="schedule-note">
+            📅 A psychologist will review your request and confirm a date and time.
+          </p>
 
-          <button 
-            className="btn-schedule" 
+          {formError && (
+            <p className="schedule-message schedule-message--error" role="alert">
+              {formError}
+            </p>
+          )}
+          {formSuccess && (
+            <p className="schedule-message schedule-message--success" role="status">
+              ✅ Your request has been sent! Redirecting…
+            </p>
+          )}
+
+          <button
+            className="btn-schedule"
             onClick={handleSchedule}
-            disabled={loading}
+            disabled={loading || formSuccess}
           >
-            {loading ? 'Scheduling...' : 'Schedule'}
+            {loading ? 'Sending request...' : 'Send Request'}
           </button>
         </div>
       </div>

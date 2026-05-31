@@ -44,6 +44,21 @@
   width: clamp(140px, 40vh, 300px);
 }
 
+.auth-error {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 4px 0;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 @media (max-width: 768px) {
   .content {
     max-width: 90%;
@@ -82,4 +97,34 @@
     gap: 10px;
   }
 
+}
+
+/* ── Role selector ────────────────────────────────────────────────────────── */
+.role-selector {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  margin: 6px auto;
+  justify-content: center;
+}
+
+.role-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 20px;
+  border: 2px solid #d0d0e8;
+  background: white;
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.role-btn--active {
+  border-color: #262688;
+  background: #262688;
+  color: white;
 }

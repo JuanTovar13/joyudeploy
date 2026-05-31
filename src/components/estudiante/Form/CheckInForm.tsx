@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../../styles/checkin.css'
+import '../../../styles/checkin.css'
 
 const questions = [
   {
@@ -10,7 +10,13 @@ const questions = [
   {
     id: 'pressure',
     text: '¿Qué te está generando más presión actualmente?',
-    options: ['Exámenes', 'Tareas y proyectos', 'Problemas personales', 'Falta de tiempo', 'Problemas económicos'],
+    options: [
+      'Exámenes',
+      'Tareas y proyectos',
+      'Problemas personales',
+      'Falta de tiempo',
+      'Problemas económicos',
+    ],
   },
   {
     id: 'sleep',
@@ -20,12 +26,24 @@ const questions = [
   {
     id: 'relax',
     text: '¿Qué actividad disfrutas más para relajarte?',
-    options: ['Escuchar música', 'Hacer ejercicio', 'Ver series o videos', 'Hablar con amigos', 'Dibujar o crear arte'],
+    options: [
+      'Escuchar música',
+      'Hacer ejercicio',
+      'Ver series o videos',
+      'Hablar con amigos',
+      'Dibujar o crear arte',
+    ],
   },
   {
     id: 'need',
     text: '¿Qué necesitas más en este momento?',
-    options: ['Relajarme', 'Organizar mi tiempo', 'Sentirme motivado/a', 'Hablar con alguien', 'Mejorar mi ánimo'],
+    options: [
+      'Relajarme',
+      'Organizar mi tiempo',
+      'Sentirme motivado/a',
+      'Hablar con alguien',
+      'Mejorar mi ánimo',
+    ],
   },
 ]
 
@@ -39,6 +57,7 @@ type Props = {
 export const CheckInForm = ({ onComplete, onClose }: Props) => {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Answers>({})
+  const [customInputs, setCustomInputs] = useState<Answers>({})
   const [submitted, setSubmitted] = useState(false)
 
   const current = questions[step]
@@ -47,6 +66,22 @@ export const CheckInForm = ({ onComplete, onClose }: Props) => {
 
   const handleSelect = (option: string) => {
     setAnswers((prev) => ({ ...prev, [current.id]: option }))
+    // Clear custom input when a preset option is chosen
+    setCustomInputs((prev) => ({ ...prev, [current.id]: '' }))
+  }
+
+  const handleCustomInput = (value: string) => {
+    setCustomInputs((prev) => ({ ...prev, [current.id]: value }))
+    if (value.trim()) {
+      setAnswers((prev) => ({ ...prev, [current.id]: value.trim() }))
+    } else {
+      // If cleared, remove the answer so the Next button stays disabled
+      setAnswers((prev) => {
+        const next = { ...prev }
+        delete next[current.id]
+        return next
+      })
+    }
   }
 
   const handleNext = () => {
@@ -70,7 +105,9 @@ export const CheckInForm = ({ onComplete, onClose }: Props) => {
           <div className="checkin-success">
             <div className="checkin-success-emoji">🌟</div>
             <h2>¡Gracias por tu check-in!</h2>
-            <p>Tus respuestas nos ayudan a recomendarte actividades personalizadas para ti.</p>
+            <p>
+              Tus respuestas nos ayudan a recomendarte actividades personalizadas para ti.
+            </p>
             <button className="checkin-btn-primary" onClick={onClose}>
               Volver al inicio
             </button>
@@ -110,13 +147,27 @@ export const CheckInForm = ({ onComplete, onClose }: Props) => {
           {current.options.map((option) => (
             <button
               key={option}
-              className={`checkin-option ${selected === option ? 'checkin-option--selected' : ''}`}
+              className={`checkin-option ${selected === option && !customInputs[current.id] ? 'checkin-option--selected' : ''}`}
               onClick={() => handleSelect(option)}
             >
               <span className="checkin-option-dot" />
               {option}
             </button>
           ))}
+
+          {/* Custom answer */}
+          <div className={`checkin-custom${customInputs[current.id] ? ' checkin-custom--active' : ''}`}>
+            <span className="checkin-option-dot checkin-custom__dot" />
+            <input
+              className="checkin-custom__input"
+              type="text"
+              placeholder="Otra respuesta..."
+              value={customInputs[current.id] ?? ''}
+              onChange={(e) => handleCustomInput(e.target.value)}
+              maxLength={120}
+              aria-label="Custom answer"
+            />
+          </div>
         </div>
 
         {/* Navigation */}

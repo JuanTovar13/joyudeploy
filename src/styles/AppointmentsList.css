@@ -19,16 +19,21 @@
 .back-button-top {
   background: white;
   border: 1px solid #E0E0E0;
-  width: 45px;
-  height: 45px;
-  border-radius: 12px;
-  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 32px;
   color: #1A1A7E;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.back-button-top:active {
+  transform: scale(0.9);
 }
 
 .list-title {
@@ -41,6 +46,16 @@
   width: 80px;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #1A1A7E;
+  font-size: 1.1rem;
+}
+
+/* ── Grid de citas ────────────────────────────────────────────────────────── */
 .appointments-grid-container {
   width: 90%;
   max-width: 800px;
@@ -48,84 +63,226 @@
   flex-direction: column;
   align-items: center;
   gap: 25px;
-  z-index: 10; /* Asegura que las tarjetas estén sobre las colinas */
+  z-index: 10;
 }
 
-.appointment-card-v2 {
-  position: relative;
+/* ══════════════════════════════════════════════════════════════════════════
+   Appointment cards — redesigned
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.appt-card {
   width: 100%;
-  border-radius: 40px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(38, 38, 136, 0.10);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.card-background-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.card-content-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 35px;
-  box-sizing: border-box;
-}
-
-.left-info {
-  text-align: left;
-}
-
-.prof-name {
-  color: #ffffff;
-  font-size: 1.8rem; /* Más grande como el prototipo */
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.details-text p {
-  color: #f8f8ff;
-  margin: 5px 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.right-actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 220px;
+  font-family: 'Fredoka', sans-serif;
+  transition: box-shadow 0.2s;
 }
 
-.btn-reschedule {
-  background: white;
-  color: #1A1A7E;
-  border: none;
-  padding: 14px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+.appt-card:hover {
+  box-shadow: 0 8px 28px rgba(38, 38, 136, 0.15);
 }
 
-.btn-cancel {
-  background: #2D2D8A;
+/* ── Header ── */
+.appt-card__header {
+  background: linear-gradient(135deg, #262688 0%, #4646b0 100%);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.appt-card__header--pending {
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+}
+
+.appt-card__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2.5px solid rgba(255,255,255,0.8);
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.appt-card__avatar--pending {
+  background: rgba(255,255,255,0.25);
+}
+
+.appt-card__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.appt-card__photo-placeholder {
+  font-size: 24px;
+  font-weight: 700;
   color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
+  font-family: 'Fredoka', sans-serif;
 }
 
+.appt-card__header-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.appt-card__label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.appt-card__name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appt-card__name--pending {
+  font-size: 17px;
+}
+
+/* mode badge */
+.appt-card__mode-badge {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.appt-card__mode-badge--virtual {
+  background: rgba(255,255,255,0.18);
+  color: #ffffff;
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+.appt-card__mode-badge--presencial {
+  background: rgba(255,255,255,0.18);
+  color: #ffffff;
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+/* ── Body ── */
+.appt-card__body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.appt-card__details-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.appt-card__detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.appt-card__detail-icon {
+  font-size: 18px;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+.appt-card__detail-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #9090b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1px;
+}
+
+.appt-card__detail-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #262688;
+}
+
+/* Pending notice row */
+.appt-card__pending-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #92400e;
+}
+
+.appt-card__pending-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  flex-shrink: 0;
+  animation: appt-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes appt-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+
+/* ── Footer ── */
+.appt-card__footer {
+  padding: 0 24px 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.appt-card__cancel-btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #dc2626;
+  background: transparent;
+  border: 1.5px solid #fca5a5;
+  border-radius: 99px;
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.appt-card__cancel-btn:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+.appt-card__cancel-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Botón nuevo agendamiento ─────────────────────────────────────────────── */
 .btn-new-appointment-v2 {
   background: #2D2D8A;
   color: white;
@@ -134,10 +291,41 @@
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1rem;
-  margin-top: 20px;
-  box-shadow: 0 5px 15px rgba(243, 243, 253, 0.3);
+  margin-top: 10px;
+  box-shadow: 0 5px 15px rgba(45, 45, 138, 0.3);
+  transition: opacity 0.2s;
 }
 
+.btn-new-appointment-v2:hover {
+  opacity: 0.88;
+}
+
+/* ── Section labels ───────────────────────────────────────────────────────── */
+.section-label {
+  color: #1A1A7E;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 4px 0 -8px;
+  align-self: flex-start;
+}
+
+
+/* ── Inline error ─────────────────────────────────────────────────────────── */
+.appt-list-error {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 10px 20px;
+  width: 90%;
+  max-width: 800px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* ── Colinas decorativas ──────────────────────────────────────────────────── */
 .decor-hills-bottom {
   position: fixed;
   bottom: 0;

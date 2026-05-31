@@ -9,13 +9,18 @@ import { authService } from "../firebase/firebaseConfig";
 import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import type { User } from "../types";
 import { store } from "../store";
-import { setUser as setReduxUser, clearUser } from "../store/slices/authSlice";
+import { setUser as setReduxUser, setRole as setReduxRole, clearUser } from "../store/slices/authSlice";
+import { clearAppointments } from "../store/slices/appointmentsSlice";
+import { clearRecommendation } from "../store/slices/recommendationSlice";
+import { supabase } from "../lib/supabaseClient";
 
-function mapFirebaseUser(fb: FirebaseUser): User {
+const mapFirebaseUser = (fb: FirebaseUser): User => {
+  // authService.currentUser always has the latest profile (post-updateProfile),
+  // while the onAuthStateChanged snapshot can be stale on first registration.
   return {
     uid: fb.uid,
     email: fb.email,
-    displayName: fb.displayName,
+    displayName: authService.currentUser?.displayName ?? fb.displayName,
     photoURL: fb.photoURL,
   };
 }
@@ -23,6 +28,7 @@ function mapFirebaseUser(fb: FirebaseUser): User {
 type AuthContextType = {
   user: User | null;
   isAuthLoading: boolean;
+  role: 'student' | 'psychologist' | null;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,9 +36,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [role, setRole] = useState<'student' | 'psychologist' | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(authService, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(authService, async (firebaseUser) => {
       if (firebaseUser) {
         store.dispatch(
           setReduxUser({
@@ -42,9 +49,23 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           }),
         );
         setUser(mapFirebaseUser(firebaseUser));
+
+        // Fetch role from Supabase profiles table
+        // maybeSingle() returns null (not 406) when no row exists yet
+        const { data } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('uid', firebaseUser.uid)
+          .maybeSingle();
+        const resolvedRole = (data?.role as 'student' | 'psychologist') ?? 'student';
+        setRole(resolvedRole);
+        store.dispatch(setReduxRole(resolvedRole));
       } else {
         store.dispatch(clearUser());
+        store.dispatch(clearAppointments());
+        store.dispatch(clearRecommendation());
         setUser(null);
+        setRole(null);
       }
       setIsAuthLoading(false);
     });
@@ -53,7 +74,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthLoading }}>
+    <AuthContext.Provider value={{ user, isAuthLoading, role }}>
       {children}
     </AuthContext.Provider>
   );

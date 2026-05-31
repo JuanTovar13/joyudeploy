@@ -20,7 +20,7 @@
   font-family: 'Fredoka', sans-serif; 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
 }
 
 .home-header {
@@ -50,20 +50,19 @@
 }
 
 
-.home-content {
+/* ── CheckIn + Quote side by side ── */
+.home-cards-row {
   display: flex;
   gap: 25px;
-  z-index: 2; 
   position: relative;
+  z-index: 2;
+  align-items: stretch;
 }
 
-.home-left-column {
-  flex: 1.2;
-}
-
-.home-right-column {
-  width: calc(50% - 12px);
-  flex: none;
+.home-cards-row .check-in-card,
+.home-cards-row .quote-card {
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .check-in-card {
@@ -324,6 +323,28 @@
   gap: 10px;
 }
 
+.quote-activities {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quote-activities-label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #262688;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.quote-activities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .quote-activity-badge {
   display: inline-block;
   background-color: rgba(38, 38, 136, 0.1);
@@ -353,7 +374,28 @@
 
 
 .home-screen {
-  padding-bottom: 140px; 
+  padding-bottom: 140px;
+}
+
+.home-signout-btn {
+  display: block;
+  margin: 8px auto 0;
+  padding: 10px 28px;
+  border-radius: 99px;
+  border: none;
+  background-color: transparent;
+  color: #a04040;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transition: background 0.18s, color 0.18s;
+}
+
+.home-signout-btn:hover {
+  background-color: rgba(200, 60, 60, 0.1);
 }
 
 
@@ -370,19 +412,9 @@
   }
 
  
-  .home-content {
+  .home-cards-row {
     flex-direction: column;
-    gap: 20px;
-  }
-
-  .home-left-column {
-    flex: none;
-    width: 100%;
-  }
-
-  .home-right-column {
-    flex: none;
-    width: 100% !important; 
+    gap: 16px;
   }
 
   

@@ -1,103 +1,114 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
+import { fetchPhotosForProfessionals } from '../lib/randomUserClient'
+import { fetchAppointments, cancelAppointment } from '../store/slices/appointmentsSlice'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import logoJoyu from '../assets/home-icons/Logo de Joyu oscuro.svg'
 import '../styles/AppointmentsList.css'
 
-// SVGs
-import mujerCard from '../assets/MUJER.svg'
-import hillsBottom from '../assets/hills.svg'
+import { PendingAppointmentCard }   from '../components/estudiante/PendingAppointmentCard'
+import { ScheduledAppointmentCard } from '../components/estudiante/ScheduledAppointmentCard'
 
-interface Appointment {
-  id: string
-  reason: string
-  date: string
-  hour: string
-  mode: string
-  status: string
-  professional_name: string
-  professional_image: string
-}
-
-export function AppointmentsList() {
-  const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [loading, setLoading] = useState(true)
+export const AppointmentsList = () => {
+  const dispatch = useAppDispatch()
   const { user } = useAuth()
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
 
+  const { items: appointments, status, cancellingId } = useAppSelector(
+    (state) => state.appointments,
+  )
+
+  // professionalPhotos is UI-only derived state — stays local
+  const [professionalPhotos, setProfessionalPhotos] = useState<Record<string, string>>({})
+  const [cancelError, setCancelError] = useState<string | null>(null)
+
+  // 1 — Fetch appointments on mount
   useEffect(() => {
-    async function fetchAppointments() {
-      if (!user?.uid) return
+    if (user?.uid) void dispatch(fetchAppointments(user.uid))
+  }, [dispatch, user?.uid])
 
-      try {
-        const { data, error } = await supabase
-          .from('appointments')
-          .select('*')
-          .eq('user_id', user.uid)
-          .order('created_at', { ascending: false })
+  // 2 — Fetch psychologist photos whenever scheduled appointments change
+  useEffect(() => {
+    const scheduled = appointments.filter(
+      (a) => a.status === 'scheduled' && a.professional_name,
+    )
+    if (scheduled.length === 0) return
+    const uniqueNames = [...new Set(scheduled.map((a) => a.professional_name))]
+    fetchPhotosForProfessionals(uniqueNames, 'female').then(setProfessionalPhotos)
+  }, [appointments])
 
-        if (error) throw error
-        if (data) setAppointments(data as Appointment[])
-      } catch (err: unknown) {
-        // Corrección para el error de TypeScript
-        if (err instanceof Error) {
-          console.error('Error fetching appointments:', err.message)
-        }
-      } finally {
-        setLoading(false)
-      }
+  // 3 — Cancel appointment via thunk
+  const handleCancel = async (appointmentId: string) => {
+    setCancelError(null)
+    const result = await dispatch(cancelAppointment(appointmentId))
+    if (cancelAppointment.rejected.match(result)) {
+      setCancelError('Could not cancel the appointment. Please try again.')
     }
+  }
 
-    fetchAppointments()
-  }, [user])
+  const pendingAppts   = appointments.filter((a) => a.status === 'pending')
+  const scheduledAppts = appointments.filter((a) => a.status === 'scheduled')
 
   return (
     <div className="list-screen-container">
+      {/* Header */}
       <div className="list-header-section">
         <button className="back-button-top" onClick={() => navigate('/home')}>
           <span>‹</span>
         </button>
-        <h1 className="list-title">Appointments Available</h1>
+        <h1 className="list-title">My Appointments</h1>
         <img src={logoJoyu} alt="Joyu" className="list-logo-right" />
       </div>
 
-      {loading ? (
-        <div className="loading-container">
-          <p>Loading appointments...</p>
-        </div>
+      {cancelError && (
+        <p className="appt-list-error" role="alert">{cancelError}</p>
+      )}
+
+      {status === 'loading' ? (
+        <div className="loading-container"><p>Loading appointments…</p></div>
+      ) : appointments.length === 0 ? (
+        <div className="loading-container"><p>No appointments yet.</p></div>
       ) : (
         <div className="appointments-grid-container">
-          {appointments.map((app) => (
-            <div key={app.id} className="appointment-card-v2">
-              <img src={mujerCard} alt="" className="card-background-svg" />
-              
-              <div className="card-content-overlay">
-                <div className="left-info">
-                  <h3 className="prof-name">{app.professional_name}</h3>
-                  <div className="details-text">
-                    <p><strong>Time:</strong> {app.hour}</p>
-                    <p><strong>Mode:</strong> {app.mode}</p>
-                  </div>
-                </div>
-                
-                <div className="right-actions">
-                  <button className="btn-reschedule">Reschedule</button>
-                  <button className="btn-cancel">Cancel appointment</button>
-                </div>
-              </div>
-            </div>
-          ))}
-          
+
+          {/* ── PENDING ── */}
+          {pendingAppts.length > 0 && (
+            <>
+              <h2 className="section-label">⏳ Awaiting Confirmation</h2>
+              {pendingAppts.map((app) => (
+                <PendingAppointmentCard
+                  key={app.id}
+                  appointment={app}
+                  isCancelling={cancellingId === app.id}
+                  onCancel={handleCancel}
+                />
+              ))}
+            </>
+          )}
+
+          {/* ── SCHEDULED ── */}
+          {scheduledAppts.length > 0 && (
+            <>
+              <h2 className="section-label">✅ Confirmed</h2>
+              {scheduledAppts.map((app) => (
+                <ScheduledAppointmentCard
+                  key={app.id}
+                  appointment={app}
+                  photoUrl={professionalPhotos[app.professional_name]}
+                  isCancelling={cancellingId === app.id}
+                  onCancel={handleCancel}
+                />
+              ))}
+            </>
+          )}
+
           <Link to="/schedule" className="btn-new-appointment-v2">
-            Schedule New
+            + New Request
           </Link>
         </div>
       )}
 
-      <div className="decor-hills-bottom">
-        <img src={hillsBottom} alt="" className="hills-svg-image" />
-      </div>
     </div>
   )
 }

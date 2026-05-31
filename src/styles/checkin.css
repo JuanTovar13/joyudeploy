@@ -141,6 +141,47 @@
   transition: background 0.2s, box-shadow 0.2s;
 }
 
+/* Custom answer input */
+.checkin-custom {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f5f5fb;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 11px 18px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.checkin-custom--active {
+  border-color: #262688;
+  background: #eeeeff;
+}
+
+.checkin-custom__dot {
+  flex-shrink: 0;
+}
+
+.checkin-custom--active .checkin-custom__dot {
+  background: #262688;
+  box-shadow: 0 0 0 3px rgba(38, 38, 136, 0.2);
+}
+
+.checkin-custom__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: #3a3a7a;
+}
+
+.checkin-custom__input::placeholder {
+  color: #b0b0cc;
+}
+
 /* Navigation */
 .checkin-nav {
   display: flex;

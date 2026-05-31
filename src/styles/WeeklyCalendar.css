@@ -1,0 +1,186 @@
+.weekly-calendar {
+  position: relative;
+  z-index: 2;
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+.weekly-calendar__title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+  padding: 24px 24px 0;
+}
+
+/* ── Scrollable container ── */
+.wc-scroll-area {
+  overflow-y: auto;
+  max-height: 460px;
+  position: relative;
+  margin-top: 12px;
+}
+
+.wc-scroll-area::-webkit-scrollbar       { width: 4px; }
+.wc-scroll-area::-webkit-scrollbar-track { background: transparent; }
+.wc-scroll-area::-webkit-scrollbar-thumb { background: #d5d5f5; border-radius: 2px; }
+
+/* ── Sticky day-name header ── */
+.wc-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: white;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid #f0f0f8;
+  padding-bottom: 6px;
+}
+
+.wc-gutter-stub {
+  width: 44px;
+  flex-shrink: 0;
+}
+
+.wc-day-header {
+  flex: 1;
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c0c0d8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 0;
+}
+
+.wc-day-header--today {
+  color: #262688;
+  border-bottom: 2px solid #262688;
+}
+
+/* ── Grid body ── */
+.wc-body {
+  display: flex;
+  position: relative;
+}
+
+/* ── Time labels (left gutter) ── */
+.wc-gutter {
+  width: 44px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.wc-hour-label {
+  position: absolute;
+  right: 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  color: #c0c0d8;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ── Day columns ── */
+.wc-col {
+  flex: 1;
+  position: relative;
+  border-left: 1px solid #f4f4f9;
+}
+
+.wc-col--today {
+  background: rgba(38, 38, 136, 0.025);
+}
+
+/* ── Hour separator lines ── */
+.wc-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #f4f4f9;
+  pointer-events: none;
+}
+
+/* ── Class blocks ── */
+.wc-class-block {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  border-radius: 8px;
+  padding: 5px 7px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  cursor: default;
+}
+
+.wc-class-block__name {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #262688;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wc-class-block__time {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 10px;
+  color: #5a5a8a;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ── Activity blocks (added from modal) ── */
+.wc-class-block--activity {
+  border: 1.5px dashed rgba(38, 38, 136, 0.35);
+  opacity: 0.88;
+  cursor: pointer;
+}
+
+/* ── Appointment blocks (scheduled by psychologist) ── */
+.wc-class-block--appointment {
+  background-color: #EDE7F6;
+  border: 1.5px solid #9575CD;
+  cursor: default;
+}
+
+.wc-class-block--appointment .wc-class-block__name {
+  color: #4527A0;
+}
+
+.wc-class-block--appointment .wc-class-block__time {
+  color: #7E57C2;
+}
+
+.wc-class-block__detail {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 10px;
+  color: #9575CD;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .wc-gutter,
+  .wc-gutter-stub { width: 32px; }
+
+  .wc-hour-label  { font-size: 10px; right: 4px; }
+
+  .wc-class-block__time { display: none; }
+}

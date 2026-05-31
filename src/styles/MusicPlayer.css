@@ -1,0 +1,124 @@
+.musicplayer-container {
+  background: #f5f6f8;
+  border-radius: 20px;
+  padding: 24px;
+  max-width: 100%;
+  height: 35vh;
+  font-family: 'Fredoka', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  transition: height 0.3s ease;
+}
+
+.musicplayer-container--compact {
+  height: 25vh;
+}
+
+/* Header row: title + toggle button */
+.musicplayer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.musicplayer-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+}
+
+.musicplayer-toggle-btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #262688;
+  background: white;
+  border: 1.5px solid #d5d5f5;
+  border-radius: 99px;
+  padding: 4px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.musicplayer-toggle-btn:hover {
+  background: #d5d5f5;
+  border-color: #262688;
+}
+
+.musicplayer-track-name {
+  font-size: 16px;
+  color: #6b6f92;
+  margin: 0;
+  text-align: center;
+}
+
+.musicplayer-iframe {
+  width: 80%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.musicplayer-iframe--hidden {
+  height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.musicplayer-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.musicplayer-btn {
+  background: transparent;
+  border: 2px solid #262688;
+  color: #262688;
+  border-radius: 99px;
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  font-family: 'Fredoka', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.musicplayer-btn:hover {
+  background: #262688;
+  color: white;
+}
+
+.musicplayer-counter {
+  font-size: 16px;
+  color: #262688;
+}
+
+.musicplayer-week-label {
+  font-size: 13px;
+  color: #6b6f92;
+  margin: 0;
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+}
+
+@media (max-width: 600px) {
+  .musicplayer-container {
+    padding: 16px;
+    height: auto;
+  }
+  .musicplayer-iframe {
+    width: 100%;
+    height: 200px;
+  }
+}

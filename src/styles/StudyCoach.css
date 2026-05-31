@@ -1,0 +1,245 @@
+/* ── Shell ── */
+.study-coach {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sc-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+}
+
+/* ── Stats grid ── */
+.sc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.sc-stat {
+  background: #F8F8FF;
+  border-radius: 16px;
+  padding: 14px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sc-stat__emoji {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.sc-stat__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sc-stat__value {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #262688;
+  line-height: 1.1;
+}
+
+.sc-stat__label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  color: #8888aa;
+  line-height: 1.2;
+}
+
+.sc-stat__sub {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  color: #b0b0cc;
+  line-height: 1.2;
+}
+
+/* ── Skip help prompt ── */
+.sc-skip-alert {
+  background: #FFF7ED;
+  border: 1.5px solid #FED7AA;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: sc-fade-in 0.25s ease;
+}
+
+.sc-skip-alert__text {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #92400e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sc-skip-alert__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sc-skip-btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.12s;
+}
+
+.sc-skip-btn:active { transform: scale(0.96); }
+
+.sc-skip-btn--help {
+  background: #262688;
+  color: white;
+}
+
+.sc-skip-btn--help:hover { opacity: 0.88; }
+
+.sc-skip-btn--ok {
+  background: white;
+  color: #92400e;
+  border: 1.5px solid #FED7AA;
+}
+
+.sc-skip-btn--ok:hover { background: #FFF7ED; }
+
+/* ── Analyze button ── */
+.sc-analyze-btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #262688;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.18s, transform 0.12s;
+  align-self: flex-start;
+}
+
+.sc-analyze-btn:hover:not(:disabled) { opacity: 0.88; }
+.sc-analyze-btn:active:not(:disabled) { transform: scale(0.97); }
+.sc-analyze-btn--loading { opacity: 0.7; cursor: default; }
+
+/* Spinner inside button */
+.sc-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: sc-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes sc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error ── */
+.sc-error {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  color: #cc3333;
+  margin: 0;
+}
+
+/* ── Analysis cards ── */
+.sc-analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: sc-fade-in 0.3s ease;
+}
+
+@keyframes sc-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sc-analysis__card {
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.sc-analysis__icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.sc-analysis__heading {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sc-analysis__text {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Card colour variants */
+.sc-analysis__card--diagnosis {
+  background: #EEF2FF;
+}
+.sc-analysis__card--diagnosis .sc-analysis__heading { color: #4338ca; }
+.sc-analysis__card--diagnosis .sc-analysis__text    { color: #3730a3; }
+
+.sc-analysis__card--highlight {
+  background: #ECFDF5;
+}
+.sc-analysis__card--highlight .sc-analysis__heading { color: #065f46; }
+.sc-analysis__card--highlight .sc-analysis__text    { color: #047857; }
+
+.sc-analysis__card--alert {
+  background: #FFFBEB;
+}
+.sc-analysis__card--alert .sc-analysis__heading { color: #92400e; }
+.sc-analysis__card--alert .sc-analysis__text    { color: #b45309; }
+
+.sc-analysis__card--action {
+  background: #F5F3FF;
+}
+.sc-analysis__card--action .sc-analysis__heading { color: #5b21b6; }
+.sc-analysis__card--action .sc-analysis__text    { color: #6d28d9; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .sc-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 420px) {
+  .sc-stats-grid { grid-template-columns: 1fr 1fr; }
+  .sc-analyze-btn { align-self: stretch; justify-content: center; }
+}
