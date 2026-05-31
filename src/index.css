@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #a7dfff;
+}
+
+.skip-to-main {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #262688;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 16px;
+  z-index: 9999;
+  clip: rect(0,0,0,0);
+  text-decoration: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

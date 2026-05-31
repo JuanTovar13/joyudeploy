@@ -428,3 +428,19 @@
   background: #dc2626;
   color: white;
 }
+
+@media (max-width: 768px) {
+  .psych-screen {
+    padding: 20px;
+  }
+  .psych-content {
+    flex-direction: column;
+  }
+  .psych-title {
+    font-size: 22px;
+  }
+  .psych-tabs {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
