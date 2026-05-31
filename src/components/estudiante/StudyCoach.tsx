@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useAppSelector } from '../../store/hooks'
 import { useAppDispatch } from '../../store/hooks'
 import { resetWorkSkips } from '../../store/slices/studyPlannerSlice'
-import { getStudyAnalysis, type StudyAnalysis } from '../../lib/groqClient'
+import { getStudyAnalysis, type StudyAnalysis } from '../../lib/groqCoach'
 import '../../styles/StudyCoach.css'
 
 // ── Stat card ─────────────────────────────────────────────────────────────────
