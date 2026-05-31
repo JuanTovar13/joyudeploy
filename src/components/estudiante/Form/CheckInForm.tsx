@@ -5,7 +5,7 @@ const questions = [
   {
     id: 'emotion',
     text: '¿Cómo te has sentido emocionalmente esta semana?',
-    options: ['Muy bien', 'Bien', 'Neutral', 'Estresado/a', 'Agotado/a'],
+    options: ['Muy bien', 'Bien', 'Estresado/a', 'Agotado/a'],
   },
   {
     id: 'pressure',

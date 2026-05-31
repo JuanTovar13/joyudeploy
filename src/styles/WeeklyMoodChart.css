@@ -1,0 +1,102 @@
+.weekly-mood-container {
+  background: white;
+  border-radius: 24px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.weekly-mood-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weekly-mood-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+}
+
+.weekly-mood-view-btn {
+  background: transparent;
+  border: 2px solid #262688;
+  color: #262688;
+  border-radius: 99px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-family: 'Fredoka', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.weekly-mood-view-btn:hover {
+  background: #D5D5F5;
+}
+
+.weekly-mood-progress {
+  font-size: 15px;
+  color: #262688;
+  background: #D5D5F5;
+  border-radius: 99px;
+  padding: 6px 16px;
+  margin: 0;
+  text-align: center;
+}
+
+.weekly-mood-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.weekly-mood-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.weekly-mood-day-label {
+  font-size: 13px;
+  color: #6b6f92;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.weekly-mood-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekly-mood-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.weekly-mood-empty {
+  font-size: 20px;
+  color: #ccc;
+}
+
+@media (max-width: 768px) {
+  .weekly-mood-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+  .weekly-mood-icon {
+    width: 26px;
+    height: 26px;
+  }
+}

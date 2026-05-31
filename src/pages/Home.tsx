@@ -1,16 +1,20 @@
 import '../styles/home.css'
 
+import { supabase } from '../lib/supabaseClient'
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckInForm } from '../components/estudiante/Form/CheckInForm'
 import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
+import { useSelector } from 'react-redux'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { fetchActivities, fetchActivitySchedules } from '../store/slices/activitiesSlice'
 import { fetchRecommendation, loadPersistedRecommendation } from '../store/slices/recommendationSlice'
 import { fetchAppointments } from '../store/slices/appointmentsSlice'
+import { fetchMoodEntries } from '../store/slices/moodSlice'
 
+import type { RootState } from '../store'
 import type { GroqRecommendation } from '../lib/groqClient'
 
 import { HomeHeader }     from '../components/estudiante/HomeHeader'
@@ -18,6 +22,8 @@ import { CheckInCard }    from '../components/estudiante/CheckInCard'
 import { QuoteCard }      from '../components/estudiante/QuoteCard'
 import { ActionsRow }        from '../components/estudiante/ActionsRow'
 import { WeeklyCalendar }    from '../components/estudiante/WeeklyCalendar'
+import { WeeklyMoodChart } from '../components/estudiante/WeeklyMoodChart'
+import { MonthlyMoodChart } from '../components/estudiante/MonthlyMoodChart'
 import { ActivitiesBanner }  from '../components/estudiante/ActivitiesBanner'
 import '../styles/WeeklyCalendar.css'
 import '../styles/ActivitiesBanner.css'
@@ -45,7 +51,10 @@ export const Home = () => {
     (state) => state.recommendation,
   )
 
+  const moodEntries = useSelector((state: RootState) => state.mood.entries)
+
   const [showCheckIn, setShowCheckIn] = useState(false)
+  const [showMonthly, setShowMonthly] = useState(false)
 
   const context = useContext(AuthContext)
   const uid = context?.user?.uid
@@ -81,11 +90,28 @@ export const Home = () => {
     if (!alreadyDone) setShowCheckIn(true)
   }, [uid, dispatch])
 
+  useEffect(() => {
+    if (uid) void dispatch(fetchMoodEntries(uid))
+  }, [uid, dispatch])
+
   const handleCheckInDone = async (answers?: Record<string, string>) => {
     if (uid) localStorage.setItem(checkinKey(uid), 'true')
     setShowCheckIn(false)
 
     if (!answers || !uid) return
+
+    const now = new Date()
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    const emotion = answers.emotion ?? 'Bien'
+
+    await supabase
+      .from('mood_entries')
+      .upsert(
+        { user_id: uid, date: today, emotion },
+        { onConflict: 'user_id,date' }
+      )
+
+    if (uid) void dispatch(fetchMoodEntries(uid))
 
     const activityTitles = joyuItems.map((item) => item.title)
     void dispatch(fetchRecommendation({ answers, activities: activityTitles, uid }))
@@ -114,6 +140,11 @@ export const Home = () => {
         <QuoteCard loadingRec={loadingRec} recError={recError} rec={recData} />
       </div>
 
+      <WeeklyMoodChart
+        entries={moodEntries}
+        onViewMonthly={() => setShowMonthly(true)}
+      />
+
       <WeeklyCalendar />
 
       <ActionsRow
@@ -130,6 +161,13 @@ export const Home = () => {
         <CheckInForm
           onClose={() => handleCheckInDone()}
           onComplete={(answers) => handleCheckInDone(answers)}
+        />
+      )}
+
+      {showMonthly && (
+        <MonthlyMoodChart
+          entries={moodEntries}
+          onClose={() => setShowMonthly(false)}
         />
       )}
     </div>

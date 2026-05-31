@@ -1,0 +1,120 @@
+.monthly-mood-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.monthly-mood-modal {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.monthly-mood-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.monthly-mood-title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #262688;
+  margin: 0;
+}
+
+.monthly-mood-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #6b6f92;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.monthly-mood-close:hover {
+  background: #F5F6F8;
+}
+
+.monthly-mood-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.monthly-mood-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #262688;
+}
+
+.monthly-mood-legend-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.monthly-mood-day-headers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.monthly-mood-day-header {
+  text-align: center;
+  font-size: 13px;
+  color: #6b6f92;
+}
+
+.monthly-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.monthly-mood-cell {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F5F6F8;
+}
+
+.monthly-mood-cell.empty {
+  background: transparent;
+}
+
+.monthly-mood-cell-icon {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.monthly-mood-cell-day {
+  font-size: 13px;
+  color: #aaa;
+  font-family: 'Fredoka', sans-serif;
+}
+
+@media (max-width: 480px) {
+  .monthly-mood-modal {
+    padding: 20px;
+  }
+}
