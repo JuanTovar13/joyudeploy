@@ -137,6 +137,11 @@ export const Home = () => {
         <QuoteCard loadingRec={loadingRec} recError={recError} rec={recData} />
       </div>
 
+      <WeeklyMoodChart
+        entries={moodEntries}
+        onViewMonthly={() => setShowMonthly(true)}
+      />
+
       <WeeklyCalendar />
 
       <ActionsRow
