@@ -20,51 +20,66 @@ export const ScheduledAppointmentCard = ({
   isCancelling,
   onCancel,
 }: ScheduledAppointmentCardProps) => {
+  const isVirtual = appointment.mode === 'Virtual'
+
   return (
-    <div className="appointment-card-v2">
-      {/* Background image */}
-      <img
-        src="https://www.icesi.edu.co/wp-content/uploads/2025/06/redes-institucionales-dk.jpg"
-        alt=""
-        className="card-background-svg"
-      />
-
-      {/* Dark overlay */}
-      <div className="card-dark-overlay" />
-
-      {/* Psychologist photo */}
-      <div className="prof-photo-wrapper">
-        {photoUrl ? (
-          <img
-            src={photoUrl}
-            alt={appointment.professional_name}
-            className="prof-photo"
-          />
-        ) : (
-          <div className="prof-photo-skeleton" aria-hidden="true" />
-        )}
+    <div className="appt-card">
+      {/* Header strip */}
+      <div className="appt-card__header">
+        <div className="appt-card__avatar">
+          {photoUrl ? (
+            <img src={photoUrl} alt={appointment.professional_name} className="appt-card__photo" />
+          ) : (
+            <div className="appt-card__photo-placeholder">
+              {appointment.professional_name.charAt(0)}
+            </div>
+          )}
+        </div>
+        <div className="appt-card__header-info">
+          <span className="appt-card__label">Scheduled appointment</span>
+          <h3 className="appt-card__name">{appointment.professional_name}</h3>
+        </div>
+        <span className={`appt-card__mode-badge appt-card__mode-badge--${isVirtual ? 'virtual' : 'presencial'}`}>
+          {isVirtual ? '💻 Virtual' : '🏢 In person'}
+        </span>
       </div>
 
-      {/* Content */}
-      <div className="card-content-overlay">
-        <div className="left-info">
-          <h3 className="prof-name">{appointment.professional_name}</h3>
-          <div className="details-text">
-            <p><strong>Date:</strong> {appointment.date ?? '—'}</p>
-            <p><strong>Time:</strong> {appointment.hour ?? '—'}</p>
-            <p><strong>Mode:</strong> {appointment.mode}</p>
+      {/* Body */}
+      <div className="appt-card__body">
+        <div className="appt-card__detail">
+          <span className="appt-card__detail-icon">📋</span>
+          <div>
+            <span className="appt-card__detail-label">Reason</span>
+            <span className="appt-card__detail-value">{appointment.reason}</span>
           </div>
         </div>
-
-        <div className="right-actions">
-          <button
-            className="btn-cancel"
-            onClick={() => onCancel(appointment.id)}
-            disabled={isCancelling}
-          >
-            {isCancelling ? 'Cancelling…' : 'Cancel'}
-          </button>
+        <div className="appt-card__details-row">
+          <div className="appt-card__detail">
+            <span className="appt-card__detail-icon">📅</span>
+            <div>
+              <span className="appt-card__detail-label">Date</span>
+              <span className="appt-card__detail-value">{appointment.date ?? '—'}</span>
+            </div>
+          </div>
+          <div className="appt-card__detail">
+            <span className="appt-card__detail-icon">🕐</span>
+            <div>
+              <span className="appt-card__detail-label">Time</span>
+              <span className="appt-card__detail-value">{appointment.hour ?? '—'}</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="appt-card__footer">
+        <button
+          className="appt-card__cancel-btn"
+          onClick={() => onCancel(appointment.id)}
+          disabled={isCancelling}
+        >
+          {isCancelling ? 'Cancelling…' : 'Cancel appointment'}
+        </button>
       </div>
     </div>
   )
