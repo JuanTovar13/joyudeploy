@@ -7,11 +7,13 @@ import { CheckInForm } from '../components/estudiante/Form/CheckInForm'
 import { AuthContext } from '../context/AuthContext'
 import { authService } from '../firebase/firebaseConfig'
 import { signOut } from 'firebase/auth'
+import { useSelector } from 'react-redux'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { fetchActivities, fetchActivitySchedules } from '../store/slices/activitiesSlice'
 import { fetchRecommendation, loadPersistedRecommendation } from '../store/slices/recommendationSlice'
 import { fetchAppointments } from '../store/slices/appointmentsSlice'
 
+import type { RootState } from '../store'
 import type { GroqRecommendation } from '../lib/groqClient'
 
 import { HomeHeader }     from '../components/estudiante/HomeHeader'
@@ -45,6 +47,8 @@ export const Home = () => {
   const { data: rec, status: recStatus } = useAppSelector(
     (state) => state.recommendation,
   )
+
+  const moodEntries = useSelector((state: RootState) => state.mood.entries)
 
   const [showCheckIn, setShowCheckIn] = useState(false)
   const [showMonthly, setShowMonthly] = useState(false)
