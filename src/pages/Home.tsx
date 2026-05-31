@@ -90,6 +90,10 @@ export const Home = () => {
     if (!alreadyDone) setShowCheckIn(true)
   }, [uid, dispatch])
 
+  useEffect(() => {
+    if (uid) void dispatch(fetchMoodEntries(uid))
+  }, [uid, dispatch])
+
   const handleCheckInDone = async (answers?: Record<string, string>) => {
     if (uid) localStorage.setItem(checkinKey(uid), 'true')
     setShowCheckIn(false)
