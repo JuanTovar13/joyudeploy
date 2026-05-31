@@ -340,3 +340,16 @@
   height: 100%;
   object-fit: cover;
 }
+
+@media (max-width: 768px) {
+  .appointments-screen {
+    padding: 20px;
+  }
+  .appointments-list {
+    gap: 12px;
+  }
+  .appointment-card {
+    padding: 16px;
+    font-size: 14px;
+  }
+}

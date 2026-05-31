@@ -207,3 +207,15 @@
   background: #ecfdf5;
   border: 1.5px solid #6ee7b7;
 }
+
+@media (max-width: 768px) {
+  .schedule-screen {
+    padding: 20px;
+  }
+  .schedule-form {
+    padding: 20px;
+  }
+  .schedule-title {
+    font-size: 24px;
+  }
+}

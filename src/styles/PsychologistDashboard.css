@@ -428,3 +428,15 @@
   background: #dc2626;
   color: white;
 }
+
+@media (max-width: 768px) {
+  .psychologist-screen {
+    padding: 20px;
+  }
+  .psychologist-content {
+    flex-direction: column;
+  }
+  .psychologist-title {
+    font-size: 24px;
+  }
+}
