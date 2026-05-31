@@ -1,17 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-const VENDOR_CHUNKS: Record<string, string[]> = {
-  // React core — changes rarely, long-term cacheable
-  'vendor-react':    ['react', 'react-dom', 'react-router-dom'],
-  // State management
-  'vendor-redux':    ['@reduxjs/toolkit', 'react-redux'],
-  // Firebase — large, almost never changes
-  'vendor-firebase': ['firebase/app', 'firebase/auth'],
-  // Supabase — large, almost never changes
-  'vendor-supabase': ['@supabase/supabase-js'],
-}
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -19,10 +8,30 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          for (const [chunk, pkgs] of Object.entries(VENDOR_CHUNKS)) {
-            if (pkgs.some(pkg => id.includes(`/node_modules/${pkg}/`))) {
-              return chunk
-            }
+          // Keep ALL firebase/* and @firebase/* packages together
+          if (id.includes('/node_modules/firebase/') || id.includes('/node_modules/@firebase/')) {
+            return 'vendor-firebase'
+          }
+          // Keep ALL @supabase/* packages together
+          if (id.includes('/node_modules/@supabase/')) {
+            return 'vendor-supabase'
+          }
+          // React ecosystem
+          if (
+            id.includes('/node_modules/react/') ||
+            id.includes('/node_modules/react-dom/') ||
+            id.includes('/node_modules/react-router') ||
+            id.includes('/node_modules/scheduler/')
+          ) {
+            return 'vendor-react'
+          }
+          // State management
+          if (
+            id.includes('/node_modules/@reduxjs/') ||
+            id.includes('/node_modules/react-redux/') ||
+            id.includes('/node_modules/redux/')
+          ) {
+            return 'vendor-redux'
           }
         },
       },
