@@ -15,7 +15,7 @@ import { fetchAppointments } from '../store/slices/appointmentsSlice'
 import { fetchMoodEntries } from '../store/slices/moodSlice'
 
 import type { RootState } from '../store'
-import type { GroqRecommendation } from '../lib/groqClient'
+import type { GroqRecommendation } from '../lib/groqRecommendations'
 
 import { HomeHeader }     from '../components/estudiante/HomeHeader'
 import { CheckInCard }    from '../components/estudiante/CheckInCard'
