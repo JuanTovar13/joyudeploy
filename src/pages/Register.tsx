@@ -2,7 +2,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import '../styles/global.css'
 import '../styles/auth.css'
 import logo from '../assets/logo.svg'
-import { BackgroundHills } from '../components/BackgroundHills'
+
 import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { authService } from '../firebase/firebaseConfig'
@@ -47,7 +47,6 @@ export const Register = () => {
     <SkipToMain />
     <div id="main-content" className="container">
       <img src={logo} className="auth-logo" alt="JoyU logo" />
-      <BackgroundHills />
       <div className="content">
         <h2 className="title">
           Sign up with your
