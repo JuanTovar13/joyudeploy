@@ -44,6 +44,21 @@
   width: clamp(140px, 40vh, 300px);
 }
 
+.auth-error {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 4px 0;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 @media (max-width: 768px) {
   .content {
     max-width: 90%;

@@ -21,6 +21,7 @@ export const AppointmentsList = () => {
 
   // professionalPhotos is UI-only derived state — stays local
   const [professionalPhotos, setProfessionalPhotos] = useState<Record<string, string>>({})
+  const [cancelError, setCancelError] = useState<string | null>(null)
 
   // 1 — Fetch appointments on mount
   useEffect(() => {
@@ -39,11 +40,12 @@ export const AppointmentsList = () => {
 
   // 3 — Cancel appointment via thunk
   const handleCancel = async (appointmentId: string) => {
+    setCancelError(null)
     const confirmed = window.confirm('Are you sure you want to cancel this appointment?')
     if (!confirmed) return
     const result = await dispatch(cancelAppointment(appointmentId))
     if (cancelAppointment.rejected.match(result)) {
-      alert('Could not cancel the appointment. Please try again.')
+      setCancelError('Could not cancel the appointment. Please try again.')
     }
   }
 
@@ -60,6 +62,10 @@ export const AppointmentsList = () => {
         <h1 className="list-title">My Appointments</h1>
         <img src={logoJoyu} alt="Joyu" className="list-logo-right" />
       </div>
+
+      {cancelError && (
+        <p className="appt-list-error" role="alert">{cancelError}</p>
+      )}
 
       {status === 'loading' ? (
         <div className="loading-container"><p>Loading appointments…</p></div>

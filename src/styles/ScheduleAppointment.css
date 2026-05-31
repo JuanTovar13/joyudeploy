@@ -184,3 +184,26 @@
   padding: 0 10px;
   line-height: 1.5;
 }
+
+/* ── Inline feedback messages ─────────────────────────────────────────────── */
+.schedule-message {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  border-radius: 12px;
+  padding: 10px 16px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.schedule-message--error {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+}
+
+.schedule-message--success {
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1.5px solid #6ee7b7;
+}

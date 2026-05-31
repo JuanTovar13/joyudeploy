@@ -13,14 +13,17 @@ export const ScheduleAppointment = () => {
   const [reason, setReason] = useState('')
   const [mode, setMode] = useState<'In person' | 'Virtual'>('In person')
   const [loading, setLoading] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formSuccess, setFormSuccess] = useState(false)
 
   const handleSchedule = async () => {
+    setFormError(null)
     if (!reason.trim()) {
-      alert('Please enter a reason for the consultation')
+      setFormError('Please enter a reason for the consultation.')
       return
     }
     if (!user?.uid) {
-      alert('Error: No user session found.')
+      setFormError('Error: No user session found.')
       return
     }
 
@@ -40,12 +43,12 @@ export const ScheduleAppointment = () => {
 
       if (error) throw error
 
-      alert('Your request has been sent! A psychologist will confirm the date and time soon.')
-      navigate('/my-appointments')
+      setFormSuccess(true)
+      setTimeout(() => navigate('/my-appointments'), 2000)
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error('Error saving appointment:', err.message)
-        alert(`Error saving: ${err.message}`)
+        setFormError(`Could not send request: ${err.message}`)
       }
     } finally {
       setLoading(false)
@@ -99,10 +102,21 @@ export const ScheduleAppointment = () => {
             📅 A psychologist will review your request and confirm a date and time.
           </p>
 
+          {formError && (
+            <p className="schedule-message schedule-message--error" role="alert">
+              {formError}
+            </p>
+          )}
+          {formSuccess && (
+            <p className="schedule-message schedule-message--success" role="status">
+              ✅ Your request has been sent! Redirecting…
+            </p>
+          )}
+
           <button
             className="btn-schedule"
             onClick={handleSchedule}
-            disabled={loading}
+            disabled={loading || formSuccess}
           >
             {loading ? 'Sending request...' : 'Send Request'}
           </button>

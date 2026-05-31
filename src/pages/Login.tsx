@@ -13,9 +13,11 @@ export const Login = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoginError(null)
     setLoading(true)
     try {
       const credential = await signInWithEmailAndPassword(authService, email, password)
@@ -28,10 +30,8 @@ export const Login = () => {
       const role = data?.role ?? 'student'
       navigate(role === 'psychologist' ? '/psychologist' : '/home')
     } catch (error: any) {
-      const errorCode = error.code
-      const errorMessage = error.message
-      console.error('Error logging in:', errorCode, errorMessage)
-      alert('Invalid email or password. Please try again.')
+      console.error('Error logging in:', error.code, error.message)
+      setLoginError('Invalid email or password. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -68,6 +68,9 @@ export const Login = () => {
             <input type="checkbox" />
             <label>Remember me</label>
           </div>
+          {loginError && (
+            <p className="auth-error" role="alert">{loginError}</p>
+          )}
           <button className='button' type="submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Log in'}
           </button>

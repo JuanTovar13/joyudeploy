@@ -310,6 +310,21 @@
 }
 
 
+/* ── Inline error ─────────────────────────────────────────────────────────── */
+.appt-list-error {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 10px 20px;
+  width: 90%;
+  max-width: 800px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
 /* ── Colinas decorativas ──────────────────────────────────────────────────── */
 .decor-hills-bottom {
   position: fixed;
