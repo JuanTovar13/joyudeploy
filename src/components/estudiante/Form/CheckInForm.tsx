@@ -57,6 +57,7 @@ type Props = {
 export const CheckInForm = ({ onComplete, onClose }: Props) => {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Answers>({})
+  const [customInputs, setCustomInputs] = useState<Answers>({})
   const [submitted, setSubmitted] = useState(false)
 
   const current = questions[step]
@@ -65,6 +66,22 @@ export const CheckInForm = ({ onComplete, onClose }: Props) => {
 
   const handleSelect = (option: string) => {
     setAnswers((prev) => ({ ...prev, [current.id]: option }))
+    // Clear custom input when a preset option is chosen
+    setCustomInputs((prev) => ({ ...prev, [current.id]: '' }))
+  }
+
+  const handleCustomInput = (value: string) => {
+    setCustomInputs((prev) => ({ ...prev, [current.id]: value }))
+    if (value.trim()) {
+      setAnswers((prev) => ({ ...prev, [current.id]: value.trim() }))
+    } else {
+      // If cleared, remove the answer so the Next button stays disabled
+      setAnswers((prev) => {
+        const next = { ...prev }
+        delete next[current.id]
+        return next
+      })
+    }
   }
 
   const handleNext = () => {
@@ -130,13 +147,27 @@ export const CheckInForm = ({ onComplete, onClose }: Props) => {
           {current.options.map((option) => (
             <button
               key={option}
-              className={`checkin-option ${selected === option ? 'checkin-option--selected' : ''}`}
+              className={`checkin-option ${selected === option && !customInputs[current.id] ? 'checkin-option--selected' : ''}`}
               onClick={() => handleSelect(option)}
             >
               <span className="checkin-option-dot" />
               {option}
             </button>
           ))}
+
+          {/* Custom answer */}
+          <div className={`checkin-custom${customInputs[current.id] ? ' checkin-custom--active' : ''}`}>
+            <span className="checkin-option-dot checkin-custom__dot" />
+            <input
+              className="checkin-custom__input"
+              type="text"
+              placeholder="Otra respuesta..."
+              value={customInputs[current.id] ?? ''}
+              onChange={(e) => handleCustomInput(e.target.value)}
+              maxLength={120}
+              aria-label="Custom answer"
+            />
+          </div>
         </div>
 
         {/* Navigation */}
