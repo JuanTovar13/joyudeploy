@@ -5,6 +5,7 @@ import appointmentsReducer  from './slices/appointmentsSlice'
 import activitiesReducer    from './slices/activitiesSlice'
 import recommendationReducer from './slices/recommendationSlice'
 import calendarReducer       from './slices/calendarSlice'
+import moodReducer           from './slices/moodSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     activities:     activitiesReducer,
     recommendation: recommendationReducer,
     calendar:       calendarReducer,
+    mood:           moodReducer,
   },
 })
 
