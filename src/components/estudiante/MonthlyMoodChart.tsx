@@ -24,7 +24,10 @@ export const MonthlyMoodChart = ({ entries, onClose }: MonthlyMoodChartProps) =>
 
   const days = Array.from({ length: daysInMonth }, (_, i) => {
     const d = new Date(year, month, i + 1)
-    const dateStr = d.toISOString().split('T')[0]
+    const y = d.getFullYear()
+    const mo = String(d.getMonth() + 1).padStart(2, '0')
+    const dy = String(d.getDate()).padStart(2, '0')
+    const dateStr = `${y}-${mo}-${dy}`
     const emotion = entryMap.get(dateStr)
     const config = emotion ? getEmotionConfig(emotion) : null
     return { day: i + 1, dateStr, emotion, config }

@@ -1,20 +1,28 @@
 import { getEmotionConfig } from './emotionConfig'
 import type { MoodEntry } from '../store/slices/moodSlice'
 
+const toLocalDateStr = (d: Date): string => {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
 export const getLast7Days = (): string[] => {
   const days: string[] = []
   for (let i = 6; i >= 0; i--) {
     const d = new Date()
     d.setDate(d.getDate() - i)
-    days.push(d.toISOString().split('T')[0])
+    days.push(toLocalDateStr(d))
   }
   return days
 }
 
 export const getWeekDayLabel = (dateStr: string): string => {
   const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  const day = new Date(dateStr).getDay()
-  return labels[day === 0 ? 6 : day - 1]
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const d = new Date(year, month - 1, day)
+  return labels[d.getDay() === 0 ? 6 : d.getDay() - 1]
 }
 
 export const getWeeklyProgress = (entries: MoodEntry[]): string => {
