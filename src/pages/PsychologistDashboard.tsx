@@ -64,7 +64,6 @@ export const PsychologistDashboard = () => {
 
     if (error) throw new Error(error.message)
 
-    // Update local state immediately
     const accepted = pending.find((p) => p.id === appointmentId)
     if (accepted) {
       setScheduled((prev) => [...prev, { ...accepted, date, hour }])
