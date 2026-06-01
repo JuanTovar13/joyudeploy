@@ -29,7 +29,7 @@ export const ScheduleAppointment = () => {
       setFormError('Error: No user session found.')
       return
     }
-
+    //INSERT la razon y modo de la cita y queda en pending
     setLoading(true)
     try {
       const { error } = await supabase.from('appointments').insert([{
