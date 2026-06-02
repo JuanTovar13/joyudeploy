@@ -50,6 +50,7 @@ export const AppointmentsList = () => {
     }
   }
 
+  //recibe todas las citas y las separa en pendientes y confirmadas para mostrarlas en secciones distintas
   const pendingAppts   = appointments.filter((a) => a.status === 'pending')
   const scheduledAppts = appointments.filter((a) => a.status === 'scheduled')
 
